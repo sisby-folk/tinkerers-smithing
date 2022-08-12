@@ -4,25 +4,6 @@ import os
 import shutil
 from copy import deepcopy
 
-
-# Tinkerer's Smithing Vanilla-Cost Design
-# Repair
-#   repairing wooden and stone tools cost the relevant fractional unit of making a new one. One unit repairs 1/3 of a pickaxe
-#   repairing smithed gear uses anvil logic - One unit repairs 25% no matter what.
-# Upgrading
-#   upgrading to stone and iron tools costs the units required to craft a new tool. As a convenience cost, any damage to the tool will be "passed on" to the new tool - as if stored in the tool rod.
-#   upgrading smithed gear utilizes existing repair mechanics. It costs one unit to upgrade, but will need repairs after this to match the new-gear cost - 0 for shovels, 1 for swords, 4 for helmets.
-# Sacrificial Upgrading
-#   upgrading to netherite from gold utilizes specially designed "sacrificial diamond" logic. Upgrades cost one piece of netherite gear as 'sacrificial gear'.
-#   any piece of sacrificial netherite gear is considered to have a full netherite bar inside.
-#   further, the sacrifice is broken into 'sacrificial diamonds' based on its unit cost and durability. a full durability chestplate is worth 8 diamonds, a 1/5 durability helmet is worth 1 diamond.
-#   the result's durability is a fraction of the sacrificial diamonds and the unit cost of the resulting item. 1 sacrificial diamond will give a 1/2 durability sword, or a 1/3 durability pickaxe.
-#   all gear types can be used as sacrifice, but some combinations are very wasteful.
-# Enchantability and De-work
-#   by making gold only directly upgradeable to netherite, enchantability is harder to abuse.
-#   prior work could be added during gold -> netherite and iron -> diamond upgrades to further balance this. Would be better if it only applied if it's actually enchanted.
-#   nether scrap can already be used to regress prior work, so this lowers both the need for and issues with this.
-
 def assert_dir(path):
     if not os.path.exists(path):
         os.makedirs(path)
