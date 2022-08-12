@@ -1,0 +1,36 @@
+{
+	"schema_version": 1,
+	"quilt_loader": {
+		"group": "folk.sisby",
+		"id": "tinkerers-smithing",
+		"version": "${version}",
+		"metadata": {
+			"name": "Tinkerer's Smithing",
+			"description": "A sentimental and convenient rebalance of gear crafting, repair, combining, and smithing.",
+			"contributors": {
+				"Sisby Folk": "Owner"
+			},
+			"contact": {
+				"homepage": "https://modrinth.com/mod/tinkerers-smithing",
+				"issues": "https://github.com/sisby-folk/tinkerers-smithing/issues",
+				"sources": "https://github.com/sisby-folk/tinkerers-smithing"
+			},
+			"icon": "assets/tinkerers-smithing/icon.png"
+		},
+		"intermediate_mappings": "net.fabricmc:intermediary",
+		"depends": [
+			{
+				"id": "quilt_loader",
+				"versions": ">=0.16.0-"
+			},
+			{
+				"id": "minecraft",
+				"versions": ">=1.15"
+			},
+			{
+				"id": "nbtcrafting",
+				"versions": ">=2"
+			}
+		]
+	}
+}
