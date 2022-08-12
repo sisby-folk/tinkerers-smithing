@@ -1,6 +1,6 @@
 # Tinkerer's Smithing
 
-A sentimental and convenient rebalance of gear crafting, repair, combining, and smithing.
+A sentimental and convenient rebalance of gear crafting, repair, enchanting, combining, and smithing.
 
 This mod:
  - Removes the XP and work cost of (enchantment-safe) unit repair for gear - Simply use a **smithing table**.
