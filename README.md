@@ -26,7 +26,7 @@ https://user-images.githubusercontent.com/55819817/184475205-fefd8da1-c998-48c2-
 
 ## Design - The Mending Problem
 
-The best gear in vanilla is made by repeatedly un-enchanting gear and enchanting it until the player gets gear RNG, then finishing it off with a couple of books (especially mending).
+The best gear in vanilla is made by repeatedly un-enchanting gear and enchanting it until the player gets good RNG, then finishing it off with a couple of books (especially mending).
 Any other method gives an immensely worse result due to `repairCost`/'Prior Work'.
 This punishes the player substantially for slowly improving gear.
 
@@ -34,7 +34,7 @@ Even repair inflicts prior work - rushing a mending villager is the only solutio
 This ruins the idea of having "sentimental" gear you improve and maintain over time.
 Finding mending villagers is also immensely boring - but the XP cost is too punishing otherwise.
 
-To combat this, TSmithing introduces work-free unit repair, "de-working" with netherite, material-upgrading.
+To combat this, TSmithing introduces work-free unit repair, "de-working" with netherite, and material-upgrading.
 
 ## Design - Cost in Minecraft
 
@@ -60,9 +60,9 @@ Upgrading to **netherite** from **gold** utilizes specially-designed 'sacrificia
     - all gear types can be used as sacrifice, but some are very wasteful.
 
 ### Enchantability
-As gold and iron have higher enchantability than their upgrade tiers, it's possible to use the better RNG to enchant fresh gear
-This is slightly harder to abuse as gold goes straight to netherite -
-the gap is smaller, and the netherite used could have been spent de-working.
+As gold and iron have higher enchantability than their upgrade tiers, it's possible to use the better RNG to enchant fresh gear.
+
+Tinkerer's smithing makes moves to avoid this, by making it only possible to upgrade gold straight to netherite. The enchantability gap between the two is  smaller, and the netherite used could have been spent de-working gear four times!
 
 ## Further Info
 
