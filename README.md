@@ -60,9 +60,9 @@ Upgrading to **netherite** from **gold** utilizes specially-designed 'sacrificia
     - all gear types can be used as sacrifice, but some are very wasteful.
 
 ### Enchantability
-As gold and iron have higher enchantability than their upgrade tiers, it's possible to use the better RNG to enchant fresh gear.
+As gold and iron have higher enchantability than their upgrade tiers, it's possible to use the better RNG to enchant fresh gold gear, then upgrade it to avoid the normally limited durability.
 
-Tinkerer's smithing makes moves to avoid this, by making it only possible to upgrade gold straight to netherite. The enchantability gap between the two is  smaller, and the netherite used could have been spent de-working gear four times!
+Tinkerer's smithing mitigates this imbalance by making it only possible to upgrade gold straight to netherite. The enchantability gap between the two is  smaller, and the netherite used could have been spent de-working gear four times!
 
 ## Further Info
 
