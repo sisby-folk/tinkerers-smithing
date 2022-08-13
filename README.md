@@ -1,7 +1,9 @@
-# Tinkerer's Smithing
+<p align="center"><img alt="tinkerer's smithing banner" src="https://user-images.githubusercontent.com/55819817/184476819-6cf95348-93da-4bc2-9582-ba32ee0364bd.png" /></p>
 
-A sentimental and convenient rebalance of gear crafting, repair, enchanting, combining, and smithing.
-Satisfying to use, but tucks away nicely next to vanilla.
+<p align="center">A sentimental and convenient rebalance of gear crafting, repair, enchanting, combining, and smithing.<br/>
+Satisfying to use, but fits nicely with vanilla.</p>
+
+---
 
 This mod:
 - Removes the XP and work cost of (enchantment-safe) unit repair for gear - Simply use a **smithing table**.
@@ -20,11 +22,7 @@ If you'd prefer the datapack version for any reason, you can [download it from t
 
 ## Showcase
 
-![screenshot recipe summary](https://cdn.modrinth.com/data/RhVpNN5O/images/a245f761515190d5864524ea9c20fe621103df09.png)
-
 https://user-images.githubusercontent.com/55819817/184475205-fefd8da1-c998-48c2-be60-b54da02183b8.mp4
-
-Screenshots include [xali's books](https://www.curseforge.com/minecraft/texture-packs/xalis-enchanted-books), [Sully's Peeves](https://www.curseforge.com/minecraft/texture-packs/sullys-peeves) and [Vanilla Tweaks](https://vanillatweaks.net/picker/resource-packs/)' degrading tools
 
 ## Design - The Mending Problem
 
@@ -69,5 +67,7 @@ the gap is smaller, and the netherite used could have been spent de-working.
 ## Further Info
 
 All modding projects are built on the work of many others.
+
+Textures shown include [xali's books](https://www.curseforge.com/minecraft/texture-packs/xalis-enchanted-books), [Sully's Peeves](https://www.curseforge.com/minecraft/texture-packs/sullys-peeves) and [Vanilla Tweaks](https://vanillatweaks.net/picker/resource-packs/)' degrading tools
 
 We're primarily modpack developers - not mod developers! If you want to port this mod, do it yourself!
