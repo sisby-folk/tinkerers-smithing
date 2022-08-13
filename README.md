@@ -22,6 +22,8 @@ If you'd prefer the datapack version for any reason, you can [download it from t
 
 ![screenshot recipe summary](https://cdn.modrinth.com/data/RhVpNN5O/images/a245f761515190d5864524ea9c20fe621103df09.png)
 
+https://user-images.githubusercontent.com/55819817/184475205-fefd8da1-c998-48c2-be60-b54da02183b8.mp4
+
 Screenshots include [xali's books](https://www.curseforge.com/minecraft/texture-packs/xalis-enchanted-books), [Sully's Peeves](https://www.curseforge.com/minecraft/texture-packs/sullys-peeves) and [Vanilla Tweaks](https://vanillatweaks.net/picker/resource-packs/)' degrading tools
 
 ## Design - The Mending Problem
