@@ -1,6 +1,6 @@
 <p align="center"><img alt="tinkerer's smithing banner" src="https://user-images.githubusercontent.com/55819817/184476819-6cf95348-93da-4bc2-9582-ba32ee0364bd.png" /></p>
 
-<p align="center">A sentimental and convenient rebalance of gear crafting, repair, enchanting, combining, and smithing.<br/>
+<p align="center">A sentimental and convenient rebalance of gear crafting, repair, enchanting, and smithing.<br/>
 Satisfying to use, but fits nicely with vanilla.</p>
 
 ---
