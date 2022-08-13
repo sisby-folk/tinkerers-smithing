@@ -14,13 +14,15 @@ This mod:
     - Lowers the cost of future anvil operations - as if you'd worked with it one less time.
 
 
-It requires [NBT Crafting](https://modrinth.com/mod/nbt-crafting), and is (secretly) just a datapack!
+It requires [NBT Crafting](https://modrinth.com/mod/nbt-crafting), and we recommend [EMI](https://modrinth.com/mod/emi), [Inventory Tabs](https://modrinth.com/mod/inventory-tabs-updated), and [Inspecio](https://modrinth.com/mod/inspecio) to improve the experience.
 
-If you'd prefer the datapack format for any reason, you can download it straight from the [Repo](https://download-directory.github.io/?url=https://github.com/sisby-folk/tinkerers-smithing/tree/main/src/main/resources/data/tinkerers_smithing) (Direct Download Link)
+If you'd prefer the datapack version for any reason, you can [download it from the repo](https://download-directory.github.io/?url=https://github.com/sisby-folk/tinkerers-smithing/tree/main/src/main/resources/data/tinkerers_smithing) (Direct Download Link)
 
-## Video
+## Showcase
 
-We *just* released the mod. Give us a day - trust us, it feels good to use. Check the gallery as recompense.
+![screenshot recipe summary](https://cdn.modrinth.com/data/RhVpNN5O/images/a245f761515190d5864524ea9c20fe621103df09.png)
+
+Screenshots include [xali's books](https://www.curseforge.com/minecraft/texture-packs/xalis-enchanted-books), [Sully's Peeves](https://www.curseforge.com/minecraft/texture-packs/sullys-peeves) and [Vanilla Tweaks](https://vanillatweaks.net/picker/resource-packs/)' degrading tools
 
 ## Design - The Mending Problem
 

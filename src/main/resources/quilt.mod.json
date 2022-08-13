@@ -6,7 +6,7 @@
 		"version": "${version}",
 		"metadata": {
 			"name": "Tinkerer's Smithing",
-			"description": "A sentimental and convenient rebalance of gear crafting, repair, combining, and smithing.",
+			"description": "A sentimental and convenient rebalance of gear crafting, repair, enchanting, combining, and smithing.",
 			"contributors": {
 				"Sisby Folk": "Owner"
 			},
