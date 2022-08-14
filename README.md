@@ -79,6 +79,8 @@ Tinkerer's smithing mitigates this imbalance by making it only possible to upgra
 
 All modding projects are built on the work of many others.
 
+We made this mod for [Tinkerer's Quilt](https://modrinth.com/modpack/tinkerers-quilt)! Our modpack about rediscovering vanilla gameplay.
+
 Textures shown include [xali's books](https://www.curseforge.com/minecraft/texture-packs/xalis-enchanted-books), [Sully's Peeves](https://www.curseforge.com/minecraft/texture-packs/sullys-peeves) and [Vanilla Tweaks](https://vanillatweaks.net/picker/resource-packs/)' degrading tools
 
 We're primarily modpack developers - not mod developers! If you want to port this mod, do it yourself!
