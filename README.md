@@ -36,6 +36,17 @@ Finding mending villagers is also immensely boring - but the XP cost is too puni
 
 To combat this, TSmithing introduces work-free unit repair, "de-working" with netherite, and material-upgrading.
 
+## Design - Progression Changes
+
+Here are a few side effects of the mod on the progression of the game (For map-makers and those curious)
+
+- Obsidian / Ancient Debris can be mined after obtaining one diamond (now it's *always* exciting)
+- There are three alternative methods to obtaining endgame gear (from reroll RNG+Mending)
+    - Early game gear can be gradually combined with books, other gear, and netherite scrap.
+    - Golden treasure gear can be combined and sacrificially upgraded to netherite (finally,  it's useful)
+    - Enchanted gear *including* iron can be bought from villagers and combined, then upgraded.
+- Netherite gear can be exchanged for other netherite gear - at the cost of enchantments/durability.
+
 ## Design - Cost in Minecraft
 
 ### Repairing
