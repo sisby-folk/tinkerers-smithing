@@ -18,7 +18,7 @@ This mod:
 
 It requires [NBT Crafting](https://modrinth.com/mod/nbt-crafting), and we recommend [EMI](https://modrinth.com/mod/emi), [Inventory Tabs](https://modrinth.com/mod/inventory-tabs-updated), and [Inspecio](https://modrinth.com/mod/inspecio) to improve the experience.
 
-If you'd prefer the datapack version for any reason, you can [download it from the repo](https://download-directory.github.io/?url=https://github.com/sisby-folk/tinkerers-smithing/tree/main/src/main/resources/data/tinkerers_smithing) (Direct Download Link)
+If you'd prefer the datapack version for any reason, you can [download it from the repo](https://download-directory.github.io/?url=https://github.com/sisby-folk/tinkerers-smithing/tree/main/src/main/resources) (Direct Download Link)
 
 ## Showcase
 
