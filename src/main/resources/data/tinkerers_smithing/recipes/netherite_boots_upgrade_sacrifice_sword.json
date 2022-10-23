@@ -1,25 +1,28 @@
 {
-    "base": {
-        "data": {
-            "deny": {
-                "Upgradeable": 0
+    "recipe": {
+        "base": {
+            "data": {
+                "deny": {
+                    "Upgradeable": 0
+                },
+                "require": {}
             },
-            "require": {}
+            "item": "minecraft:golden_boots"
         },
-        "item": "minecraft:golden_boots"
-    },
-    "ingredient": {
-        "data": {
-            "require": {}
+        "ingredient": {
+            "data": {
+                "require": {}
+            },
+            "item": "minecraft:netherite_sword"
         },
-        "item": "minecraft:netherite_sword"
-    },
-    "result": {
-        "data": {
-            "$": "$base",
-            "Damage": "$(481-((2031-ingredient.Damage)*962.0/8124))#i"
+        "result": {
+            "data": {
+                "$": "$base",
+                "Damage": "$max(0, (481-((2031-ingredient.Damage)*962.0/8124))#i)"
+            },
+            "item": "minecraft:netherite_boots"
         },
-        "item": "minecraft:netherite_boots"
+        "type": "minecraft:smithing"
     },
-    "type": "nbtcrafting:smithing"
+    "type": "nbtcrafting3:data"
 }

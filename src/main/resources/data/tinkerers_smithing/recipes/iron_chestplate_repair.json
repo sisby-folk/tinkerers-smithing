@@ -1,24 +1,27 @@
 {
-    "base": {
-        "data": {
-            "require": {
-                "Damage": "$60.."
-            }
+    "recipe": {
+        "base": {
+            "data": {
+                "require": {
+                    "Damage": "$60.."
+                }
+            },
+            "item": "minecraft:iron_chestplate"
         },
-        "item": "minecraft:iron_chestplate"
-    },
-    "ingredient": {
-        "data": {
-            "require": {}
+        "ingredient": {
+            "data": {
+                "require": {}
+            },
+            "item": "minecraft:iron_ingot"
         },
-        "item": "minecraft:iron_ingot"
-    },
-    "result": {
-        "data": {
-            "$": "$base",
-            "Damage": "$base.Damage - 60"
+        "result": {
+            "data": {
+                "$": "$base",
+                "Damage": "$max(0, base.Damage - 60)"
+            },
+            "item": "minecraft:iron_chestplate"
         },
-        "item": "minecraft:iron_chestplate"
+        "type": "minecraft:smithing"
     },
-    "type": "nbtcrafting:smithing"
+    "type": "nbtcrafting3:data"
 }

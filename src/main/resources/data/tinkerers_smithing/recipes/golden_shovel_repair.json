@@ -1,24 +1,27 @@
 {
-    "base": {
-        "data": {
-            "require": {
-                "Damage": "$8.."
-            }
+    "recipe": {
+        "base": {
+            "data": {
+                "require": {
+                    "Damage": "$8.."
+                }
+            },
+            "item": "minecraft:golden_shovel"
         },
-        "item": "minecraft:golden_shovel"
-    },
-    "ingredient": {
-        "data": {
-            "require": {}
+        "ingredient": {
+            "data": {
+                "require": {}
+            },
+            "item": "minecraft:gold_ingot"
         },
-        "item": "minecraft:gold_ingot"
-    },
-    "result": {
-        "data": {
-            "$": "$base",
-            "Damage": "$base.Damage - 8"
+        "result": {
+            "data": {
+                "$": "$base",
+                "Damage": "$max(0, base.Damage - 8)"
+            },
+            "item": "minecraft:golden_shovel"
         },
-        "item": "minecraft:golden_shovel"
+        "type": "minecraft:smithing"
     },
-    "type": "nbtcrafting:smithing"
+    "type": "nbtcrafting3:data"
 }

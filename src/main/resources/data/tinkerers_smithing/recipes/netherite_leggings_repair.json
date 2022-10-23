@@ -1,24 +1,27 @@
 {
-    "base": {
-        "data": {
-            "require": {
-                "Damage": "$139.."
-            }
+    "recipe": {
+        "base": {
+            "data": {
+                "require": {
+                    "Damage": "$139.."
+                }
+            },
+            "item": "minecraft:netherite_leggings"
         },
-        "item": "minecraft:netherite_leggings"
-    },
-    "ingredient": {
-        "data": {
-            "require": {}
+        "ingredient": {
+            "data": {
+                "require": {}
+            },
+            "item": "minecraft:netherite_ingot"
         },
-        "item": "minecraft:netherite_ingot"
-    },
-    "result": {
-        "data": {
-            "$": "$base",
-            "Damage": "$base.Damage - 139"
+        "result": {
+            "data": {
+                "$": "$base",
+                "Damage": "$max(0, base.Damage - 139)"
+            },
+            "item": "minecraft:netherite_leggings"
         },
-        "item": "minecraft:netherite_leggings"
+        "type": "minecraft:smithing"
     },
-    "type": "nbtcrafting:smithing"
+    "type": "nbtcrafting3:data"
 }

@@ -1,0 +1,21 @@
+{
+    "recipe": {
+        "ingredients": [
+            {
+                "item": "minecraft:wooden_sword"
+            },
+            {
+                "tag": "minecraft:planks"
+            }
+        ],
+        "result": {
+            "data": {
+                "$": "$i0",
+                "Damage": "$max(0, i0.Damage - 30)"
+            },
+            "item": "minecraft:wooden_sword"
+        },
+        "type": "minecraft:crafting_shapeless"
+    },
+    "type": "nbtcrafting3:data"
+}

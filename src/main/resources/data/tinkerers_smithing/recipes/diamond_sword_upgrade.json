@@ -1,25 +1,28 @@
 {
-    "base": {
-        "data": {
-            "deny": {
-                "Upgradeable": 0
+    "recipe": {
+        "base": {
+            "data": {
+                "deny": {
+                    "Upgradeable": 0
+                },
+                "require": {}
             },
-            "require": {}
+            "item": "minecraft:iron_sword"
         },
-        "item": "minecraft:iron_sword"
-    },
-    "ingredient": {
-        "data": {
-            "require": {}
+        "ingredient": {
+            "data": {
+                "require": {}
+            },
+            "item": "minecraft:diamond"
         },
-        "item": "minecraft:diamond"
-    },
-    "result": {
-        "data": {
-            "$": "$base",
-            "Damage": "$390"
+        "result": {
+            "data": {
+                "$": "$base",
+                "Damage": "$390"
+            },
+            "item": "minecraft:diamond_sword"
         },
-        "item": "minecraft:diamond_sword"
+        "type": "minecraft:smithing"
     },
-    "type": "nbtcrafting:smithing"
+    "type": "nbtcrafting3:data"
 }

@@ -1,0 +1,21 @@
+{
+    "recipe": {
+        "ingredients": [
+            {
+                "item": "minecraft:stone_pickaxe"
+            },
+            {
+                "tag": "minecraft:stone_tool_materials"
+            }
+        ],
+        "result": {
+            "data": {
+                "$": "$i0",
+                "Damage": "$max(0, i0.Damage - 44)"
+            },
+            "item": "minecraft:stone_pickaxe"
+        },
+        "type": "minecraft:crafting_shapeless"
+    },
+    "type": "nbtcrafting3:data"
+}

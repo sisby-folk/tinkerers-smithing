@@ -1,24 +1,27 @@
 {
-    "base": {
-        "data": {
-            "require": {
-                "Damage": "$57.."
-            }
+    "recipe": {
+        "base": {
+            "data": {
+                "require": {
+                    "Damage": "$57.."
+                }
+            },
+            "item": "minecraft:iron_leggings"
         },
-        "item": "minecraft:iron_leggings"
-    },
-    "ingredient": {
-        "data": {
-            "require": {}
+        "ingredient": {
+            "data": {
+                "require": {}
+            },
+            "item": "minecraft:iron_ingot"
         },
-        "item": "minecraft:iron_ingot"
-    },
-    "result": {
-        "data": {
-            "$": "$base",
-            "Damage": "$base.Damage - 57"
+        "result": {
+            "data": {
+                "$": "$base",
+                "Damage": "$max(0, base.Damage - 57)"
+            },
+            "item": "minecraft:iron_leggings"
         },
-        "item": "minecraft:iron_leggings"
+        "type": "minecraft:smithing"
     },
-    "type": "nbtcrafting:smithing"
+    "type": "nbtcrafting3:data"
 }

@@ -1,24 +1,24 @@
 {
-    "ingredients": [
-        {
-            "data": {
-                "require": {}
+    "recipe": {
+        "ingredients": [
+            {
+                "item": "minecraft:wooden_hoe"
             },
-            "item": "minecraft:wooden_hoe"
+            {
+                "tag": "minecraft:stone_tool_materials"
+            },
+            {
+                "tag": "minecraft:stone_tool_materials"
+            }
+        ],
+        "result": {
+            "data": {
+                "$": "$i0",
+                "Damage": "$i0.Damage"
+            },
+            "item": "minecraft:stone_hoe"
         },
-        {
-            "tag": "minecraft:stone_tool_materials"
-        },
-        {
-            "tag": "minecraft:stone_tool_materials"
-        }
-    ],
-    "result": {
-        "data": {
-            "$": "$i0",
-            "Damage": "$i0.Damage"
-        },
-        "item": "minecraft:stone_hoe"
+        "type": "minecraft:crafting_shapeless"
     },
-    "type": "minecraft:crafting_shapeless"
+    "type": "nbtcrafting3:data"
 }

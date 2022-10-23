@@ -1,21 +1,21 @@
 {
-    "ingredients": [
-        {
-            "data": {
-                "require": {}
+    "recipe": {
+        "ingredients": [
+            {
+                "item": "minecraft:stone_shovel"
             },
-            "item": "minecraft:stone_shovel"
+            {
+                "item": "minecraft:iron_ingot"
+            }
+        ],
+        "result": {
+            "data": {
+                "$": "$i0",
+                "Damage": "$i0.Damage"
+            },
+            "item": "minecraft:iron_shovel"
         },
-        {
-            "item": "minecraft:iron_ingot"
-        }
-    ],
-    "result": {
-        "data": {
-            "$": "$i0",
-            "Damage": "$i0.Damage"
-        },
-        "item": "minecraft:iron_shovel"
+        "type": "minecraft:crafting_shapeless"
     },
-    "type": "minecraft:crafting_shapeless"
+    "type": "nbtcrafting3:data"
 }

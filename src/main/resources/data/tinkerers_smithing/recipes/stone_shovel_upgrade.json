@@ -1,21 +1,21 @@
 {
-    "ingredients": [
-        {
-            "data": {
-                "require": {}
+    "recipe": {
+        "ingredients": [
+            {
+                "item": "minecraft:wooden_shovel"
             },
-            "item": "minecraft:wooden_shovel"
+            {
+                "tag": "minecraft:stone_tool_materials"
+            }
+        ],
+        "result": {
+            "data": {
+                "$": "$i0",
+                "Damage": "$i0.Damage"
+            },
+            "item": "minecraft:stone_shovel"
         },
-        {
-            "tag": "minecraft:stone_tool_materials"
-        }
-    ],
-    "result": {
-        "data": {
-            "$": "$i0",
-            "Damage": "$i0.Damage"
-        },
-        "item": "minecraft:stone_shovel"
+        "type": "minecraft:crafting_shapeless"
     },
-    "type": "minecraft:crafting_shapeless"
+    "type": "nbtcrafting3:data"
 }

@@ -1,27 +1,28 @@
 {
-    "base": {
-        "data": {
-            "deny": {
-                "Upgradeable": 0
+    "recipe": {
+        "base": {
+            "data": {
+                "deny": {
+                    "Upgradeable": 0
+                },
+                "require": {}
             },
-            "require": {}
+            "item": "minecraft:golden_leggings"
         },
-        "item": "minecraft:golden_leggings"
-    },
-    "ingredient": {
-        "data": {
-            "require": {
-                "Damage": "$75.."
-            }
+        "ingredient": {
+            "data": {
+                "require": {}
+            },
+            "item": "minecraft:netherite_chestplate"
         },
-        "item": "minecraft:netherite_chestplate"
-    },
-    "result": {
-        "data": {
-            "$": "$base",
-            "Damage": "$(555-((592-ingredient.Damage)*4440.0/4144))#i"
+        "result": {
+            "data": {
+                "$": "$base",
+                "Damage": "$max(0, (555-((592-ingredient.Damage)*4440.0/4144))#i)"
+            },
+            "item": "minecraft:netherite_leggings"
         },
-        "item": "minecraft:netherite_leggings"
+        "type": "minecraft:smithing"
     },
-    "type": "nbtcrafting:smithing"
+    "type": "nbtcrafting3:data"
 }

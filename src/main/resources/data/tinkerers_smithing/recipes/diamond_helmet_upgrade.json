@@ -1,25 +1,28 @@
 {
-    "base": {
-        "data": {
-            "deny": {
-                "Upgradeable": 0
+    "recipe": {
+        "base": {
+            "data": {
+                "deny": {
+                    "Upgradeable": 0
+                },
+                "require": {}
             },
-            "require": {}
+            "item": "minecraft:iron_helmet"
         },
-        "item": "minecraft:iron_helmet"
-    },
-    "ingredient": {
-        "data": {
-            "require": {}
+        "ingredient": {
+            "data": {
+                "require": {}
+            },
+            "item": "minecraft:diamond"
         },
-        "item": "minecraft:diamond"
-    },
-    "result": {
-        "data": {
-            "$": "$base",
-            "Damage": "$363"
+        "result": {
+            "data": {
+                "$": "$base",
+                "Damage": "$363"
+            },
+            "item": "minecraft:diamond_helmet"
         },
-        "item": "minecraft:diamond_helmet"
+        "type": "minecraft:smithing"
     },
-    "type": "nbtcrafting:smithing"
+    "type": "nbtcrafting3:data"
 }

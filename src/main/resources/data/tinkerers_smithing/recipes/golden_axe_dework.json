@@ -1,24 +1,27 @@
 {
-    "base": {
-        "data": {
-            "require": {
-                "RepairCost": "$2.."
-            }
+    "recipe": {
+        "base": {
+            "data": {
+                "require": {
+                    "RepairCost": "$1.."
+                }
+            },
+            "item": "minecraft:golden_axe"
         },
-        "item": "minecraft:golden_axe"
-    },
-    "ingredient": {
-        "data": {
-            "require": {}
+        "ingredient": {
+            "data": {
+                "require": {}
+            },
+            "item": "minecraft:netherite_scrap"
         },
-        "item": "minecraft:netherite_scrap"
-    },
-    "result": {
-        "data": {
-            "$": "$base",
-            "RepairCost": "$((base.RepairCost + 1)/2)-1"
+        "result": {
+            "data": {
+                "$": "$base",
+                "RepairCost": "$((base.RepairCost + 1)/2)-1"
+            },
+            "item": "minecraft:golden_axe"
         },
-        "item": "minecraft:golden_axe"
+        "type": "minecraft:smithing"
     },
-    "type": "nbtcrafting:smithing"
+    "type": "nbtcrafting3:data"
 }
