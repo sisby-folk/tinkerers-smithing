@@ -30,9 +30,9 @@ dependencyResolutionManagement {
 			library('quiltMappings', 'org.quiltmc', 'quilt-mappings').versionRef('quiltMappings')
 
 			// // Libraries // //
-			version('nbtCrafting', "2.2.1+mc${mc_major}")
+			version('nbtCrafting', "3.0.0-alpha.1+mc${mc_major}")
 
-			library('nbtCrafting', 'de.siphalor', 'nbtcrafting-' + mc_major).versionRef('nbtCrafting')
+			library('nbtCrafting', 'de.siphalor', 'nbtcrafting3-' + mc_major).versionRef('nbtCrafting')
 
 		}
 	}

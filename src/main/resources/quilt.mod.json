@@ -28,8 +28,8 @@
 				"versions": ">=1.15"
 			},
 			{
-				"id": "nbtcrafting",
-				"versions": ">=2.2.1"
+				"id": "nbtcrafting3",
+				"versions": ">=3.0.0-"
 			}
 		]
 	}
