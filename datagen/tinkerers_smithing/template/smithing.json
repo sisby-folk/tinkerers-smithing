@@ -1,5 +1,5 @@
 {
-  "type": "nbtcrafting:smithing",
+  "type": "minecraft:smithing",
   "base": {
     "item": "{{ base_item }}",
     "data": {
