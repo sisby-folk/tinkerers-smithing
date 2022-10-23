@@ -138,42 +138,24 @@ def main():
         template = json.load(template_file)
 
     for gear_type in ['pickaxe', 'sword', 'shovel', 'axe', 'hoe']:
-        for gear_tier in ['wooden', 'stone', 'golden', 'iron']:
-            for recipe_type in ['repair_single', 'repair_double', 'repair_triple', 'upgrade']:
+        # repair
+        for gear_tier in ['wooden', 'stone']:
+            recipe = deepcopy(template)
+            recipe['result']['item'] = 'minecraft:' + gear_tier + '_' + gear_type
 
-                recipe = deepcopy(template)
-                recipe['result']['item'] = 'minecraft:' + gear_tier + '_' + gear_type
+            for amount in range(1, get_unit_cost(gear_type) + 1):
+                recipe['ingredients'] = [{'item': 'minecraft:' + gear_tier + '_' + gear_type}] + [{get_repair_ingredient_type(gear_tier): get_repair_ingredient(gear_tier)} for _ in range(amount)]
+                durability_restored = math.ceil((get_durability(gear_tier, gear_type) * amount) / float(get_unit_cost(gear_type)))
+                recipe['result']['data']['Damage'] = '$max(0, i0.Damage - ' + str(durability_restored) + ')'
+                write_recipe(dir_recipes, recipe, gear_tier, gear_type, "repair" + "_" + str(amount))
 
-                if recipe_type.startswith('repair'):
-                    if gear_tier in ['iron', 'golden']:
-                        continue
-
-                    amount = 3 if 'triple' in recipe_type else (2 if 'double' in recipe_type else 1)
-
-                    if amount > get_unit_cost(gear_type):
-                        continue
-
-                    durability = get_durability(gear_tier, gear_type)
-                    recipe['ingredients'][0]['item'] = 'minecraft:' + gear_tier + '_' + gear_type
-
-                    for _ in range(amount):
-                        recipe['ingredients'] += [{get_repair_ingredient_type(gear_tier): get_repair_ingredient(gear_tier)}]
-
-                    durability_restored = math.ceil((durability * amount) / float(get_unit_cost(gear_type)))
-                    recipe['result']['data']['Damage'] = '$$max(0, i0.Damage - ' + str(durability_restored) + ')'
-
-                if recipe_type.startswith('upgrade'):
-                    if gear_tier in ['wooden']:
-                        continue
-                    recipe['ingredients'][0]['item'] = get_upgrade_item(gear_tier, gear_type)
-                    amount = get_unit_cost(gear_type)
-                    for _ in range(amount):
-                        recipe['ingredients'] += [{get_repair_ingredient_type(gear_tier): get_repair_ingredient(gear_tier)}]
-
-                    recipe['result']['data']['Damage'] = "$i0.Damage"
-
-                with open(dir_recipes + gear_tier + '_' + gear_type + '_' + recipe_type + '.json', 'w') as out_file:
-                    json.dump(recipe, out_file, indent=4, sort_keys=True)
+        # upgrade
+        for gear_tier in ['stone', 'golden', 'iron']:
+            recipe = deepcopy(template)
+            recipe['result']['item'] = 'minecraft:' + gear_tier + '_' + gear_type
+            recipe['ingredients'] = [{'item': get_upgrade_item(gear_tier, gear_type)}] + [{get_repair_ingredient_type(gear_tier): get_repair_ingredient(gear_tier)} for _ in range(get_unit_cost(gear_type))]
+            recipe['result']['data']['Damage'] = "$i0.Damage"
+            write_recipe(dir_recipes, recipe, gear_tier, gear_type, "upgrade")
 
 
 if __name__ == "__main__":
