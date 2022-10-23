@@ -23,11 +23,12 @@ if (System.getenv("GITHUB_TOKEN")) {
 archivesBaseName = project.archives_base_name
 
 def mc_major = '1.19'
+def nbt_crafting = '2'
 def mc = mc_major + '.2'
 def default_branch = 'main'
 
 def origVersion = project.version
-project.version = project.version + "+" + mc_major
+project.version = project.version + "+nbtc" + nbt_crafting
 group = project.maven_group
 
 repositories {
@@ -66,6 +67,10 @@ processResources {
 	inputs.property "version", version
 
 	filesMatching('quilt.mod.json') {
+		expand "version": version
+	}
+
+	filesMatching('fabric.mod.json') {
 		expand "version": version
 	}
 }
@@ -111,8 +116,8 @@ if (System.getenv("MODRINTH_TOKEN")) {
 		versionName = origVersion
 		versionType = 'release'
 		uploadFile = remapJar
-		gameVersions = [mc]
-		loaders = ['quilt']
+		gameVersions = ['1.15', '1.15.1', '1.15.2', '1.16', '1.16.1', '1.16.2', '1.16.3', '1.16.4', '1.16.5', '1.17', '1.17.1', '1.18', '1.18.1', '1.18.2', '1.19', '1.19.1', '1.19.2']
+		loaders = ['quilt', 'fabric']
 		detectLoaders = false
 		dependencies {
 			required.project "nbt-crafting"
