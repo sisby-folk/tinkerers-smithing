@@ -16,7 +16,7 @@
         },
         "result": {
             "data": {
-                "$": "$base",
+                "$": "base",
                 "Damage": "$max(0, base.Damage - 63)"
             },
             "item": "minecraft:iron_axe"

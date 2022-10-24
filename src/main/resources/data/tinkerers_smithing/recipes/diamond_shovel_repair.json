@@ -16,7 +16,7 @@
         },
         "result": {
             "data": {
-                "$": "$base",
+                "$": "base",
                 "Damage": "$max(0, base.Damage - 391)"
             },
             "item": "minecraft:diamond_shovel"

@@ -17,7 +17,7 @@
         },
         "result": {
             "data": {
-                "$": "$base",
+                "$": "base",
                 "Damage": "$max(0, (407-((2031-ingredient.Damage)*814.0/10155))#i)"
             },
             "item": "minecraft:netherite_helmet"

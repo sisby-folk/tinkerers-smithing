@@ -16,7 +16,7 @@
         },
         "result": {
             "data": {
-                "$": "$base",
+                "$": "base",
                 "Damage": "$max(0, base.Damage - 139)"
             },
             "item": "minecraft:netherite_leggings"

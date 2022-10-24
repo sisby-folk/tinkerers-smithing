@@ -17,7 +17,7 @@
         },
         "result": {
             "data": {
-                "$": "$base",
+                "$": "base",
                 "Damage": "$max(0, (2031-((555-ingredient.Damage)*14217.0/1665))#i)"
             },
             "item": "minecraft:netherite_axe"

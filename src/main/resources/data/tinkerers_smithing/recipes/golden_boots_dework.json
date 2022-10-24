@@ -16,7 +16,7 @@
         },
         "result": {
             "data": {
-                "$": "$base",
+                "$": "base",
                 "RepairCost": "$((base.RepairCost + 1)/2)-1"
             },
             "item": "minecraft:golden_boots"

@@ -18,7 +18,7 @@
         ],
         "result": {
             "data": {
-                "$": "$i0",
+                "$": "i0",
                 "Damage": "$max(0, i0.Damage - 40)"
             },
             "item": "minecraft:wooden_pickaxe"

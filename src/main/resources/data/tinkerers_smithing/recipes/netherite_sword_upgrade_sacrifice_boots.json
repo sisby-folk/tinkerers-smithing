@@ -17,7 +17,7 @@
         },
         "result": {
             "data": {
-                "$": "$base",
+                "$": "base",
                 "Damage": "$max(0, (2031-((481-ingredient.Damage)*8124.0/962))#i)"
             },
             "item": "minecraft:netherite_sword"

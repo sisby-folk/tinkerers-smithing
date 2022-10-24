@@ -17,7 +17,7 @@
         },
         "result": {
             "data": {
-                "$": "$base",
+                "$": "base",
                 "Damage": "$max(0, (481-((592-ingredient.Damage)*3848.0/2368))#i)"
             },
             "item": "minecraft:netherite_boots"

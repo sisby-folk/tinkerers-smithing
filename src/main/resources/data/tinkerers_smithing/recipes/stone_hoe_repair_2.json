@@ -18,7 +18,7 @@
         ],
         "result": {
             "data": {
-                "$": "$i0",
+                "$": "i0",
                 "Damage": "$max(0, i0.Damage - 131)"
             },
             "item": "minecraft:stone_hoe"

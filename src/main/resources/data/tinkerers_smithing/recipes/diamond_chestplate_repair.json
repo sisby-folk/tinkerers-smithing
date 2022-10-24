@@ -16,7 +16,7 @@
         },
         "result": {
             "data": {
-                "$": "$base",
+                "$": "base",
                 "Damage": "$max(0, base.Damage - 132)"
             },
             "item": "minecraft:diamond_chestplate"
