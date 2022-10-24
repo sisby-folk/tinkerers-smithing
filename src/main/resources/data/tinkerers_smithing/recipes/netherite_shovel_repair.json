@@ -3,7 +3,7 @@
         "base": {
             "data": {
                 "require": {
-                    "Damage": "$508.."
+                    "Damage": "$1.."
                 }
             },
             "item": "minecraft:netherite_shovel"

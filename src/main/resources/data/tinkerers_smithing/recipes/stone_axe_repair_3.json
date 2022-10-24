@@ -2,6 +2,11 @@
     "recipe": {
         "ingredients": [
             {
+                "data": {
+                    "require": {
+                        "Damage": "$89.."
+                    }
+                },
                 "item": "minecraft:stone_axe"
             },
             {

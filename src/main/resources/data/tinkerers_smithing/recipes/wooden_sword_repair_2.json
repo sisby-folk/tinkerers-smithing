@@ -2,6 +2,11 @@
     "recipe": {
         "ingredients": [
             {
+                "data": {
+                    "require": {
+                        "Damage": "$31.."
+                    }
+                },
                 "item": "minecraft:wooden_sword"
             },
             {

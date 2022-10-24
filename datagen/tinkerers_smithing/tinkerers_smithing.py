@@ -104,7 +104,7 @@ def main():
             durability_restored = math.ceil(durability / 4.0)
             recipe['base']['item'] = 'minecraft:' + gear_tier + '_' + gear_type
             recipe['ingredient']['item'] = get_repair_ingredient(gear_tier)
-            recipe['base']['data']['require']["Damage"] = '$' + str(durability_restored) + '..'
+            recipe['base']['data']['require']["Damage"] = '$1..'
             recipe['result']['data']['Damage'] = '$max(0, base.Damage - ' + str(durability_restored) + ')'
             write_recipe(dir_recipes, recipe, gear_tier, gear_type, 'repair')
 
@@ -143,10 +143,11 @@ def main():
             recipe = deepcopy(template)
             recipe['result']['item'] = 'minecraft:' + gear_tier + '_' + gear_type
 
+            durability_restored = lambda amt: math.ceil((get_durability(gear_tier, gear_type) * amt) / float(get_unit_cost(gear_type)))
             for amount in range(1, get_unit_cost(gear_type) + 1):
+                recipe['result']['data']['Damage'] = '$max(0, i0.Damage - ' + str(durability_restored(amount)) + ')'
                 recipe['ingredients'] = [{'item': 'minecraft:' + gear_tier + '_' + gear_type}] + [{get_repair_ingredient_type(gear_tier): get_repair_ingredient(gear_tier)} for _ in range(amount)]
-                durability_restored = math.ceil((get_durability(gear_tier, gear_type) * amount) / float(get_unit_cost(gear_type)))
-                recipe['result']['data']['Damage'] = '$max(0, i0.Damage - ' + str(durability_restored) + ')'
+                recipe['ingredients'][0]['data'] = {'require': {'Damage': '$' + str(max(durability_restored(amount - 1) + 1, 1)) + '..'}}
                 write_recipe(dir_recipes, recipe, gear_tier, gear_type, "repair" + "_" + str(amount))
 
         # upgrade

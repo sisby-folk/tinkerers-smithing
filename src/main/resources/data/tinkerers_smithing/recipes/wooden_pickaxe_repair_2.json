@@ -2,6 +2,11 @@
     "recipe": {
         "ingredients": [
             {
+                "data": {
+                    "require": {
+                        "Damage": "$21.."
+                    }
+                },
                 "item": "minecraft:wooden_pickaxe"
             },
             {
