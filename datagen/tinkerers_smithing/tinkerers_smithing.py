@@ -130,7 +130,7 @@ def main():
                         result_durability = get_durability(gear_tier, gear_type)
                         result_units = get_unit_cost(gear_type)
 
-                        recipe['result']['data']['Damage'] = f"${clamp_positive(f'({result_durability}-(({sacrifice_durability}-ingredient.Damage)*{sacrifice_units * result_durability:.1f}/{sacrifice_durability * result_units}))#i)')}"
+                        recipe['result']['data']['Damage'] = f"${clamp_positive(f'({result_durability}-(({sacrifice_durability}-ingredient.Damage)*{sacrifice_units * result_durability:.1f}/{sacrifice_durability * result_units}))#i')}"
                         write_recipe(dir_recipes, recipe, gear_tier, gear_type, 'upgrade_sacrifice_' + sacrifice_type)
 
                 elif get_unit_cost(gear_type) <= 5:
