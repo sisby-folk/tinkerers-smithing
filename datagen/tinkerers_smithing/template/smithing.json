@@ -17,6 +17,7 @@
   "result": {
     "item": "{{ result_item }}",
     "data": {
+      "$": "base"
     }
   }
 }
