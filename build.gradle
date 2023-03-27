@@ -25,7 +25,7 @@ archivesBaseName = project.archives_base_name
 def mc_major = '1.19'
 def nbt_crafting = '2'
 def mc = mc_major + '.2'
-def default_branch = 'main'
+def default_branch = 'nbtc2'
 
 def origVersion = project.version
 project.version = project.version + "+nbtc" + nbt_crafting
