@@ -75,6 +75,10 @@ def get_upgrade_item(gear_tier, gear_type):
         return 'minecraft:' + upgrade_tier + '_' + gear_type if upgrade_tier is not None and armor_tiers[tiers.index(upgrade_tier)] else None
 
 
+def clamp_positive(exp):
+    return f'({exp})*((2*({exp})+1)%2+1)/2'
+
+
 def main():
     dir_pack = '../out/tinkerers_smithing'
     dir_recipes = dir_pack + '/data/tinkerers_smithing/recipes/'
@@ -105,7 +109,7 @@ def main():
             recipe['base']['item'] = 'minecraft:' + gear_tier + '_' + gear_type
             recipe['ingredient']['item'] = get_repair_ingredient(gear_tier)
             recipe['base']['data']['require']["Damage"] = '$1..'
-            recipe['result']['data']['Damage'] = '$max(0, base.Damage - ' + str(durability_restored) + ')'
+            recipe['result']['data']['Damage'] = f"${clamp_positive(f'base.Damage-{durability_restored}')}"
             write_recipe(dir_recipes, recipe, gear_tier, gear_type, 'repair')
 
             # upgrade
@@ -126,7 +130,7 @@ def main():
                         result_durability = get_durability(gear_tier, gear_type)
                         result_units = get_unit_cost(gear_type)
 
-                        recipe['result']['data']['Damage'] = '$max(0, (' + str(result_durability) + '-((' + str(sacrifice_durability) + '-ingredient.Damage)*' + '{:.1f}'.format(sacrifice_units * result_durability) + '/' + str(sacrifice_durability * result_units) + '))#i)'
+                        recipe['result']['data']['Damage'] = f"${clamp_positive(f'({result_durability}-(({sacrifice_durability}-ingredient.Damage)*{sacrifice_units * result_durability:.1f}/{sacrifice_durability * result_units}))#i)')}"
                         write_recipe(dir_recipes, recipe, gear_tier, gear_type, 'upgrade_sacrifice_' + sacrifice_type)
 
                 elif get_unit_cost(gear_type) <= 5:
@@ -145,7 +149,7 @@ def main():
 
             durability_restored = lambda amt: math.ceil((get_durability(gear_tier, gear_type) * amt) / float(get_unit_cost(gear_type)))
             for amount in range(1, get_unit_cost(gear_type) + 1):
-                recipe['result']['data']['Damage'] = '$max(0, i0.Damage - ' + str(durability_restored(amount)) + ')'
+                recipe['result']['data']['Damage'] = f"${clamp_positive(f'i0.Damage-{durability_restored(amount)}')}"
                 recipe['ingredients'] = [{'item': 'minecraft:' + gear_tier + '_' + gear_type}] + [{get_repair_ingredient_type(gear_tier): get_repair_ingredient(gear_tier)} for _ in range(amount)]
                 recipe['ingredients'][0]['data'] = {'require': {'Damage': '$' + str(max(durability_restored(amount - 1) + 1, 1)) + '..'}}
                 write_recipe(dir_recipes, recipe, gear_tier, gear_type, "repair" + "_" + str(amount))
