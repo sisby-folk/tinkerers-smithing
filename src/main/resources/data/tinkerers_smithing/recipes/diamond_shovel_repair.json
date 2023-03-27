@@ -15,6 +15,7 @@
     },
     "result": {
         "data": {
+            "$": "base",
             "Damage": "$(base.Damage-391)*((2*(base.Damage-391)+1)%2+1)/2"
         },
         "item": "minecraft:diamond_shovel"

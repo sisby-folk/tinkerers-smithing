@@ -15,6 +15,7 @@
     },
     "result": {
         "data": {
+            "$": "base",
             "Damage": "$(base.Damage-28)*((2*(base.Damage-28)+1)%2+1)/2"
         },
         "item": "minecraft:golden_chestplate"

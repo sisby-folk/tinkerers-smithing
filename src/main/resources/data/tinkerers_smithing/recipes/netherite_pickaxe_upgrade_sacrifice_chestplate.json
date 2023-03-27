@@ -16,6 +16,7 @@
     },
     "result": {
         "data": {
+            "$": "base",
             "Damage": "$((2031-((592-ingredient.Damage)*16248.0/1776))#i)*((2*((2031-((592-ingredient.Damage)*16248.0/1776))#i)+1)%2+1)/2"
         },
         "item": "minecraft:netherite_pickaxe"

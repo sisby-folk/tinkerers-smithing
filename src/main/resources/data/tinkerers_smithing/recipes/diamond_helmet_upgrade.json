@@ -16,6 +16,7 @@
     },
     "result": {
         "data": {
+            "$": "base",
             "Damage": "$363"
         },
         "item": "minecraft:diamond_helmet"

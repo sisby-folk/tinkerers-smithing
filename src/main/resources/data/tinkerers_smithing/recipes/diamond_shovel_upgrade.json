@@ -16,6 +16,7 @@
     },
     "result": {
         "data": {
+            "$": "base",
             "Damage": "$0"
         },
         "item": "minecraft:diamond_shovel"
