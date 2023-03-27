@@ -17,7 +17,7 @@ def assert_not_dir(path):
 
 def write_recipe(recipe_dir, recipe, tier, gear_type, recipe_type):
     with open(recipe_dir + tier + '_' + gear_type + '_' + recipe_type + '.json', 'w') as out_file:
-        json.dump({"type": "nbtcrafting3:data", "recipe": recipe}, out_file, indent=4, sort_keys=True)
+        json.dump(recipe, out_file, indent=4, sort_keys=True)
 
 
 def get_durability(gear_tier, gear_type):
