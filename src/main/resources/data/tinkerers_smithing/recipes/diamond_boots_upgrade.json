@@ -16,7 +16,6 @@
     },
     "result": {
         "data": {
-            "$": "base",
             "Damage": "$321"
         },
         "item": "minecraft:diamond_boots"

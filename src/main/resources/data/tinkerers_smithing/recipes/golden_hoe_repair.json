@@ -15,7 +15,6 @@
     },
     "result": {
         "data": {
-            "$": "base",
             "Damage": "$(base.Damage-8)*((2*(base.Damage-8)+1)%2+1)/2"
         },
         "item": "minecraft:golden_hoe"

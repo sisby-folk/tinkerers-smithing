@@ -15,7 +15,6 @@
     },
     "result": {
         "data": {
-            "$": "base",
             "RepairCost": "$((base.RepairCost + 1)/2)-1"
         },
         "item": "minecraft:diamond_axe"

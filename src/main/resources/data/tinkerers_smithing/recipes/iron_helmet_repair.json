@@ -15,7 +15,6 @@
     },
     "result": {
         "data": {
-            "$": "base",
             "Damage": "$(base.Damage-42)*((2*(base.Damage-42)+1)%2+1)/2"
         },
         "item": "minecraft:iron_helmet"
