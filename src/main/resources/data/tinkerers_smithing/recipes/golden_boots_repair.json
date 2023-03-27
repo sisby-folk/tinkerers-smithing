@@ -1,27 +1,24 @@
 {
-    "recipe": {
-        "base": {
-            "data": {
-                "require": {
-                    "Damage": "$1.."
-                }
-            },
-            "item": "minecraft:golden_boots"
+    "base": {
+        "data": {
+            "require": {
+                "Damage": "$1.."
+            }
         },
-        "ingredient": {
-            "data": {
-                "require": {}
-            },
-            "item": "minecraft:gold_ingot"
-        },
-        "result": {
-            "data": {
-                "$": "base",
-                "Damage": "$max(0, base.Damage - 23)"
-            },
-            "item": "minecraft:golden_boots"
-        },
-        "type": "minecraft:smithing"
+        "item": "minecraft:golden_boots"
     },
-    "type": "nbtcrafting3:data"
+    "ingredient": {
+        "data": {
+            "require": {}
+        },
+        "item": "minecraft:gold_ingot"
+    },
+    "result": {
+        "data": {
+            "$": "base",
+            "Damage": "$(base.Damage-23)*((2*(base.Damage-23)+1)%2+1)/2"
+        },
+        "item": "minecraft:golden_boots"
+    },
+    "type": "nbtcrafting:smithing"
 }

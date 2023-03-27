@@ -1,27 +1,24 @@
 {
-    "recipe": {
-        "base": {
-            "data": {
-                "require": {
-                    "Damage": "$1.."
-                }
-            },
-            "item": "minecraft:diamond_hoe"
+    "base": {
+        "data": {
+            "require": {
+                "Damage": "$1.."
+            }
         },
-        "ingredient": {
-            "data": {
-                "require": {}
-            },
-            "item": "minecraft:diamond"
-        },
-        "result": {
-            "data": {
-                "$": "base",
-                "Damage": "$max(0, base.Damage - 391)"
-            },
-            "item": "minecraft:diamond_hoe"
-        },
-        "type": "minecraft:smithing"
+        "item": "minecraft:diamond_hoe"
     },
-    "type": "nbtcrafting3:data"
+    "ingredient": {
+        "data": {
+            "require": {}
+        },
+        "item": "minecraft:diamond"
+    },
+    "result": {
+        "data": {
+            "$": "base",
+            "Damage": "$(base.Damage-391)*((2*(base.Damage-391)+1)%2+1)/2"
+        },
+        "item": "minecraft:diamond_hoe"
+    },
+    "type": "nbtcrafting:smithing"
 }

@@ -1,28 +1,25 @@
 {
-    "recipe": {
-        "base": {
-            "data": {
-                "deny": {
-                    "Upgradeable": 0
-                },
-                "require": {}
+    "base": {
+        "data": {
+            "deny": {
+                "Upgradeable": 0
             },
-            "item": "minecraft:golden_helmet"
+            "require": {}
         },
-        "ingredient": {
-            "data": {
-                "require": {}
-            },
-            "item": "minecraft:netherite_axe"
-        },
-        "result": {
-            "data": {
-                "$": "base",
-                "Damage": "$max(0, (407-((2031-ingredient.Damage)*1221.0/10155))#i)"
-            },
-            "item": "minecraft:netherite_helmet"
-        },
-        "type": "minecraft:smithing"
+        "item": "minecraft:golden_helmet"
     },
-    "type": "nbtcrafting3:data"
+    "ingredient": {
+        "data": {
+            "require": {}
+        },
+        "item": "minecraft:netherite_axe"
+    },
+    "result": {
+        "data": {
+            "$": "base",
+            "Damage": "$((407-((2031-ingredient.Damage)*1221.0/10155))#i))*((2*((407-((2031-ingredient.Damage)*1221.0/10155))#i))+1)%2+1)/2"
+        },
+        "item": "minecraft:netherite_helmet"
+    },
+    "type": "nbtcrafting:smithing"
 }

@@ -1,28 +1,25 @@
 {
-    "recipe": {
-        "base": {
-            "data": {
-                "deny": {
-                    "Upgradeable": 0
-                },
-                "require": {}
+    "base": {
+        "data": {
+            "deny": {
+                "Upgradeable": 0
             },
-            "item": "minecraft:iron_shovel"
+            "require": {}
         },
-        "ingredient": {
-            "data": {
-                "require": {}
-            },
-            "item": "minecraft:diamond"
-        },
-        "result": {
-            "data": {
-                "$": "base",
-                "Damage": "$0"
-            },
-            "item": "minecraft:diamond_shovel"
-        },
-        "type": "minecraft:smithing"
+        "item": "minecraft:iron_shovel"
     },
-    "type": "nbtcrafting3:data"
+    "ingredient": {
+        "data": {
+            "require": {}
+        },
+        "item": "minecraft:diamond"
+    },
+    "result": {
+        "data": {
+            "$": "base",
+            "Damage": "$0"
+        },
+        "item": "minecraft:diamond_shovel"
+    },
+    "type": "nbtcrafting:smithing"
 }

@@ -1,29 +1,26 @@
 {
-    "recipe": {
-        "ingredients": [
-            {
-                "data": {
-                    "require": {
-                        "Damage": "$45.."
-                    }
-                },
-                "item": "minecraft:stone_axe"
-            },
-            {
-                "tag": "minecraft:stone_tool_materials"
-            },
-            {
-                "tag": "minecraft:stone_tool_materials"
-            }
-        ],
-        "result": {
+    "ingredients": [
+        {
             "data": {
-                "$": "i0",
-                "Damage": "$max(0, i0.Damage - 88)"
+                "require": {
+                    "Damage": "$45.."
+                }
             },
             "item": "minecraft:stone_axe"
         },
-        "type": "minecraft:crafting_shapeless"
+        {
+            "tag": "minecraft:stone_tool_materials"
+        },
+        {
+            "tag": "minecraft:stone_tool_materials"
+        }
+    ],
+    "result": {
+        "data": {
+            "$": "i0",
+            "Damage": "$(i0.Damage-88)*((2*(i0.Damage-88)+1)%2+1)/2"
+        },
+        "item": "minecraft:stone_axe"
     },
-    "type": "nbtcrafting3:data"
+    "type": "minecraft:crafting_shapeless"
 }

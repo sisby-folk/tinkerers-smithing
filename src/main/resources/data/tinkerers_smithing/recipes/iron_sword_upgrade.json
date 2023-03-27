@@ -1,24 +1,21 @@
 {
-    "recipe": {
-        "ingredients": [
-            {
-                "item": "minecraft:stone_sword"
-            },
-            {
-                "item": "minecraft:iron_ingot"
-            },
-            {
-                "item": "minecraft:iron_ingot"
-            }
-        ],
-        "result": {
-            "data": {
-                "$": "i0",
-                "Damage": "$i0.Damage"
-            },
-            "item": "minecraft:iron_sword"
+    "ingredients": [
+        {
+            "item": "minecraft:stone_sword"
         },
-        "type": "minecraft:crafting_shapeless"
+        {
+            "item": "minecraft:iron_ingot"
+        },
+        {
+            "item": "minecraft:iron_ingot"
+        }
+    ],
+    "result": {
+        "data": {
+            "$": "i0",
+            "Damage": "$i0.Damage"
+        },
+        "item": "minecraft:iron_sword"
     },
-    "type": "nbtcrafting3:data"
+    "type": "minecraft:crafting_shapeless"
 }

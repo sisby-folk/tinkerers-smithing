@@ -1,24 +1,21 @@
 {
-    "recipe": {
-        "ingredients": [
-            {
-                "item": "minecraft:wooden_sword"
-            },
-            {
-                "tag": "minecraft:stone_tool_materials"
-            },
-            {
-                "tag": "minecraft:stone_tool_materials"
-            }
-        ],
-        "result": {
-            "data": {
-                "$": "i0",
-                "Damage": "$i0.Damage"
-            },
-            "item": "minecraft:stone_sword"
+    "ingredients": [
+        {
+            "item": "minecraft:wooden_sword"
         },
-        "type": "minecraft:crafting_shapeless"
+        {
+            "tag": "minecraft:stone_tool_materials"
+        },
+        {
+            "tag": "minecraft:stone_tool_materials"
+        }
+    ],
+    "result": {
+        "data": {
+            "$": "i0",
+            "Damage": "$i0.Damage"
+        },
+        "item": "minecraft:stone_sword"
     },
-    "type": "nbtcrafting3:data"
+    "type": "minecraft:crafting_shapeless"
 }

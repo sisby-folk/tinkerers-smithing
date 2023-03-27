@@ -1,29 +1,26 @@
 {
-    "recipe": {
-        "ingredients": [
-            {
-                "data": {
-                    "require": {
-                        "Damage": "$31.."
-                    }
-                },
-                "item": "minecraft:wooden_hoe"
-            },
-            {
-                "tag": "minecraft:planks"
-            },
-            {
-                "tag": "minecraft:planks"
-            }
-        ],
-        "result": {
+    "ingredients": [
+        {
             "data": {
-                "$": "i0",
-                "Damage": "$max(0, i0.Damage - 59)"
+                "require": {
+                    "Damage": "$31.."
+                }
             },
             "item": "minecraft:wooden_hoe"
         },
-        "type": "minecraft:crafting_shapeless"
+        {
+            "tag": "minecraft:planks"
+        },
+        {
+            "tag": "minecraft:planks"
+        }
+    ],
+    "result": {
+        "data": {
+            "$": "i0",
+            "Damage": "$(i0.Damage-59)*((2*(i0.Damage-59)+1)%2+1)/2"
+        },
+        "item": "minecraft:wooden_hoe"
     },
-    "type": "nbtcrafting3:data"
+    "type": "minecraft:crafting_shapeless"
 }

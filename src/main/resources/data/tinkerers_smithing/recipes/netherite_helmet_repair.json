@@ -1,27 +1,24 @@
 {
-    "recipe": {
-        "base": {
-            "data": {
-                "require": {
-                    "Damage": "$1.."
-                }
-            },
-            "item": "minecraft:netherite_helmet"
+    "base": {
+        "data": {
+            "require": {
+                "Damage": "$1.."
+            }
         },
-        "ingredient": {
-            "data": {
-                "require": {}
-            },
-            "item": "minecraft:netherite_ingot"
-        },
-        "result": {
-            "data": {
-                "$": "base",
-                "Damage": "$max(0, base.Damage - 102)"
-            },
-            "item": "minecraft:netherite_helmet"
-        },
-        "type": "minecraft:smithing"
+        "item": "minecraft:netherite_helmet"
     },
-    "type": "nbtcrafting3:data"
+    "ingredient": {
+        "data": {
+            "require": {}
+        },
+        "item": "minecraft:netherite_ingot"
+    },
+    "result": {
+        "data": {
+            "$": "base",
+            "Damage": "$(base.Damage-102)*((2*(base.Damage-102)+1)%2+1)/2"
+        },
+        "item": "minecraft:netherite_helmet"
+    },
+    "type": "nbtcrafting:smithing"
 }

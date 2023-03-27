@@ -1,24 +1,21 @@
 {
-    "recipe": {
-        "ingredients": [
-            {
-                "item": "minecraft:wooden_sword"
-            },
-            {
-                "item": "minecraft:gold_ingot"
-            },
-            {
-                "item": "minecraft:gold_ingot"
-            }
-        ],
-        "result": {
-            "data": {
-                "$": "i0",
-                "Damage": "$i0.Damage"
-            },
-            "item": "minecraft:golden_sword"
+    "ingredients": [
+        {
+            "item": "minecraft:wooden_sword"
         },
-        "type": "minecraft:crafting_shapeless"
+        {
+            "item": "minecraft:gold_ingot"
+        },
+        {
+            "item": "minecraft:gold_ingot"
+        }
+    ],
+    "result": {
+        "data": {
+            "$": "i0",
+            "Damage": "$i0.Damage"
+        },
+        "item": "minecraft:golden_sword"
     },
-    "type": "nbtcrafting3:data"
+    "type": "minecraft:crafting_shapeless"
 }

@@ -1,26 +1,23 @@
 {
-    "recipe": {
-        "ingredients": [
-            {
-                "data": {
-                    "require": {
-                        "Damage": "$1.."
-                    }
-                },
-                "item": "minecraft:wooden_shovel"
-            },
-            {
-                "tag": "minecraft:planks"
-            }
-        ],
-        "result": {
+    "ingredients": [
+        {
             "data": {
-                "$": "i0",
-                "Damage": "$max(0, i0.Damage - 59)"
+                "require": {
+                    "Damage": "$1.."
+                }
             },
             "item": "minecraft:wooden_shovel"
         },
-        "type": "minecraft:crafting_shapeless"
+        {
+            "tag": "minecraft:planks"
+        }
+    ],
+    "result": {
+        "data": {
+            "$": "i0",
+            "Damage": "$(i0.Damage-59)*((2*(i0.Damage-59)+1)%2+1)/2"
+        },
+        "item": "minecraft:wooden_shovel"
     },
-    "type": "nbtcrafting3:data"
+    "type": "minecraft:crafting_shapeless"
 }

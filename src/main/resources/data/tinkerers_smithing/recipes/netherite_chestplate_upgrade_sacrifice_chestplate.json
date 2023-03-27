@@ -1,28 +1,25 @@
 {
-    "recipe": {
-        "base": {
-            "data": {
-                "deny": {
-                    "Upgradeable": 0
-                },
-                "require": {}
+    "base": {
+        "data": {
+            "deny": {
+                "Upgradeable": 0
             },
-            "item": "minecraft:golden_chestplate"
+            "require": {}
         },
-        "ingredient": {
-            "data": {
-                "require": {}
-            },
-            "item": "minecraft:netherite_chestplate"
-        },
-        "result": {
-            "data": {
-                "$": "base",
-                "Damage": "$max(0, (592-((592-ingredient.Damage)*4736.0/4736))#i)"
-            },
-            "item": "minecraft:netherite_chestplate"
-        },
-        "type": "minecraft:smithing"
+        "item": "minecraft:golden_chestplate"
     },
-    "type": "nbtcrafting3:data"
+    "ingredient": {
+        "data": {
+            "require": {}
+        },
+        "item": "minecraft:netherite_chestplate"
+    },
+    "result": {
+        "data": {
+            "$": "base",
+            "Damage": "$((592-((592-ingredient.Damage)*4736.0/4736))#i))*((2*((592-((592-ingredient.Damage)*4736.0/4736))#i))+1)%2+1)/2"
+        },
+        "item": "minecraft:netherite_chestplate"
+    },
+    "type": "nbtcrafting:smithing"
 }

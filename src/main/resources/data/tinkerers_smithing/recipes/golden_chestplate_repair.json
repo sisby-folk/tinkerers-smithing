@@ -1,27 +1,24 @@
 {
-    "recipe": {
-        "base": {
-            "data": {
-                "require": {
-                    "Damage": "$1.."
-                }
-            },
-            "item": "minecraft:golden_chestplate"
+    "base": {
+        "data": {
+            "require": {
+                "Damage": "$1.."
+            }
         },
-        "ingredient": {
-            "data": {
-                "require": {}
-            },
-            "item": "minecraft:gold_ingot"
-        },
-        "result": {
-            "data": {
-                "$": "base",
-                "Damage": "$max(0, base.Damage - 28)"
-            },
-            "item": "minecraft:golden_chestplate"
-        },
-        "type": "minecraft:smithing"
+        "item": "minecraft:golden_chestplate"
     },
-    "type": "nbtcrafting3:data"
+    "ingredient": {
+        "data": {
+            "require": {}
+        },
+        "item": "minecraft:gold_ingot"
+    },
+    "result": {
+        "data": {
+            "$": "base",
+            "Damage": "$(base.Damage-28)*((2*(base.Damage-28)+1)%2+1)/2"
+        },
+        "item": "minecraft:golden_chestplate"
+    },
+    "type": "nbtcrafting:smithing"
 }

@@ -1,28 +1,25 @@
 {
-    "recipe": {
-        "base": {
-            "data": {
-                "deny": {
-                    "Upgradeable": 0
-                },
-                "require": {}
+    "base": {
+        "data": {
+            "deny": {
+                "Upgradeable": 0
             },
-            "item": "minecraft:golden_hoe"
+            "require": {}
         },
-        "ingredient": {
-            "data": {
-                "require": {}
-            },
-            "item": "minecraft:netherite_axe"
-        },
-        "result": {
-            "data": {
-                "$": "base",
-                "Damage": "$max(0, (2031-((2031-ingredient.Damage)*6093.0/4062))#i)"
-            },
-            "item": "minecraft:netherite_hoe"
-        },
-        "type": "minecraft:smithing"
+        "item": "minecraft:golden_hoe"
     },
-    "type": "nbtcrafting3:data"
+    "ingredient": {
+        "data": {
+            "require": {}
+        },
+        "item": "minecraft:netherite_axe"
+    },
+    "result": {
+        "data": {
+            "$": "base",
+            "Damage": "$((2031-((2031-ingredient.Damage)*6093.0/4062))#i))*((2*((2031-((2031-ingredient.Damage)*6093.0/4062))#i))+1)%2+1)/2"
+        },
+        "item": "minecraft:netherite_hoe"
+    },
+    "type": "nbtcrafting:smithing"
 }

@@ -1,27 +1,24 @@
 {
-    "recipe": {
-        "base": {
-            "data": {
-                "require": {
-                    "Damage": "$1.."
-                }
-            },
-            "item": "minecraft:iron_helmet"
+    "base": {
+        "data": {
+            "require": {
+                "Damage": "$1.."
+            }
         },
-        "ingredient": {
-            "data": {
-                "require": {}
-            },
-            "item": "minecraft:iron_ingot"
-        },
-        "result": {
-            "data": {
-                "$": "base",
-                "Damage": "$max(0, base.Damage - 42)"
-            },
-            "item": "minecraft:iron_helmet"
-        },
-        "type": "minecraft:smithing"
+        "item": "minecraft:iron_helmet"
     },
-    "type": "nbtcrafting3:data"
+    "ingredient": {
+        "data": {
+            "require": {}
+        },
+        "item": "minecraft:iron_ingot"
+    },
+    "result": {
+        "data": {
+            "$": "base",
+            "Damage": "$(base.Damage-42)*((2*(base.Damage-42)+1)%2+1)/2"
+        },
+        "item": "minecraft:iron_helmet"
+    },
+    "type": "nbtcrafting:smithing"
 }
