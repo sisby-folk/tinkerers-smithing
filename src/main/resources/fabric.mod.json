@@ -23,7 +23,7 @@
     "fabricloader": ">=0.14.9",
     "minecraft": ">=1.15",
     "java": ">=17",
-    "nbtcrafting": ">=2.2.1"
+    "nbtcrafting": ">=2.2.4"
   },
   "suggests": {
     "another-mod": "*"

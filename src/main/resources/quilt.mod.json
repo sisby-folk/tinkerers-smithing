@@ -29,7 +29,7 @@
 			},
 			{
 				"id": "nbtcrafting",
-				"versions": ">=2.2.1"
+				"versions": ">=2.2.4"
 			}
 		]
 	}
