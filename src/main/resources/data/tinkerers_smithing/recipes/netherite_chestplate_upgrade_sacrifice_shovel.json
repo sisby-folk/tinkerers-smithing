@@ -17,7 +17,7 @@
     "result": {
         "data": {
             "$": "base",
-            "Damage": "$((592-((2031-ingredient.Damage)*592.0/16248))#i))*((2*((592-((2031-ingredient.Damage)*592.0/16248))#i))+1)%2+1)/2"
+            "Damage": "$((592-((2031-ingredient.Damage)*592.0/16248))#i)*((2*((592-((2031-ingredient.Damage)*592.0/16248))#i)+1)%2+1)/2"
         },
         "item": "minecraft:netherite_chestplate"
     },
