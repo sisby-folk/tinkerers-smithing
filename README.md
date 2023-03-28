@@ -8,15 +8,15 @@ Requires <a href="https://modrinth.com/mod/nbt-crafting">NBT Crafting</a>, and w
 ---
 
 This mod:
-- Adds unit repair recipes for all equipment with no XP or prior work cost.
-    - For iron and above, use a smithing table to repair 25% at a time, like an anvil.
-    - For basic tools, add up to 3 material in the 2x2 crafting grid to repair based on tool cost.
+- Adds repair recipes for all equipment with no XP or prior work cost.
+  - For basic tools, add up to 3 material in the crafting grid to repair based on tool cost.
+  - For other equipment, add one material at a smithing table to repair 25% durability, like an anvil.
 - Adds upgrade recipes for all equipment.
-    - For iron, use a smithing table to upgrade anything but chestplates and leggings.
-    - For wood and stone tools, add everything but sticks in the 2x2 crafting grid.
-    - For gold gear, add any piece of netherite gear at the smithing table.
+  - For iron, just add a diamond at a smithing table. Excludes chestplates and leggings.
+  - For wood and stone tools, add the full amount of new material to the tool in the crafting grid.
+  - For golden gear, add any piece of netherite gear to it at the smithing table.
 - Adds a recipe to "de-work" equipment, lowering the cost of future anvil operations.
-    - For all equipment, just add netherite scrap at the smithing table.
+  - For iron and above, just add netherite scrap at the smithing table.
 
 All added recipes keep tools as-is - with enchantments, custom names, and any modded data.
 
@@ -28,37 +28,35 @@ If you'd prefer the datapack version for any reason, you can [download it from t
 
 <iframe width="896" height="504" src="https://www.youtube.com/embed/q7KKN9hn7Uo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-## Design - The Mending Problem
+## Design - Progression and Mending
 
-The best gear in vanilla is made by repeatedly un-enchanting gear and enchanting it until the player gets good RNG, then finishing it off with a couple of books (especially mending).<br/>
-Any other method gives an immensely worse result due to `repairCost`/'Prior Work'.<br/>
+In vanilla, endgame gear is made by repeatedly enchanting and un-enchanting for good RNG, then adding books (like mending).
+Any other method gives an immensely worse result due to `repairCost`/'Prior Work'.
 This punishes the player substantially for slowly improving gear.
 
-Even repair inflicts prior work - rushing a mending villager is the only solution.<br/>
-This ruins the idea of having "sentimental" gear you improve and maintain over time.<br/>
-Finding mending villagers is also immensely boring - but the XP cost is too punishing otherwise.
+Even repair inflicts prior work - rushing a mending villager is the only solution.
+This ruins the idea of having "sentimental" gear you improve and maintain over time.
+Finding mending villagers is also boring - but the XP cost is too punishing otherwise.
 
-To combat this, TSmithing introduces work-free unit repair, "de-working" with netherite, and material-upgrading.
+Tinkerer's Smithing doesn't remove prior work, and it doesn't nerf or remove mending. <br/>
+Its recipes instead buff the rest of the game, altering balance as follows:
 
-## Design - Progression Changes
-
-Here are a few side effects of the mod on the progression of the game (For map-makers and those curious)
-
-- Obsidian / Ancient Debris can be mined after obtaining only one diamond.
-- There are three alternative non-RNG methods to obtaining endgame gear
+- Adds three new non-RNG methods to obtaining endgame gear
     - Early game gear can be gradually combined with books, other gear, and netherite scrap.
-    - Enchanted golden treasure gear can be combined and upgraded to netherite.
+    - Enchanted golden treasure can be combined and upgraded to netherite.
     - Enchanted gear can be bought from villagers and combined, then upgraded.
-- Netherite gear can technically be exchanged for other netherite gear - removing enchantments.
-- Adds one RNG-based method to obtain endgame gear: upgrading table-enchanted golden gear.
+- Adds one additional RNG-based method to obtain endgame gear: upgrading table-enchanted golden gear.
     - At the point of having netherite, this is less of an issue as its enchantability is higher.
     - Netherite scrap can also be used to continue combining already powerful gear, nerfing this strategy by proxy.
+- Obsidian / Ancient Debris can be mined after obtaining only one diamond.
+- Netherite gear can technically be exchanged for other netherite gear (removes enchantments).
 
-## Design - Cost in Minecraft
+## Design - Recipe Cost
 
 ### Repairing
 - Repairing **wooden**/**stone** tools from 0 to full costs the same as a fresh tool. 1 unit repairs 1/3 of a pickaxe.
 - Repairing other gear uses anvil balancing - One unit repairs 25% no matter what.
+  - If 4 iron to repair an iron shovel seems steep - make fresh shovels or add enchantments as soon as you can!
 
 ### Upgrading
 - Upgrading **wooden**/**stone** tools costs the same units as the fresh tool.
