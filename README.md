@@ -26,7 +26,7 @@ If you'd prefer the datapack version for any reason, you can [download it from t
 
 ## Showcase
 
-https://user-images.githubusercontent.com/55819817/184475205-fefd8da1-c998-48c2-be60-b54da02183b8.mp4
+<iframe width="896" height="504" src="https://www.youtube.com/embed/q7KKN9hn7Uo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 ## Design - The Mending Problem
 
