@@ -1,22 +1,26 @@
-<p align="center"><img alt="tinkerer's smithing banner" src="https://user-images.githubusercontent.com/55819817/184476819-6cf95348-93da-4bc2-9582-ba32ee0364bd.png" /></p>
+<center><img alt="tinkerer's smithing banner" src="https://user-images.githubusercontent.com/55819817/184476819-6cf95348-93da-4bc2-9582-ba32ee0364bd.png" /></center>
 
-<p align="center">A sentimental and convenient rebalance of gear crafting, repair, enchanting, and smithing.<br/>
-Satisfying to use, but fits nicely with vanilla.</p>
+<center>A sentimental and convenient rebalance of gear crafting, repair, enchanting, and smithing.<br/>
+Satisfying to use, but fits nicely with vanilla.<br/>
+Requires <a href="https://modrinth.com/mod/nbt-crafting">NBT Crafting</a>, and works well with <a href="https://modrinth.com/mod/emi">EMI</a> and <a href="https://modrinth.com/mod/inspecio">Inspecio</a>.
+</center>
 
 ---
 
 This mod:
-- Removes the XP and work cost of (enchantment-safe) unit repair for gear - Simply use a **smithing table**.
-    - Also adds convenient unit repair to stone and wooden tools in any crafting grid.
-- Adds enchantment-safe upgrade paths for gear to encourage more experimentation, and "Sentimental Gear".
-    - Upgrade iron gear (ex. chestplates/leggings) to diamond gear at the smithing table.
-    - For convenience, upgrade wood and stone tools right from the crafting table.
-    - Sacrifice any piece of netherite gear at a smithing table to upgrade gold gear to netherite.
-- Adds a way to recover "overworked"/"too expensive" enchanted gear using netherite scrap at a smtihing table.
-    - Lowers the cost of future anvil operations - as if you'd worked with it one less time.
+- Adds unit repair recipes for all equipment with no XP or prior work cost.
+    - For iron and above, use a smithing table to repair 25% at a time, like an anvil.
+    - For basic tools, add up to 3 material in the 2x2 crafting grid to repair based on tool cost.
+- Adds upgrade recipes for all equipment.
+    - For iron, use a smithing table to upgrade anything but chestplates and leggings.
+    - For wood and stone tools, add everything but sticks in the 2x2 crafting grid.
+    - For gold gear, add any piece of netherite gear at the smithing table.
+- Adds a recipe to "de-work" equipment, lowering the cost of future anvil operations.
+    - For all equipment, just add netherite scrap at the smithing table.
 
+All added recipes keep tools as-is - with enchantments, custom names, and any modded data.
 
-It requires [NBT Crafting](https://modrinth.com/mod/nbt-crafting), and we recommend [EMI](https://modrinth.com/mod/emi), [Inventory Tabs](https://modrinth.com/mod/inventory-tabs-updated), and [Inspecio](https://modrinth.com/mod/inspecio) to improve the experience.
+Tinkerer's Smithing encourages enchanting and naming your tools much earlier - and keeping them in good condition with repairs and small improvements.
 
 If you'd prefer the datapack version for any reason, you can [download it from the repo](https://download-directory.github.io/?url=https://github.com/sisby-folk/tinkerers-smithing/tree/main/src/main/resources) (Direct Download Link)
 
@@ -26,12 +30,12 @@ https://user-images.githubusercontent.com/55819817/184475205-fefd8da1-c998-48c2-
 
 ## Design - The Mending Problem
 
-The best gear in vanilla is made by repeatedly un-enchanting gear and enchanting it until the player gets good RNG, then finishing it off with a couple of books (especially mending).
-Any other method gives an immensely worse result due to `repairCost`/'Prior Work'.
+The best gear in vanilla is made by repeatedly un-enchanting gear and enchanting it until the player gets good RNG, then finishing it off with a couple of books (especially mending).<br/>
+Any other method gives an immensely worse result due to `repairCost`/'Prior Work'.<br/>
 This punishes the player substantially for slowly improving gear.
 
-Even repair inflicts prior work - rushing a mending villager is the only solution.
-This ruins the idea of having "sentimental" gear you improve and maintain over time.
+Even repair inflicts prior work - rushing a mending villager is the only solution.<br/>
+This ruins the idea of having "sentimental" gear you improve and maintain over time.<br/>
 Finding mending villagers is also immensely boring - but the XP cost is too punishing otherwise.
 
 To combat this, TSmithing introduces work-free unit repair, "de-working" with netherite, and material-upgrading.
@@ -40,12 +44,15 @@ To combat this, TSmithing introduces work-free unit repair, "de-working" with ne
 
 Here are a few side effects of the mod on the progression of the game (For map-makers and those curious)
 
-- Obsidian / Ancient Debris can be mined after obtaining one diamond (now it's *always* exciting)
-- There are three alternative methods to obtaining endgame gear (from reroll RNG+Mending)
+- Obsidian / Ancient Debris can be mined after obtaining only one diamond.
+- There are three alternative non-RNG methods to obtaining endgame gear
     - Early game gear can be gradually combined with books, other gear, and netherite scrap.
-    - Golden treasure gear can be combined and sacrificially upgraded to netherite (finally,  it's useful)
-    - Enchanted gear *including* iron can be bought from villagers and combined, then upgraded.
-- Netherite gear can be exchanged for other netherite gear - at the cost of enchantments/durability.
+    - Enchanted golden treasure gear can be combined and upgraded to netherite.
+    - Enchanted gear can be bought from villagers and combined, then upgraded.
+- Netherite gear can technically be exchanged for other netherite gear - removing enchantments.
+- Adds one RNG-based method to obtain endgame gear: upgrading table-enchanted golden gear.
+    - At the point of having netherite, this is less of an issue as its enchantability is higher.
+    - Netherite scrap can also be used to continue combining already powerful gear, nerfing this strategy by proxy.
 
 ## Design - Cost in Minecraft
 
@@ -58,29 +65,25 @@ Here are a few side effects of the mod on the progression of the game (For map-m
     - As a convenience cost, damage to the tool will be "passed on" to the new tool - as if left in the handle.
 - Upgrading other tiers of gear costs only one unit. However, it leverages above repair mechanics:
     - Gear other than shovels need unit repairs afterwards - Swords need one, axes need two, etc.
+    - This is why leggings and chestplates aren't upgradeable: -50% durability is not a thing.
 
 ### Sacrificial Upgrading
 Upgrading to **netherite** from **gold** utilizes specially-designed 'sacrificial diamond' logic.
 
-- Upgrades cost one piece of netherite gear as 'sacrificial gear'.
-- Any sacrificial gear is considered to have the full netherite ingot inside for the upgrade from diamond.
-- The sacrifice is broken into 'sacrificial diamonds' based on unit cost and durability.
+- Upgrades cost one piece of netherite gear.
+- The netherite gear is considered to have a full netherite ingot inside for the upgrade.
+- The netherite gear is broken into 'sacrificial diamonds' based on its unit cost and durability.
     - A full durability chestplate is worth 8 diamonds, a 1/5 durability helmet is worth 1 diamond.
 - The resulting gear's durability is relative to its own unit cost.
     - 1 sacrificial diamond will give a 1/2 durability sword, or a 1/3 durability pickaxe.
     - all gear types can be used as sacrifice, but some are very wasteful.
 
-### Enchantability
-As gold and iron have higher enchantability than their upgrade tiers, it's possible to use the better RNG to enchant fresh gold gear, then upgrade it to avoid the normally limited durability.
+### Afterword
 
-Tinkerer's smithing mitigates this imbalance by making it only possible to upgrade gold straight to netherite. The enchantability gap between the two is  smaller, and the netherite used could have been spent de-working gear four times!
+All mods are built on the work of many others.
 
-## Further Info
-
-All modding projects are built on the work of many others.
-
-We made this mod for [Tinkerer's Quilt](https://modrinth.com/modpack/tinkerers-quilt)! Our modpack about rediscovering vanilla gameplay.
+This mod is included in [Tinkerer's Quilt](https://modrinth.com/modpack/tinkerers-quilt) - our modpack about rediscovering vanilla.
 
 Textures shown include [xali's books](https://www.curseforge.com/minecraft/texture-packs/xalis-enchanted-books), [Sully's Peeves](https://www.curseforge.com/minecraft/texture-packs/sullys-peeves) and [Vanilla Tweaks](https://vanillatweaks.net/picker/resource-packs/)' degrading tools
 
-We're primarily modpack developers - not mod developers! If you want to port this mod, do it yourself!
+We're open to suggestions for how to implement stuff better - if you see something wonky and have an idea - let us know.
