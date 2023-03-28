@@ -1,6 +1,6 @@
 <center><img alt="tinkerer's smithing banner" src="https://user-images.githubusercontent.com/55819817/184476819-6cf95348-93da-4bc2-9582-ba32ee0364bd.png" /></center>
 
-<center>A sentimental and convenient rebalance of gear crafting, repair, enchanting, and smithing.<br/>
+<center>A sentimental and convenient rebalance of gear crafting, repair, enchanting, and upgrading.<br/>
 Satisfying to use, but fits nicely with vanilla.<br/>
 Requires <a href="https://modrinth.com/mod/nbt-crafting">NBT Crafting</a>, and works well with <a href="https://modrinth.com/mod/emi">EMI</a> and <a href="https://modrinth.com/mod/inspecio">Inspecio</a>.
 </center>
