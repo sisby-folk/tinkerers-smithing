@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:smithing",
+  "addition": {
+    "item": "minecraft:diamond"
+  },
+  "base": {
+    "item": "minecraft:iron_pickaxe",
+    "require": {
+      "Damage": 0
+    }
+  },
+  "result": {
+    "data": {
+      "$": "base",
+      "Damage": "780.0"
+    },
+    "item": "minecraft:diamond_pickaxe"
+  }
+}

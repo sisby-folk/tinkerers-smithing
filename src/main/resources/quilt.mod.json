@@ -17,6 +17,11 @@
 			},
 			"icon": "assets/tinkerers-smithing/icon.png"
 		},
+		"entrypoints": {
+			"fabric-datagen": [
+				"folk.sisby.tinkerers_smithing.TinkerersSmithingDataGeneration"
+			]
+		},
 		"intermediate_mappings": "net.fabricmc:intermediary",
 		"depends": [
 			{
@@ -29,7 +34,7 @@
 			},
 			{
 				"id": "nbtcrafting",
-				"versions": ">=2.2.4"
+				"versions": ">=2.2.3"
 			}
 		]
 	}
