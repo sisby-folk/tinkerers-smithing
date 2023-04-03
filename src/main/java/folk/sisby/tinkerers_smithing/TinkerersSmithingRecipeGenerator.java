@@ -53,7 +53,7 @@ public class TinkerersSmithingRecipeGenerator extends FabricRecipeProvider {
 		SmithingNBTRecipeJsonFactory.create(ofAdvancedEntries(Stream.of(
 				new IngredientStackEntry(base)
 		)), Ingredient.ofItems(Items.DIAMOND), result)
-				.offerTo(exporter, new Identifier("diamond_pickaxe_upgrade"));
+				.offerTo(exporter, new Identifier(ID, "diamond_pickaxe_upgrade"));
 
 	}
 }

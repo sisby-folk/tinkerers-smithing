@@ -89,7 +89,7 @@ loom {
 			name "Data Generation"
 			property('fabric-api.datagen')
 			property("fabric-api.datagen.output-dir=${file("src/main/generated")}")
-			property("fabric-api.datagen.modid=${archives_base_name}")
+			property("fabric-api.datagen.modid=${namespace}")
 		}
 	}
 }
