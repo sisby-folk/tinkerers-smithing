@@ -28,15 +28,15 @@ public class TinkerersSmithingRecipeGenerator extends FabricRecipeProvider {
 		registerEquipment(new TinkerersEquipment(Items.NETHERITE_CHESTPLATE, 8, false, Ingredient.ofItems(Items.NETHERITE_INGOT)));
 
 		// Diamond
-		registerEquipment(new TinkerersEquipment(Items.DIAMOND_SHOVEL, 1, false, Ingredient.ofItems(Items.DIAMOND), equipment.get(Items.NETHERITE_SHOVEL)));
-		registerEquipment(new TinkerersEquipment(Items.DIAMOND_SWORD, 2, false, Ingredient.ofItems(Items.DIAMOND), equipment.get(Items.NETHERITE_SWORD)));
-		registerEquipment(new TinkerersEquipment(Items.DIAMOND_HOE, 2, false, Ingredient.ofItems(Items.DIAMOND), equipment.get(Items.NETHERITE_HOE)));
-		registerEquipment(new TinkerersEquipment(Items.DIAMOND_PICKAXE, 3, false, Ingredient.ofItems(Items.DIAMOND), equipment.get(Items.NETHERITE_PICKAXE)));
-		registerEquipment(new TinkerersEquipment(Items.DIAMOND_AXE, 3, false, Ingredient.ofItems(Items.DIAMOND), equipment.get(Items.NETHERITE_AXE)));
-		registerEquipment(new TinkerersEquipment(Items.DIAMOND_BOOTS, 4, false, Ingredient.ofItems(Items.DIAMOND), equipment.get(Items.NETHERITE_BOOTS)));
-		registerEquipment(new TinkerersEquipment(Items.DIAMOND_HELMET, 5, false, Ingredient.ofItems(Items.DIAMOND), equipment.get(Items.NETHERITE_HELMET)));
-		registerEquipment(new TinkerersEquipment(Items.DIAMOND_LEGGINGS, 7, false, Ingredient.ofItems(Items.DIAMOND), equipment.get(Items.NETHERITE_LEGGINGS)));
-		registerEquipment(new TinkerersEquipment(Items.DIAMOND_CHESTPLATE, 8, false, Ingredient.ofItems(Items.DIAMOND), equipment.get(Items.NETHERITE_CHESTPLATE)));
+		registerEquipment(new TinkerersEquipment(Items.DIAMOND_SHOVEL, 1, false, Ingredient.ofItems(Items.DIAMOND)));
+		registerEquipment(new TinkerersEquipment(Items.DIAMOND_SWORD, 2, false, Ingredient.ofItems(Items.DIAMOND)));
+		registerEquipment(new TinkerersEquipment(Items.DIAMOND_HOE, 2, false, Ingredient.ofItems(Items.DIAMOND)));
+		registerEquipment(new TinkerersEquipment(Items.DIAMOND_PICKAXE, 3, false, Ingredient.ofItems(Items.DIAMOND)));
+		registerEquipment(new TinkerersEquipment(Items.DIAMOND_AXE, 3, false, Ingredient.ofItems(Items.DIAMOND)));
+		registerEquipment(new TinkerersEquipment(Items.DIAMOND_BOOTS, 4, false, Ingredient.ofItems(Items.DIAMOND)));
+		registerEquipment(new TinkerersEquipment(Items.DIAMOND_HELMET, 5, false, Ingredient.ofItems(Items.DIAMOND)));
+		registerEquipment(new TinkerersEquipment(Items.DIAMOND_LEGGINGS, 7, false, Ingredient.ofItems(Items.DIAMOND)));
+		registerEquipment(new TinkerersEquipment(Items.DIAMOND_CHESTPLATE, 8, false, Ingredient.ofItems(Items.DIAMOND)));
 
 		// Iron
 		registerEquipment(new TinkerersEquipment(Items.IRON_SHOVEL, 1, false, Ingredient.ofItems(Items.IRON_INGOT), equipment.get(Items.DIAMOND_SHOVEL)));
