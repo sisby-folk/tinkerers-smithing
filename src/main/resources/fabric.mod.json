@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "tinkerers-smithing",
+  "id": "tinkerers_smithing",
   "version": "${version}",
 
   "name": "Tinkerer's Smithing",
@@ -19,11 +19,17 @@
 
   "environment": "*",
 
+  "entrypoints": {
+    "fabric-datagen": [
+      "folk.sisby.tinkerers_smithing.TinkerersSmithingDataGeneration"
+    ]
+  },
+
   "depends": {
     "fabricloader": ">=0.14.9",
     "minecraft": ">=1.15",
     "java": ">=17",
-    "nbtcrafting": ">=2.2.4"
+    "nbtcrafting": ">=2.2.3"
   },
   "suggests": {
     "another-mod": "*"

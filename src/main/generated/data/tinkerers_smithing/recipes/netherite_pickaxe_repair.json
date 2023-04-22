@@ -1,0 +1,21 @@
+{
+  "type": "nbtcrafting:smithing",
+  "base": {
+    "data": {
+      "require": {
+        "Damage": "$1.."
+      }
+    },
+    "item": "minecraft:netherite_pickaxe"
+  },
+  "ingredient": {
+    "item": "minecraft:netherite_ingot"
+  },
+  "result": {
+    "data": {
+      "$": "base",
+      "Damage": "$(base.Damage-508.0)*((2*(base.Damage-508.0)+1)%2+1)/2"
+    },
+    "item": "minecraft:netherite_pickaxe"
+  }
+}
