@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tinkerers_smithing:diamond_pickaxe_upgrade"
+        "recipe": "tinkerers_smithing:netherite_shovel_sacrifice_shovel"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -15,7 +15,7 @@
   ],
   "rewards": {
     "recipes": [
-      "tinkerers_smithing:diamond_pickaxe_upgrade"
+      "tinkerers_smithing:netherite_shovel_sacrifice_shovel"
     ]
   }
 }

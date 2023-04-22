@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tinkerers_smithing:netherite_pickaxe_sacrifice_chestplate"
+        "recipe": "tinkerers_smithing:netherite_shovel_sacrifice_sword"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -15,7 +15,7 @@
   ],
   "rewards": {
     "recipes": [
-      "tinkerers_smithing:netherite_pickaxe_sacrifice_chestplate"
+      "tinkerers_smithing:netherite_shovel_sacrifice_sword"
     ]
   }
 }

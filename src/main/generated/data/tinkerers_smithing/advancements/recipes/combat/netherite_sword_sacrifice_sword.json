@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tinkerers_smithing:netherite_pickaxe_sacrifice_leggings"
+        "recipe": "tinkerers_smithing:netherite_sword_sacrifice_sword"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -15,7 +15,7 @@
   ],
   "rewards": {
     "recipes": [
-      "tinkerers_smithing:netherite_pickaxe_sacrifice_leggings"
+      "tinkerers_smithing:netherite_sword_sacrifice_sword"
     ]
   }
 }

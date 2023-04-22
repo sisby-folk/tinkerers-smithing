@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tinkerers_smithing:netherite_pickaxe_sacrifice_boots"
+        "recipe": "tinkerers_smithing:golden_shovel_dework"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -15,7 +15,7 @@
   ],
   "rewards": {
     "recipes": [
-      "tinkerers_smithing:netherite_pickaxe_sacrifice_boots"
+      "tinkerers_smithing:golden_shovel_dework"
     ]
   }
 }

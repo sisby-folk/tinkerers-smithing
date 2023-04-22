@@ -6,7 +6,7 @@
         "RepairCost": "$1.."
       }
     },
-    "item": "minecraft:diamond_pickaxe"
+    "item": "minecraft:golden_sword"
   },
   "ingredient": {
     "item": "minecraft:netherite_scrap"
@@ -14,8 +14,8 @@
   "result": {
     "data": {
       "$": "base",
-      "RepairCost": "$((base.RepairCost + 1)/2)-1"
+      "RepairCost": "$((item.RepairCost + 1)/2)-1"
     },
-    "item": "minecraft:diamond_pickaxe"
+    "item": "minecraft:golden_sword"
   }
 }

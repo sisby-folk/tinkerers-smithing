@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tinkerers_smithing:stone_pickaxe_repair_3"
+        "recipe": "tinkerers_smithing:netherite_shovel_dework"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -15,7 +15,7 @@
   ],
   "rewards": {
     "recipes": [
-      "tinkerers_smithing:stone_pickaxe_repair_3"
+      "tinkerers_smithing:netherite_shovel_dework"
     ]
   }
 }

@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tinkerers_smithing:diamond_pickaxe_dework"
+        "recipe": "tinkerers_smithing:golden_sword_repair"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -15,7 +15,7 @@
   ],
   "rewards": {
     "recipes": [
-      "tinkerers_smithing:diamond_pickaxe_dework"
+      "tinkerers_smithing:golden_sword_repair"
     ]
   }
 }
