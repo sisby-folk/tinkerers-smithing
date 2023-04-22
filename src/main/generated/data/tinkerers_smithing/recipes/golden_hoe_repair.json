@@ -1,0 +1,21 @@
+{
+  "type": "nbtcrafting:smithing",
+  "base": {
+    "data": {
+      "require": {
+        "Damage": "$1.."
+      }
+    },
+    "item": "minecraft:golden_hoe"
+  },
+  "ingredient": {
+    "item": "minecraft:gold_ingot"
+  },
+  "result": {
+    "data": {
+      "$": "base",
+      "Damage": "$(item.Damage-8.0)*((2*(item.Damage-8.0)+1)%2+1)/2"
+    },
+    "item": "minecraft:golden_hoe"
+  }
+}

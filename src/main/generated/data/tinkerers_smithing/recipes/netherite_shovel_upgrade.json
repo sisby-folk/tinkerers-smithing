@@ -1,0 +1,16 @@
+{
+  "type": "nbtcrafting:smithing",
+  "base": {
+    "item": "minecraft:diamond_shovel"
+  },
+  "ingredient": {
+    "item": "minecraft:netherite_ingot"
+  },
+  "result": {
+    "data": {
+      "$": "base",
+      "Damage": 0
+    },
+    "item": "minecraft:netherite_shovel"
+  }
+}

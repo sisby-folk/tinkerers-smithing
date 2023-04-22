@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "data": {
+        "require": {
+          "Damage": "$1.."
+        }
+      },
+      "item": "minecraft:stone_hoe"
+    },
+    {
+      "tag": "minecraft:stone_tool_materials"
+    }
+  ],
+  "result": {
+    "data": {
+      "$": "base",
+      "Damage": "$(i0.Damage-66)*((2*(i0.Damage-66)+1)%2+1)/2"
+    },
+    "item": "minecraft:stone_hoe"
+  }
+}

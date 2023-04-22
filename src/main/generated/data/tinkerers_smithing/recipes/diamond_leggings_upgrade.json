@@ -1,0 +1,16 @@
+{
+  "type": "nbtcrafting:smithing",
+  "base": {
+    "item": "minecraft:iron_leggings"
+  },
+  "ingredient": {
+    "item": "minecraft:diamond"
+  },
+  "result": {
+    "data": {
+      "$": "base",
+      "Damage": 742
+    },
+    "item": "minecraft:diamond_leggings"
+  }
+}

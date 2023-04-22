@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "data": {
+        "require": {
+          "Damage": "$1.."
+        }
+      },
+      "item": "minecraft:wooden_shovel"
+    },
+    {
+      "tag": "minecraft:planks"
+    }
+  ],
+  "result": {
+    "data": {
+      "$": "base",
+      "Damage": "$(i0.Damage-59)*((2*(i0.Damage-59)+1)%2+1)/2"
+    },
+    "item": "minecraft:wooden_shovel"
+  }
+}

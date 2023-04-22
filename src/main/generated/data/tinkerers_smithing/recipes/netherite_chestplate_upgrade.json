@@ -1,0 +1,16 @@
+{
+  "type": "nbtcrafting:smithing",
+  "base": {
+    "item": "minecraft:diamond_chestplate"
+  },
+  "ingredient": {
+    "item": "minecraft:netherite_ingot"
+  },
+  "result": {
+    "data": {
+      "$": "base",
+      "Damage": 1036
+    },
+    "item": "minecraft:netherite_chestplate"
+  }
+}

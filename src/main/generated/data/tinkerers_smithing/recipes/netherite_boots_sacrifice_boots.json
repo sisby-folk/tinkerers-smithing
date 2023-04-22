@@ -1,0 +1,16 @@
+{
+  "type": "nbtcrafting:smithing",
+  "base": {
+    "item": "minecraft:golden_boots"
+  },
+  "ingredient": {
+    "item": "minecraft:netherite_boots"
+  },
+  "result": {
+    "data": {
+      "$": "base",
+      "Damage": "$((481-((481-ingredient.Damage)*1924.0/1924))#i)*((2*((481-((481-ingredient.Damage)*1924.0/1924))#i)+1)%2+1)/2"
+    },
+    "item": "minecraft:netherite_boots"
+  }
+}

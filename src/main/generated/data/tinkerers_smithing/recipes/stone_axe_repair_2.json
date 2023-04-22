@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "data": {
+        "require": {
+          "Damage": "$45.."
+        }
+      },
+      "item": "minecraft:stone_axe"
+    },
+    {
+      "tag": "minecraft:stone_tool_materials"
+    },
+    {
+      "tag": "minecraft:stone_tool_materials"
+    }
+  ],
+  "result": {
+    "data": {
+      "$": "base",
+      "Damage": "$(i0.Damage-88)*((2*(i0.Damage-88)+1)%2+1)/2"
+    },
+    "item": "minecraft:stone_axe"
+  }
+}
