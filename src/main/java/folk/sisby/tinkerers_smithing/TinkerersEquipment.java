@@ -119,7 +119,7 @@ public record TinkerersEquipment(Item item, int unitCost, boolean useGrid, Ingre
 
 		ItemStack resultStack = upgradeTo.item.getDefaultStack();
 		NbtCompound resultNbt = resultStack.getOrCreateNbt();
-		resultNbt.putString("$", "base");
+		resultNbt.putString("$", "i0");
 		resultNbt.remove("Damage");
 
 		ShapelessNBTRecipeJsonFactory factory = ShapelessNBTRecipeJsonFactory.create(resultStack);
@@ -139,7 +139,7 @@ public record TinkerersEquipment(Item item, int unitCost, boolean useGrid, Ingre
 
 			ItemStack resultStack = item.getDefaultStack();
 			NbtCompound resultNbt = resultStack.getOrCreateNbt();
-			resultNbt.putString("$", "base");
+			resultNbt.putString("$", "i0");
 			resultNbt.putString("Damage", clampPositive("i0.Damage-%d".formatted((int) Math.ceil((item.getMaxDamage() * ingredientsUsed) / (double) unitCost))));
 
 			ShapelessNBTRecipeJsonFactory factory = ShapelessNBTRecipeJsonFactory.create(resultStack);
