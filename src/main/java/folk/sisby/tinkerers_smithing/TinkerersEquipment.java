@@ -63,9 +63,9 @@ public record TinkerersEquipment(Item item, int unitCost, boolean useGrid, Ingre
 		baseNbt.remove("Damage");
 
 		ItemStack resultStack = upgradeTo.item.getDefaultStack();
-		resultStack.setDamage((int) Math.floor(upgradeTo.item.getMaxDamage() * ((unitCost - 1) / 4.0)));
 		NbtCompound resultNbt = resultStack.getOrCreateNbt();
 		resultNbt.putString("$", "base");
+		resultNbt.putString("Damage", "$%d".formatted((int) Math.floor(upgradeTo.item.getMaxDamage() * ((unitCost - 1) / 4.0))));
 
 		SmithingNBTRecipeJsonFactory.create(
 			ofAdvancedEntries(Stream.of(new IngredientStackEntry(baseStack))),
@@ -159,7 +159,6 @@ public record TinkerersEquipment(Item item, int unitCost, boolean useGrid, Ingre
 			baseNbt.remove("Damage");
 
 			ItemStack resultStack = sacrificeTo.getDefaultStack();
-			resultStack.setDamage((int) Math.floor(sacrificeTo.getMaxDamage() * ((unitCost - 1) / 4.0)));
 			NbtCompound resultNbt = resultStack.getOrCreateNbt();
 			resultNbt.putString("$", "base");
 			resultNbt.putString("Damage", clampPositive("(%d-((%d-ingredient.Damage)*%.1f/%d))#i".formatted(

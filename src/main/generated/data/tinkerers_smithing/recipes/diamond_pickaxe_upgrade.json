@@ -9,7 +9,7 @@
   "result": {
     "data": {
       "$": "base",
-      "Damage": 780
+      "Damage": "$780"
     },
     "item": "minecraft:diamond_pickaxe"
   }

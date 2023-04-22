@@ -9,7 +9,7 @@
   "result": {
     "data": {
       "$": "base",
-      "Damage": 924
+      "Damage": "$924"
     },
     "item": "minecraft:diamond_chestplate"
   }

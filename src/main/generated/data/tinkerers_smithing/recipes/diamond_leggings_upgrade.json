@@ -9,7 +9,7 @@
   "result": {
     "data": {
       "$": "base",
-      "Damage": 742
+      "Damage": "$742"
     },
     "item": "minecraft:diamond_leggings"
   }

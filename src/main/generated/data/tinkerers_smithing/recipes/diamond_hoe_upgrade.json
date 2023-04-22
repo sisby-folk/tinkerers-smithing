@@ -9,7 +9,7 @@
   "result": {
     "data": {
       "$": "base",
-      "Damage": 390
+      "Damage": "$390"
     },
     "item": "minecraft:diamond_hoe"
   }
