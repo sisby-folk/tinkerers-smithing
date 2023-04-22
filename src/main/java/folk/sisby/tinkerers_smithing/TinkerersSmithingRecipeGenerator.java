@@ -95,7 +95,7 @@ public class TinkerersSmithingRecipeGenerator extends FabricRecipeProvider {
 				if (te.repairMaterial() != null) te.generateShapelessRepairRecipes(exporter);
 				if (te.upgradeTo() != null) te.generateShapelessUpgradeRecipe(exporter);
 			} else {
-				if (te.upgradeTo() != null) te.generateUpgradeRecipe(exporter);
+				if (te.upgradeTo() != null && te.unitCost() <= 5) te.generateUpgradeRecipe(exporter);
 				if (te.repairMaterial() != null) te.generateRepairRecipe(exporter);
 				te.generateDeWorkRecipe(exporter);
 				if (te.sacrifices() != null) te.generateSacrificeRecipe(exporter);
