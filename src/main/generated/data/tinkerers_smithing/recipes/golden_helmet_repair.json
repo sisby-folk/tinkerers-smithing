@@ -14,7 +14,7 @@
   "result": {
     "data": {
       "$": "base",
-      "Damage": "$(item.Damage-20.0)*((2*(item.Damage-20.0)+1)%2+1)/2"
+      "Damage": "$(base.Damage-20.0)*((2*(base.Damage-20.0)+1)%2+1)/2"
     },
     "item": "minecraft:golden_helmet"
   }

@@ -14,7 +14,7 @@
   "result": {
     "data": {
       "$": "base",
-      "Damage": "$(item.Damage-391.0)*((2*(item.Damage-391.0)+1)%2+1)/2"
+      "Damage": "$(base.Damage-391.0)*((2*(base.Damage-391.0)+1)%2+1)/2"
     },
     "item": "minecraft:diamond_sword"
   }

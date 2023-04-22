@@ -14,7 +14,7 @@
   "result": {
     "data": {
       "$": "base",
-      "RepairCost": "$((item.RepairCost + 1)/2)-1"
+      "RepairCost": "$((base.RepairCost + 1)/2)-1"
     },
     "item": "minecraft:netherite_boots"
   }

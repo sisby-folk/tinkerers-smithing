@@ -21,7 +21,9 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-public record TinkerersEquipment(Item item, int unitCost, boolean useGrid, Ingredient repairMaterial, TinkerersEquipment upgradeTo, Collection<TinkerersEquipment> sacrifices, Item sacrificeTo) {
+public record TinkerersEquipment(Item item, int unitCost, boolean useGrid, Ingredient repairMaterial,
+								 TinkerersEquipment upgradeTo, Collection<TinkerersEquipment> sacrifices,
+								 Item sacrificeTo) {
 	public TinkerersEquipment(Item item, int unitCost, boolean useGrid, Ingredient repairMaterial) {
 		this(item, unitCost, useGrid, repairMaterial, null, List.of(), null);
 	}
@@ -81,7 +83,7 @@ public record TinkerersEquipment(Item item, int unitCost, boolean useGrid, Ingre
 		ItemStack resultStack = item.getDefaultStack();
 		NbtCompound resultNbt = resultStack.getOrCreateNbt();
 		resultNbt.putString("$", "base");
-		resultNbt.putString("Damage", clampPositive("item.Damage-%s".formatted(Math.ceil(item.getMaxDamage() / 4.0))));
+		resultNbt.putString("Damage", clampPositive("base.Damage-%s".formatted(Math.ceil(item.getMaxDamage() / 4.0))));
 
 		SmithingNBTRecipeJsonFactory.create(
 			ofAdvancedEntries(Stream.of(new IngredientStackEntry(baseStack))),
@@ -100,7 +102,7 @@ public record TinkerersEquipment(Item item, int unitCost, boolean useGrid, Ingre
 		ItemStack resultStack = item.getDefaultStack();
 		NbtCompound resultNbt = resultStack.getOrCreateNbt();
 		resultNbt.putString("$", "base");
-		resultNbt.putString("RepairCost", "$((item.RepairCost + 1)/2)-1");
+		resultNbt.putString("RepairCost", "$((base.RepairCost + 1)/2)-1");
 		resultNbt.remove("Damage");
 
 		SmithingNBTRecipeJsonFactory.create(
