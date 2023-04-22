@@ -1,7 +1,12 @@
 {
   "type": "nbtcrafting:smithing",
   "base": {
-    "item": "minecraft:iron_pickaxe"
+    "data": {
+      "require": {
+        "Damage": "$1.."
+      }
+    },
+    "item": "minecraft:diamond_pickaxe"
   },
   "ingredient": {
     "item": "minecraft:diamond"
@@ -9,7 +14,7 @@
   "result": {
     "data": {
       "$": "base",
-      "Damage": 780
+      "Damage": "$(base.Damage-391.0)*((2*(base.Damage-391.0)+1)%2+1)/2"
     },
     "item": "minecraft:diamond_pickaxe"
   }

@@ -1,8 +1,9 @@
-package folk.sisby.tinkerers_smithing;
+package folk.sisby.tinkerers_smithing.json;
 
 import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import de.siphalor.nbtcrafting.api.nbt.NbtUtil;
 import net.minecraft.advancement.Advancement;
 import net.minecraft.advancement.AdvancementRewards;
 import net.minecraft.advancement.CriterionMerger;
@@ -12,6 +13,7 @@ import net.minecraft.data.server.recipe.CraftingRecipeJsonFactory;
 import net.minecraft.data.server.recipe.RecipeJsonProvider;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
+import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.tag.TagKey;
@@ -23,23 +25,23 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class ShapelessNBTRecipeJsonFactory implements CraftingRecipeJsonFactory {
-	private final Item output;
+	private final ItemStack output;
 	private final int outputCount;
 	private final List<Ingredient> inputs = Lists.<Ingredient>newArrayList();
 	private final Advancement.Task builder = Advancement.Task.create();
 	@Nullable
 	private String group;
 
-	public ShapelessNBTRecipeJsonFactory(ItemConvertible output, int outputCount) {
-		this.output = output.asItem();
+	public ShapelessNBTRecipeJsonFactory(ItemStack output, int outputCount) {
+		this.output = output;
 		this.outputCount = outputCount;
 	}
 
-	public static ShapelessNBTRecipeJsonFactory create(ItemConvertible output) {
+	public static ShapelessNBTRecipeJsonFactory create(ItemStack output) {
 		return new ShapelessNBTRecipeJsonFactory(output, 1);
 	}
 
-	public static ShapelessNBTRecipeJsonFactory create(ItemConvertible output, int outputCount) {
+	public static ShapelessNBTRecipeJsonFactory create(ItemStack output, int outputCount) {
 		return new ShapelessNBTRecipeJsonFactory(output, outputCount);
 	}
 
@@ -83,7 +85,7 @@ public class ShapelessNBTRecipeJsonFactory implements CraftingRecipeJsonFactory 
 
 	@Override
 	public Item getOutputItem() {
-		return this.output;
+		return this.output.getItem();
 	}
 
 	@Override
@@ -102,20 +104,20 @@ public class ShapelessNBTRecipeJsonFactory implements CraftingRecipeJsonFactory 
 						this.group == null ? "" : this.group,
 						this.inputs,
 						this.builder,
-						new Identifier(recipeId.getNamespace(), "recipes/" + this.output.getGroup().getName() + "/" + recipeId.getPath())
+						new Identifier(recipeId.getNamespace(), "recipes/" + this.output.getItem().getGroup().getName() + "/" + recipeId.getPath())
 				)
 		);
 	}
 
 	private void validate(Identifier recipeId) {
-		if (this.builder.getCriteria().isEmpty()) {
-			throw new IllegalStateException("No way of obtaining recipe " + recipeId);
-		}
+//		if (this.builder.getCriteria().isEmpty()) {
+//			throw new IllegalStateException("No way of obtaining recipe " + recipeId);
+//		}
 	}
 
 	public static class ShapelessNBTRecipeJsonProvider implements RecipeJsonProvider {
 		private final Identifier recipeId;
-		private final Item output;
+		private final ItemStack output;
 		private final int count;
 		private final String group;
 		private final List<Ingredient> inputs;
@@ -123,7 +125,7 @@ public class ShapelessNBTRecipeJsonFactory implements CraftingRecipeJsonFactory 
 		private final Identifier advancementId;
 
 		public ShapelessNBTRecipeJsonProvider(
-				Identifier recipeId, Item output, int outputCount, String group, List<Ingredient> inputs, Advancement.Task builder, Identifier advancementId
+				Identifier recipeId, ItemStack output, int outputCount, String group, List<Ingredient> inputs, Advancement.Task builder, Identifier advancementId
 		) {
 			this.recipeId = recipeId;
 			this.output = output;
@@ -143,15 +145,24 @@ public class ShapelessNBTRecipeJsonFactory implements CraftingRecipeJsonFactory 
 			JsonArray jsonArray = new JsonArray();
 
 			for(Ingredient ingredient : this.inputs) {
-				jsonArray.add(ingredient.toJson());
+				JsonObject baseJson = ingredient.toJson().getAsJsonObject();
+				if (baseJson.has("require")) {
+					// Fix required nesting
+					JsonObject dataJson = new JsonObject();
+					baseJson.add("data", dataJson);
+					dataJson.add("require", baseJson.getAsJsonObject("require"));
+					baseJson.remove("require");
+				}
+				jsonArray.add(baseJson);
 			}
 
 			json.add("ingredients", jsonArray);
 			JsonObject jsonObject = new JsonObject();
-			jsonObject.addProperty("item", Registry.ITEM.getId(this.output).toString());
+			jsonObject.addProperty("item", Registry.ITEM.getId(this.output.getItem()).toString());
 			if (this.count > 1) {
 				jsonObject.addProperty("count", this.count);
 			}
+			if (this.output.hasNbt()) jsonObject.add("data", NbtUtil.toJson(this.output.getNbt()));
 
 			json.add("result", jsonObject);
 		}

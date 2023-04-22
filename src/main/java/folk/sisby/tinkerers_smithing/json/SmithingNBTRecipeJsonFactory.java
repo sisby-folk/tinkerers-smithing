@@ -1,7 +1,8 @@
-package folk.sisby.tinkerers_smithing;
+package folk.sisby.tinkerers_smithing.json;
 
 
 import com.google.gson.JsonObject;
+import de.siphalor.nbtcrafting.NbtCrafting;
 import de.siphalor.nbtcrafting.api.nbt.NbtUtil;
 import net.minecraft.advancement.Advancement;
 import net.minecraft.advancement.AdvancementRewards;
@@ -34,7 +35,7 @@ public class SmithingNBTRecipeJsonFactory {
 	}
 
 	public static SmithingNBTRecipeJsonFactory create(Ingredient base, Ingredient addition, ItemStack result) {
-		return new SmithingNBTRecipeJsonFactory(RecipeSerializer.SMITHING, base, addition, result);
+		return new SmithingNBTRecipeJsonFactory(NbtCrafting.SMITHING_RECIPE_SERIALIZER, base, addition, result);
 	}
 
 	public SmithingNBTRecipeJsonFactory criterion(String criterionName, CriterionConditions conditions) {
@@ -75,19 +76,19 @@ public class SmithingNBTRecipeJsonFactory {
 	public static class SmithingNBTRecipeJsonProvider implements RecipeJsonProvider {
 		private final Identifier recipeId;
 		private final Ingredient base;
-		private final Ingredient addition;
+		private final Ingredient ingredient;
 		private final ItemStack result;
 		private final Advancement.Task builder;
 		private final Identifier advancementId;
 		private final RecipeSerializer<?> serializer;
 
 		public SmithingNBTRecipeJsonProvider(
-				Identifier recipeId, RecipeSerializer<?> serializer, Ingredient base, Ingredient addition, ItemStack result, Advancement.Task builder, Identifier advancementId
+			Identifier recipeId, RecipeSerializer<?> serializer, Ingredient base, Ingredient ingredient, ItemStack result, Advancement.Task builder, Identifier advancementId
 		) {
 			this.recipeId = recipeId;
 			this.serializer = serializer;
 			this.base = base;
-			this.addition = addition;
+			this.ingredient = ingredient;
 			this.result = result;
 			this.builder = builder;
 			this.advancementId = advancementId;
@@ -95,8 +96,17 @@ public class SmithingNBTRecipeJsonFactory {
 
 		@Override
 		public void serialize(JsonObject json) {
-			json.add("base", this.base.toJson());
-			json.add("addition", this.addition.toJson());
+			JsonObject baseJson = this.base.toJson().getAsJsonObject();
+			if (baseJson.has("require")) {
+				// Fix required nesting
+				JsonObject dataJson = new JsonObject();
+				baseJson.add("data", dataJson);
+				dataJson.add("require", baseJson.getAsJsonObject("require"));
+				baseJson.remove("require");
+			}
+			json.add("base", baseJson);
+
+			json.add("ingredient", this.ingredient.toJson());
 			JsonObject jsonObject = new JsonObject();
 			jsonObject.addProperty("item", Registry.ITEM.getId(this.result.getItem()).toString());
 			if (this.result.hasNbt()) jsonObject.add("data", NbtUtil.toJson(this.result.getNbt()));
