@@ -18,7 +18,7 @@
   ],
   "result": {
     "data": {
-      "$": "base",
+      "$": "i0",
       "Damage": "$(i0.Damage-131)*((2*(i0.Damage-131)+1)%2+1)/2"
     },
     "item": "minecraft:stone_hoe"

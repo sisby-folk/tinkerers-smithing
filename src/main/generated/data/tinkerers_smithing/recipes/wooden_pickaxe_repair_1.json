@@ -15,7 +15,7 @@
   ],
   "result": {
     "data": {
-      "$": "base",
+      "$": "i0",
       "Damage": "$(i0.Damage-20)*((2*(i0.Damage-20)+1)%2+1)/2"
     },
     "item": "minecraft:wooden_pickaxe"
