@@ -21,19 +21,31 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-public record TinkerersEquipment(Item item, int unitCost, boolean useGrid, Ingredient repairMaterial,
+public record TinkerersEquipment(Item item, Collection<String> modRequirements, int unitCost, boolean useGrid, Ingredient repairMaterial,
 								 TinkerersEquipment upgradeTo, Collection<TinkerersEquipment> sacrifices,
 								 Item sacrificeTo) {
+	public TinkerersEquipment(Item item, Collection<String> modRequirements, int unitCost, boolean useGrid, Ingredient repairMaterial) {
+		this(item, modRequirements, unitCost, useGrid, repairMaterial, null, List.of(), null);
+	}
+
+	public TinkerersEquipment(Item item, Collection<String> modRequirements, int unitCost, boolean useGrid, Ingredient repairMaterial, TinkerersEquipment upgradeTo) {
+		this(item, modRequirements, unitCost, useGrid, repairMaterial, upgradeTo, List.of(), null);
+	}
+
+	public TinkerersEquipment(Item item, Collection<String> modRequirements, int unitCost, boolean useGrid, Ingredient repairMaterial, Collection<TinkerersEquipment> sacrifices, Item sacrificeTo) {
+		this(item, modRequirements, unitCost, useGrid, repairMaterial, null, sacrifices, sacrificeTo);
+	}
+
 	public TinkerersEquipment(Item item, int unitCost, boolean useGrid, Ingredient repairMaterial) {
-		this(item, unitCost, useGrid, repairMaterial, null, List.of(), null);
+		this(item, List.of(), unitCost, useGrid, repairMaterial, null, List.of(), null);
 	}
 
 	public TinkerersEquipment(Item item, int unitCost, boolean useGrid, Ingredient repairMaterial, TinkerersEquipment upgradeTo) {
-		this(item, unitCost, useGrid, repairMaterial, upgradeTo, List.of(), null);
+		this(item, List.of(), unitCost, useGrid, repairMaterial, upgradeTo, List.of(), null);
 	}
 
 	public TinkerersEquipment(Item item, int unitCost, boolean useGrid, Ingredient repairMaterial, Collection<TinkerersEquipment> sacrifices, Item sacrificeTo) {
-		this(item, unitCost, useGrid, repairMaterial, null, sacrifices, sacrificeTo);
+		this(item, List.of(), unitCost, useGrid, repairMaterial, null, sacrifices, sacrificeTo);
 	}
 
 	public static final String ID = "tinkerers_smithing";
@@ -68,12 +80,13 @@ public record TinkerersEquipment(Item item, int unitCost, boolean useGrid, Ingre
 		resultNbt.putString("Damage", "$%d".formatted((int) Math.floor(upgradeTo.item.getMaxDamage() * ((unitCost - 1) / 4.0))));
 
 
-
-		SmithingNBTRecipeJsonFactory.create(
+		SmithingNBTRecipeJsonFactory factory = SmithingNBTRecipeJsonFactory.create(
 			ofAdvancedEntries(Stream.of(new IngredientStackEntry(baseStack))),
 			upgradeTo().repairMaterial,
 			resultStack
-		).offerTo(exporter, new Identifier(ID, "%s_upgrade_%s".formatted(Registry.ITEM.getId(upgradeTo.item).getPath(), Registry.ITEM.getId(item).getPath().replaceFirst("_%s$".formatted(Registry.ITEM.getId(upgradeTo.item).getPath().split("_")[1]), ""))));
+		);
+		modRequirements.forEach(factory::requiresMod);
+		factory.offerTo(exporter, new Identifier(ID, "%s_upgrade_%s".formatted(Registry.ITEM.getId(upgradeTo.item).getPath(), Registry.ITEM.getId(item).getPath().replaceFirst("_%s$".formatted(Registry.ITEM.getId(upgradeTo.item).getPath().split("_")[1]), ""))));
 	}
 
 	public void generateRepairRecipe(Consumer<RecipeJsonProvider> exporter) {
@@ -87,11 +100,13 @@ public record TinkerersEquipment(Item item, int unitCost, boolean useGrid, Ingre
 		resultNbt.putString("$", "base");
 		resultNbt.putString("Damage", clampPositive("base.Damage-%s".formatted(Math.ceil(item.getMaxDamage() / 4.0))));
 
-		SmithingNBTRecipeJsonFactory.create(
+		SmithingNBTRecipeJsonFactory factory = SmithingNBTRecipeJsonFactory.create(
 			ofAdvancedEntries(Stream.of(new IngredientStackEntry(baseStack))),
 			repairMaterial,
 			resultStack
-		).offerTo(exporter, new Identifier(ID, "%s_repair".formatted(Registry.ITEM.getId(item).getPath())));
+		);
+		modRequirements.forEach(factory::requiresMod);
+		factory.offerTo(exporter, new Identifier(ID, "%s_repair".formatted(Registry.ITEM.getId(item).getPath())));
 	}
 
 	public void generateDeWorkRecipe(Consumer<RecipeJsonProvider> exporter) {
@@ -107,11 +122,13 @@ public record TinkerersEquipment(Item item, int unitCost, boolean useGrid, Ingre
 		resultNbt.putString("RepairCost", "$((base.RepairCost + 1)/2)-1");
 		resultNbt.remove("Damage");
 
-		SmithingNBTRecipeJsonFactory.create(
+		SmithingNBTRecipeJsonFactory factory = SmithingNBTRecipeJsonFactory.create(
 			ofAdvancedEntries(Stream.of(new IngredientStackEntry(baseStack))),
 			Ingredient.ofItems(Items.NETHERITE_SCRAP),
 			resultStack
-		).offerTo(exporter, new Identifier(ID, "%s_dework".formatted(Registry.ITEM.getId(item).getPath())));
+		);
+		modRequirements.forEach(factory::requiresMod);
+		factory.offerTo(exporter, new Identifier(ID, "%s_dework".formatted(Registry.ITEM.getId(item).getPath())));
 	}
 
 	public void generateShapelessUpgradeRecipe(Consumer<RecipeJsonProvider> exporter) {
@@ -129,6 +146,7 @@ public record TinkerersEquipment(Item item, int unitCost, boolean useGrid, Ingre
 		for (int i = 0; i < unitCost; i++) {
 			factory.input(upgradeTo.repairMaterial);
 		}
+		modRequirements.forEach(factory::requiresMod);
 		factory.offerTo(exporter, new Identifier(ID, "%s_upgrade_%s".formatted(Registry.ITEM.getId(upgradeTo.item).getPath(), Registry.ITEM.getId(item).getPath().replaceFirst("_%s$".formatted(Registry.ITEM.getId(upgradeTo.item).getPath().split("_")[1]), ""))));
 	}
 
@@ -149,7 +167,7 @@ public record TinkerersEquipment(Item item, int unitCost, boolean useGrid, Ingre
 			for (int i = 0; i < ingredientsUsed; i++) {
 				factory.input(repairMaterial);
 			}
-
+			modRequirements.forEach(factory::requiresMod);
 			factory.offerTo(exporter, new Identifier(ID, "%s_repair_%d".formatted(Registry.ITEM.getId(item).getPath(), ingredientsUsed)));
 		}
 	}
@@ -170,11 +188,13 @@ public record TinkerersEquipment(Item item, int unitCost, boolean useGrid, Ingre
 				sacrifice.item.getMaxDamage() * unitCost
 			)));
 
-			SmithingNBTRecipeJsonFactory.create(
+			SmithingNBTRecipeJsonFactory factory = SmithingNBTRecipeJsonFactory.create(
 				ofAdvancedEntries(Stream.of(new IngredientStackEntry(baseStack))),
 				Ingredient.ofItems(sacrifice.item),
 				resultStack
-			).offerTo(exporter, new Identifier(ID, "%s_sacrifice_%s".formatted(Registry.ITEM.getId(sacrificeTo).getPath(), Registry.ITEM.getId(sacrifice.item).getPath().replaceFirst("^%s_".formatted(Registry.ITEM.getId(sacrificeTo).getPath().split("_")[0]), ""))));
+			);
+			modRequirements.forEach(factory::requiresMod);
+			factory.offerTo(exporter, new Identifier(ID, "%s_sacrifice_%s".formatted(Registry.ITEM.getId(sacrificeTo).getPath(), Registry.ITEM.getId(sacrifice.item).getPath().replaceFirst("^%s_".formatted(Registry.ITEM.getId(sacrificeTo).getPath().split("_")[0]), ""))));
 		});
 	}
 }

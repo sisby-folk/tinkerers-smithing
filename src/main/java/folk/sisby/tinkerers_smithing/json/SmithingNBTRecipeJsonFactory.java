@@ -1,6 +1,7 @@
 package folk.sisby.tinkerers_smithing.json;
 
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import de.siphalor.nbtcrafting.NbtCrafting;
 import de.siphalor.nbtcrafting.api.nbt.NbtUtil;
@@ -18,9 +19,12 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.function.Consumer;
 
 public class SmithingNBTRecipeJsonFactory {
+	private final Collection<String> modRequirements = new ArrayList<>();
 	private final Ingredient base;
 	private final Ingredient addition;
 	private final ItemStack result;
@@ -43,6 +47,11 @@ public class SmithingNBTRecipeJsonFactory {
 		return this;
 	}
 
+	public SmithingNBTRecipeJsonFactory requiresMod(String id) {
+		this.modRequirements.add(id);
+		return this;
+	}
+
 	public void offerTo(Consumer<RecipeJsonProvider> exporter, String recipeId) {
 		this.offerTo(exporter, new Identifier(recipeId));
 	}
@@ -56,7 +65,7 @@ public class SmithingNBTRecipeJsonFactory {
 				.criteriaMerger(CriterionMerger.OR);
 		exporter.accept(
 				new SmithingNBTRecipeJsonFactory.SmithingNBTRecipeJsonProvider(
-						recipeId,
+					this.modRequirements, recipeId,
 						this.serializer,
 						this.base,
 						this.addition,
@@ -74,6 +83,7 @@ public class SmithingNBTRecipeJsonFactory {
 	}
 
 	public static class SmithingNBTRecipeJsonProvider implements RecipeJsonProvider {
+		private final Collection<String> modRequirements;
 		private final Identifier recipeId;
 		private final Ingredient base;
 		private final Ingredient ingredient;
@@ -83,8 +93,9 @@ public class SmithingNBTRecipeJsonFactory {
 		private final RecipeSerializer<?> serializer;
 
 		public SmithingNBTRecipeJsonProvider(
-			Identifier recipeId, RecipeSerializer<?> serializer, Ingredient base, Ingredient ingredient, ItemStack result, Advancement.Task builder, Identifier advancementId
+			Collection<String> modRequirements, Identifier recipeId, RecipeSerializer<?> serializer, Ingredient base, Ingredient ingredient, ItemStack result, Advancement.Task builder, Identifier advancementId
 		) {
+			this.modRequirements = modRequirements;
 			this.recipeId = recipeId;
 			this.serializer = serializer;
 			this.base = base;
@@ -96,6 +107,13 @@ public class SmithingNBTRecipeJsonFactory {
 
 		@Override
 		public void serialize(JsonObject json) {
+			if (!modRequirements.isEmpty()) {
+				JsonObject loadConditions = new JsonObject();
+				loadConditions.addProperty("condition","fabric:all_mods_loaded");
+				JsonArray modArray = new JsonArray();
+				modRequirements.forEach(modArray::add);
+				loadConditions.add("value", modArray);
+			}
 			JsonObject baseJson = this.base.toJson().getAsJsonObject();
 			if (baseJson.has("require")) {
 				// Fix required nesting

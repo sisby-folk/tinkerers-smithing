@@ -21,10 +21,13 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
 
 public class ShapelessNBTRecipeJsonFactory implements CraftingRecipeJsonFactory {
+	private final Collection<String> modRequirements = new ArrayList<>();
 	private final ItemStack output;
 	private final int outputCount;
 	private final List<Ingredient> inputs = Lists.<Ingredient>newArrayList();
@@ -78,6 +81,11 @@ public class ShapelessNBTRecipeJsonFactory implements CraftingRecipeJsonFactory 
 		return this;
 	}
 
+	public ShapelessNBTRecipeJsonFactory requiresMod(String id) {
+		this.modRequirements.add(id);
+		return this;
+	}
+
 	public ShapelessNBTRecipeJsonFactory group(@Nullable String string) {
 		this.group = string;
 		return this;
@@ -98,7 +106,7 @@ public class ShapelessNBTRecipeJsonFactory implements CraftingRecipeJsonFactory 
 				.criteriaMerger(CriterionMerger.OR);
 		exporter.accept(
 				new ShapelessNBTRecipeJsonFactory.ShapelessNBTRecipeJsonProvider(
-						recipeId,
+					this.modRequirements, recipeId,
 						this.output,
 						this.outputCount,
 						this.group == null ? "" : this.group,
@@ -116,6 +124,7 @@ public class ShapelessNBTRecipeJsonFactory implements CraftingRecipeJsonFactory 
 	}
 
 	public static class ShapelessNBTRecipeJsonProvider implements RecipeJsonProvider {
+		private final Collection<String> modRequirements;
 		private final Identifier recipeId;
 		private final ItemStack output;
 		private final int count;
@@ -125,8 +134,9 @@ public class ShapelessNBTRecipeJsonFactory implements CraftingRecipeJsonFactory 
 		private final Identifier advancementId;
 
 		public ShapelessNBTRecipeJsonProvider(
-				Identifier recipeId, ItemStack output, int outputCount, String group, List<Ingredient> inputs, Advancement.Task builder, Identifier advancementId
+			Collection<String> modRequirements, Identifier recipeId, ItemStack output, int outputCount, String group, List<Ingredient> inputs, Advancement.Task builder, Identifier advancementId
 		) {
+			this.modRequirements = modRequirements;
 			this.recipeId = recipeId;
 			this.output = output;
 			this.count = outputCount;
@@ -138,6 +148,14 @@ public class ShapelessNBTRecipeJsonFactory implements CraftingRecipeJsonFactory 
 
 		@Override
 		public void serialize(JsonObject json) {
+			if (!modRequirements.isEmpty()) {
+				JsonObject loadConditions = new JsonObject();
+				loadConditions.addProperty("condition","fabric:all_mods_loaded");
+				JsonArray modArray = new JsonArray();
+				modRequirements.forEach(modArray::add);
+				loadConditions.add("value", modArray);
+			}
+
 			if (!this.group.isEmpty()) {
 				json.addProperty("group", this.group);
 			}
