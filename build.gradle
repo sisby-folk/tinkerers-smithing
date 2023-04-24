@@ -43,11 +43,57 @@ repositories {
 		name "Siphalor's Maven"
 		url "https://maven.siphalor.de"
 	}
+
+	maven { // Cloth Config
+		url "https://maven.shedaniel.me/"
+	}
+	maven { // ModMenu
+		url "https://maven.terraformersmc.com/"
+	}
 	// For some testing dependencies of Nbt Crafting
 	maven {
 		name "Jitpack"
 		url "https://jitpack.io"
 	}
+	maven {
+		url "https://api.modrinth.com/maven"
+		content {
+			includeGroup "maven.modrinth"
+		}
+	}
+	// Compat
+	maven {
+		url 'https://repo.sleeping.town'
+	}
+	repositories {
+		maven { url 'https://maven.blamejared.com' }
+	}
+	maven {
+		url "https://maven.jamieswhiteshirt.com/libs-release"
+		content {
+			includeGroup "com.jamieswhiteshirt"
+		}
+	}
+	maven {
+		url 'https://ladysnake.jfrog.io/artifactory/mods'
+	}
+	maven {
+		url 'https://maven.cafeteria.dev'
+		content {
+			includeGroup 'net.adriantodt.fabricmc'
+		}
+	}
+	// Create
+	maven { url = "https://dvs1.progwml6.com/files/maven/" } // JEI
+	maven { url = "https://maven.parchmentmc.org" } // Parchment mappings
+	maven { url = "https://maven.quiltmc.org/repository/release" } // Quilt Mappings
+	maven { url = "https://mvn.devos.one/snapshots/" } // Create, Porting Lib, Forge Tags, Milk Lib, Registrate
+	maven { url = "https://cursemaven.com" } // Forge Config API Port
+	maven {
+		name = "Fuzs Mod Resources"
+		url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/"
+	}
+	maven { url = "https://maven.tterrag.com/" } // Flywheel
 }
 
 // All the dependencies are declared at gradle/libs.version.toml and referenced with "libs.<id>"
@@ -62,6 +108,39 @@ dependencies {
 
 	// // Libraries // //
 	modImplementation libs.nbtCrafting
+
+	// // Compat Dependencies // //
+	modImplementation libs.lib39aqi
+	modImplementation libs.lib39core
+	modImplementation libs.lib39crowbar
+	modImplementation libs.lib39deferral
+	modImplementation libs.lib39dessicant
+	modImplementation libs.lib39fractal
+	modImplementation libs.lib39gesundheit
+	modImplementation libs.lib39keygen
+	modImplementation libs.lib39lockpick
+	modImplementation libs.lib39machination
+	modImplementation libs.lib39mesh
+	modImplementation libs.lib39phantom
+	modImplementation libs.lib39recoil
+	modImplementation libs.lib39ripple
+	modImplementation libs.lib39sandman
+	modImplementation libs.lib39tunnel
+	modImplementation libs.lib39util
+	modImplementation libs.lib39waypoint
+	modImplementation libs.lib39weld
+
+	modApi libs.forgeConfigApiPort
+
+	// // Compat // //
+	modImplementation libs.farmersDelight
+	modImplementation libs.campanion
+	modImplementation libs.halfdoors
+	modImplementation libs.chalk
+	modImplementation libs.consistencyPlus
+	modImplementation libs.yttr
+	modImplementation libs.botania
+	modImplementation libs.create
 }
 
 

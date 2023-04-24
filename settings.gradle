@@ -42,6 +42,52 @@ dependencyResolutionManagement {
 
 			library('nbtCrafting', 'de.siphalor', 'nbtcrafting-' + mc_major).versionRef('nbtCrafting')
 
+
+			// // Compat // //
+			version('farmersDelight', "1.3.9")
+			version('campanion', "4.1.2+fabric")
+			version('halfdoors', "1.3.9+1.19.x")
+			version('chalk', "2.1.0")
+			version('consistencyPlus', "0.5.1")
+			version('yttr', "7.638+1.19.2")
+			version('botania', "1.19.2-438-FABRIC-SNAPSHOT")
+			version('create', "0.5.0.i-991+1.19.2")
+
+			library('farmersDelight', 'maven.modrinth', 'farmers-delight-fabric').versionRef('farmersDelight')
+			library('campanion', 'maven.modrinth', 'campanion').versionRef('campanion')
+			library('halfdoors', 'maven.modrinth', 'half-doors').versionRef('halfdoors')
+			library('chalk', 'maven.modrinth', 'chalk').versionRef('chalk')
+			library('consistencyPlus', 'maven.modrinth', 'consistencyplus').versionRef('consistencyPlus')
+			library('yttr', 'maven.modrinth', 'yttr').versionRef('yttr')
+			library('botania', 'vazkii.botania', 'Botania').versionRef('botania')
+			library('create', 'com.simibubi.create', 'create-fabric-1.19.2').versionRef('create')
+
+			// // Dependencies // //
+			version('lib39', "1.5.0-pre3+${mc}")
+			version('nightConfig', "3.6.5")
+			version('forgeConfigApiPort', "4.2.9")
+
+			library('lib39aqi', 'com.unascribed', 'lib39-aqi').versionRef('lib39')
+			library('lib39core', 'com.unascribed', 'lib39-core').versionRef('lib39')
+			library('lib39crowbar', 'com.unascribed', 'lib39-crowbar').versionRef('lib39')
+			library('lib39deferral', 'com.unascribed', 'lib39-deferral').versionRef('lib39')
+			library('lib39dessicant', 'com.unascribed', 'lib39-dessicant').versionRef('lib39')
+			library('lib39fractal', 'com.unascribed', 'lib39-fractal').versionRef('lib39')
+			library('lib39gesundheit', 'com.unascribed', 'lib39-gesundheit').version('1.4.2')
+			library('lib39keygen', 'com.unascribed', 'lib39-keygen').versionRef('lib39')
+			library('lib39lockpick', 'com.unascribed', 'lib39-lockpick').versionRef('lib39')
+			library('lib39machination', 'com.unascribed', 'lib39-machination').versionRef('lib39')
+			library('lib39mesh', 'com.unascribed', 'lib39-mesh').versionRef('lib39')
+			library('lib39phantom', 'com.unascribed', 'lib39-phantom').versionRef('lib39')
+			library('lib39recoil', 'com.unascribed', 'lib39-recoil').versionRef('lib39')
+			library('lib39ripple', 'com.unascribed', 'lib39-ripple').versionRef('lib39')
+			library('lib39sandman', 'com.unascribed', 'lib39-sandman').versionRef('lib39')
+			library('lib39tunnel', 'com.unascribed', 'lib39-tunnel').versionRef('lib39')
+			library('lib39util', 'com.unascribed', 'lib39-util').versionRef('lib39')
+			library('lib39waypoint', 'com.unascribed', 'lib39-waypoint').versionRef('lib39')
+			library('lib39weld', 'com.unascribed', 'lib39-weld').versionRef('lib39')
+
+			library('forgeConfigApiPort', 'net.minecraftforge', 'forgeconfigapiport-fabric').versionRef('forgeConfigApiPort')
 		}
 	}
 }
