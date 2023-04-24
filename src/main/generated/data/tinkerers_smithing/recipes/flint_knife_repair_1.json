@@ -1,11 +1,13 @@
 {
   "type": "minecraft:crafting_shapeless",
-  "fabric:load_conditions": {
-    "condition": "fabric:all_mods_loaded",
-    "value": [
-      "farmersdelight"
-    ]
-  },
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "value": [
+        "farmersdelight"
+      ]
+    }
+  ],
   "ingredients": [
     {
       "data": {

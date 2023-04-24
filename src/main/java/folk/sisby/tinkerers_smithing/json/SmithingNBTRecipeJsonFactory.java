@@ -147,13 +147,13 @@ public class SmithingNBTRecipeJsonFactory {
 		@Nullable
 		@Override
 		public JsonObject toAdvancementJson() {
-			return this.builder.toJson();
+			return null;
 		}
 
 		@Nullable
 		@Override
 		public Identifier getAdvancementId() {
-			return this.advancementId;
+			return null;
 		}
 	}
 }

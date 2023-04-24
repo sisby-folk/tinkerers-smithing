@@ -3,12 +3,14 @@
   "base": {
     "item": "farmersdelight:golden_knife"
   },
-  "fabric:load_conditions": {
-    "condition": "fabric:all_mods_loaded",
-    "value": [
-      "farmersdelight"
-    ]
-  },
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "value": [
+        "farmersdelight"
+      ]
+    }
+  ],
   "ingredient": {
     "item": "minecraft:netherite_axe"
   },

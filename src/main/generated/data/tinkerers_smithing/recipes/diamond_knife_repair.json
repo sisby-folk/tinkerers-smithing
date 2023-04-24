@@ -8,12 +8,14 @@
     },
     "item": "farmersdelight:diamond_knife"
   },
-  "fabric:load_conditions": {
-    "condition": "fabric:all_mods_loaded",
-    "value": [
-      "farmersdelight"
-    ]
-  },
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "value": [
+        "farmersdelight"
+      ]
+    }
+  ],
   "ingredient": {
     "item": "minecraft:diamond"
   },
