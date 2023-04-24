@@ -113,6 +113,7 @@ public class SmithingNBTRecipeJsonFactory {
 				JsonArray modArray = new JsonArray();
 				modRequirements.forEach(modArray::add);
 				loadConditions.add("value", modArray);
+				json.add("fabric:load_conditions", loadConditions);
 			}
 			JsonObject baseJson = this.base.toJson().getAsJsonObject();
 			if (baseJson.has("require")) {
