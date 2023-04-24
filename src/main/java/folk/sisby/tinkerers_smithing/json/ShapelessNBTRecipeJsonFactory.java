@@ -21,13 +21,11 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.function.Consumer;
 
 public class ShapelessNBTRecipeJsonFactory implements CraftingRecipeJsonFactory {
-	private final Collection<String> modRequirements = new ArrayList<>();
+	private final Set<String> modRequirements = new HashSet<>();
 	private final ItemStack output;
 	private final int outputCount;
 	private final List<Ingredient> inputs = Lists.<Ingredient>newArrayList();
@@ -57,7 +55,7 @@ public class ShapelessNBTRecipeJsonFactory implements CraftingRecipeJsonFactory 
 	}
 
 	public ShapelessNBTRecipeJsonFactory input(ItemConvertible itemProvider, int size) {
-		for(int i = 0; i < size; ++i) {
+		for (int i = 0; i < size; ++i) {
 			this.input(Ingredient.ofItems(itemProvider));
 		}
 
@@ -69,7 +67,7 @@ public class ShapelessNBTRecipeJsonFactory implements CraftingRecipeJsonFactory 
 	}
 
 	public ShapelessNBTRecipeJsonFactory input(Ingredient ingredient, int size) {
-		for(int i = 0; i < size; ++i) {
+		for (int i = 0; i < size; ++i) {
 			this.inputs.add(ingredient);
 		}
 
@@ -100,20 +98,21 @@ public class ShapelessNBTRecipeJsonFactory implements CraftingRecipeJsonFactory 
 	public void offerTo(Consumer<RecipeJsonProvider> exporter, Identifier recipeId) {
 		this.validate(recipeId);
 		this.builder
-				.parent(f_rbjlzbic)
-				.criterion("has_the_recipe", RecipeUnlockedCriterion.create(recipeId))
-				.rewards(AdvancementRewards.Builder.recipe(recipeId))
-				.criteriaMerger(CriterionMerger.OR);
+			.parent(f_rbjlzbic)
+			.criterion("has_the_recipe", RecipeUnlockedCriterion.create(recipeId))
+			.rewards(AdvancementRewards.Builder.recipe(recipeId))
+			.criteriaMerger(CriterionMerger.OR);
 		exporter.accept(
-				new ShapelessNBTRecipeJsonFactory.ShapelessNBTRecipeJsonProvider(
-					this.modRequirements, recipeId,
-						this.output,
-						this.outputCount,
-						this.group == null ? "" : this.group,
-						this.inputs,
-						this.builder,
-						new Identifier(recipeId.getNamespace(), "recipes/" + this.output.getItem().getGroup().getName() + "/" + recipeId.getPath())
-				)
+			new ShapelessNBTRecipeJsonFactory.ShapelessNBTRecipeJsonProvider(
+				this.modRequirements,
+				recipeId,
+				this.output,
+				this.outputCount,
+				this.group == null ? "" : this.group,
+				this.inputs,
+				this.builder,
+				new Identifier(recipeId.getNamespace(), "recipes/" + this.output.getItem().getGroup().getName() + "/" + recipeId.getPath())
+			)
 		);
 	}
 
@@ -124,7 +123,7 @@ public class ShapelessNBTRecipeJsonFactory implements CraftingRecipeJsonFactory 
 	}
 
 	public static class ShapelessNBTRecipeJsonProvider implements RecipeJsonProvider {
-		private final Collection<String> modRequirements;
+		private final Set<String> modRequirements;
 		private final Identifier recipeId;
 		private final ItemStack output;
 		private final int count;
@@ -134,7 +133,7 @@ public class ShapelessNBTRecipeJsonFactory implements CraftingRecipeJsonFactory 
 		private final Identifier advancementId;
 
 		public ShapelessNBTRecipeJsonProvider(
-			Collection<String> modRequirements, Identifier recipeId, ItemStack output, int outputCount, String group, List<Ingredient> inputs, Advancement.Task builder, Identifier advancementId
+			Set<String> modRequirements, Identifier recipeId, ItemStack output, int outputCount, String group, List<Ingredient> inputs, Advancement.Task builder, Identifier advancementId
 		) {
 			this.modRequirements = modRequirements;
 			this.recipeId = recipeId;
@@ -151,7 +150,7 @@ public class ShapelessNBTRecipeJsonFactory implements CraftingRecipeJsonFactory 
 			if (!modRequirements.isEmpty()) {
 				JsonArray loadConditions = new JsonArray();
 				JsonObject loadCondition = new JsonObject();
-				loadCondition.addProperty("condition","fabric:all_mods_loaded");
+				loadCondition.addProperty("condition", "fabric:all_mods_loaded");
 				JsonArray modArray = new JsonArray();
 				modRequirements.forEach(modArray::add);
 				loadCondition.add("values", modArray);
@@ -165,7 +164,7 @@ public class ShapelessNBTRecipeJsonFactory implements CraftingRecipeJsonFactory 
 
 			JsonArray jsonArray = new JsonArray();
 
-			for(Ingredient ingredient : this.inputs) {
+			for (Ingredient ingredient : this.inputs) {
 				JsonObject baseJson = ingredient.toJson().getAsJsonObject();
 				if (baseJson.has("require")) {
 					// Fix required nesting

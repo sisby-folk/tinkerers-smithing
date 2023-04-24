@@ -19,12 +19,12 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Consumer;
 
 public class SmithingNBTRecipeJsonFactory {
-	private final Collection<String> modRequirements = new ArrayList<>();
+	private final Set<String> modRequirements = new HashSet<>();
 	private final Ingredient base;
 	private final Ingredient addition;
 	private final ItemStack result;
@@ -83,7 +83,7 @@ public class SmithingNBTRecipeJsonFactory {
 	}
 
 	public static class SmithingNBTRecipeJsonProvider implements RecipeJsonProvider {
-		private final Collection<String> modRequirements;
+		private final Set<String> modRequirements;
 		private final Identifier recipeId;
 		private final Ingredient base;
 		private final Ingredient ingredient;
@@ -93,7 +93,7 @@ public class SmithingNBTRecipeJsonFactory {
 		private final RecipeSerializer<?> serializer;
 
 		public SmithingNBTRecipeJsonProvider(
-			Collection<String> modRequirements, Identifier recipeId, RecipeSerializer<?> serializer, Ingredient base, Ingredient ingredient, ItemStack result, Advancement.Task builder, Identifier advancementId
+			Set<String> modRequirements, Identifier recipeId, RecipeSerializer<?> serializer, Ingredient base, Ingredient ingredient, ItemStack result, Advancement.Task builder, Identifier advancementId
 		) {
 			this.modRequirements = modRequirements;
 			this.recipeId = recipeId;

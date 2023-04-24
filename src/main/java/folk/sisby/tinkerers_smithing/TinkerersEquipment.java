@@ -17,7 +17,9 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
@@ -85,7 +87,9 @@ public record TinkerersEquipment(Item item, Collection<String> modRequirements, 
 			upgradeTo().repairMaterial,
 			resultStack
 		);
-		modRequirements.forEach(factory::requiresMod);
+		Set<String> requirements = new HashSet<>(modRequirements);
+		requirements.addAll(upgradeTo.modRequirements);
+		requirements.forEach(factory::requiresMod);
 		factory.offerTo(exporter, new Identifier(ID, "%s_upgrade_%s".formatted(Registry.ITEM.getId(upgradeTo.item).getPath(), Registry.ITEM.getId(item).getPath().replaceFirst("_%s$".formatted(Registry.ITEM.getId(upgradeTo.item).getPath().split("_")[1]), ""))));
 	}
 
@@ -146,7 +150,9 @@ public record TinkerersEquipment(Item item, Collection<String> modRequirements, 
 		for (int i = 0; i < unitCost; i++) {
 			factory.input(upgradeTo.repairMaterial);
 		}
-		modRequirements.forEach(factory::requiresMod);
+		Set<String> requirements = new HashSet<>(modRequirements);
+		requirements.addAll(upgradeTo.modRequirements);
+		requirements.forEach(factory::requiresMod);
 		factory.offerTo(exporter, new Identifier(ID, "%s_upgrade_%s".formatted(Registry.ITEM.getId(upgradeTo.item).getPath(), Registry.ITEM.getId(item).getPath().replaceFirst("_%s$".formatted(Registry.ITEM.getId(upgradeTo.item).getPath().split("_")[1]), ""))));
 	}
 
@@ -193,7 +199,9 @@ public record TinkerersEquipment(Item item, Collection<String> modRequirements, 
 				Ingredient.ofItems(sacrifice.item),
 				resultStack
 			);
-			modRequirements.forEach(factory::requiresMod);
+			Set<String> requirements = new HashSet<>(modRequirements);
+			requirements.addAll(sacrifice.modRequirements);
+			requirements.forEach(factory::requiresMod);
 			factory.offerTo(exporter, new Identifier(ID, "%s_sacrifice_%s".formatted(Registry.ITEM.getId(sacrificeTo).getPath(), Registry.ITEM.getId(sacrifice.item).getPath().replaceFirst("^%s_".formatted(Registry.ITEM.getId(sacrificeTo).getPath().split("_")[0]), ""))));
 		});
 	}
