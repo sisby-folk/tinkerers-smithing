@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "fabric:load_conditions": {
+    "condition": "fabric:all_mods_loaded",
+    "value": [
+      "farmersdelight"
+    ]
+  },
+  "ingredients": [
+    {
+      "data": {
+        "require": {
+          "Damage": "$1.."
+        }
+      },
+      "item": "farmersdelight:flint_knife"
+    },
+    {
+      "item": "minecraft:flint"
+    }
+  ],
+  "result": {
+    "data": {
+      "$": "i0",
+      "Damage": "$(i0.Damage-131)*((2*(i0.Damage-131)+1)%2+1)/2"
+    },
+    "item": "farmersdelight:flint_knife"
+  }
+}

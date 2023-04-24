@@ -1,5 +1,6 @@
 package folk.sisby.tinkerers_smithing;
 
+import com.nhoryzon.mc.farmersdelight.registry.ItemsRegistry;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.minecraft.data.server.recipe.RecipeJsonProvider;
@@ -8,7 +9,10 @@ import net.minecraft.item.Items;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.tag.ItemTags;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 public class TinkerersSmithingRecipeGenerator extends FabricRecipeProvider {
@@ -61,18 +65,6 @@ public class TinkerersSmithingRecipeGenerator extends FabricRecipeProvider {
 		registerEquipment(new TinkerersEquipment(Items.LEATHER_LEGGINGS, 7, true, Ingredient.ofItems(Items.LEATHER), equipment.get(Items.IRON_LEGGINGS)));
 		registerEquipment(new TinkerersEquipment(Items.LEATHER_CHESTPLATE, 8, true, Ingredient.ofItems(Items.LEATHER), equipment.get(Items.IRON_CHESTPLATE)));
 
-		// Golden (maybe when this is data driven this could work via pseudo-tags - split files by material)
-		Collection<TinkerersEquipment> netheriteEquipment = equipment.values().stream().filter(te -> te.repairMaterial().test(Items.NETHERITE_INGOT.getDefaultStack())).toList();
-		registerEquipment(new TinkerersEquipment(Items.GOLDEN_SHOVEL, 1, false, Ingredient.ofItems(Items.GOLD_INGOT), netheriteEquipment, Items.NETHERITE_SHOVEL));
-		registerEquipment(new TinkerersEquipment(Items.GOLDEN_SWORD, 2, false, Ingredient.ofItems(Items.GOLD_INGOT), netheriteEquipment, Items.NETHERITE_SWORD));
-		registerEquipment(new TinkerersEquipment(Items.GOLDEN_HOE, 2, false, Ingredient.ofItems(Items.GOLD_INGOT), netheriteEquipment, Items.NETHERITE_HOE));
-		registerEquipment(new TinkerersEquipment(Items.GOLDEN_PICKAXE, 3, false, Ingredient.ofItems(Items.GOLD_INGOT), netheriteEquipment, Items.NETHERITE_PICKAXE));
-		registerEquipment(new TinkerersEquipment(Items.GOLDEN_AXE, 3, false, Ingredient.ofItems(Items.GOLD_INGOT), netheriteEquipment, Items.NETHERITE_AXE));
-		registerEquipment(new TinkerersEquipment(Items.GOLDEN_BOOTS, 4, false, Ingredient.ofItems(Items.GOLD_INGOT), netheriteEquipment, Items.NETHERITE_BOOTS));
-		registerEquipment(new TinkerersEquipment(Items.GOLDEN_HELMET, 5, false, Ingredient.ofItems(Items.GOLD_INGOT), netheriteEquipment, Items.NETHERITE_HELMET));
-		registerEquipment(new TinkerersEquipment(Items.GOLDEN_LEGGINGS, 7, false, Ingredient.ofItems(Items.GOLD_INGOT), netheriteEquipment, Items.NETHERITE_LEGGINGS));
-		registerEquipment(new TinkerersEquipment(Items.GOLDEN_CHESTPLATE, 8, false, Ingredient.ofItems(Items.GOLD_INGOT), netheriteEquipment, Items.NETHERITE_CHESTPLATE));
-
 		// Stone
 		registerEquipment(new TinkerersEquipment(Items.STONE_SHOVEL, 1, true, Ingredient.ofTag(ItemTags.STONE_TOOL_MATERIALS), equipment.get(Items.IRON_SHOVEL)));
 		registerEquipment(new TinkerersEquipment(Items.STONE_SWORD, 2, true, Ingredient.ofTag(ItemTags.STONE_TOOL_MATERIALS), equipment.get(Items.IRON_SWORD)));
@@ -103,6 +95,28 @@ public class TinkerersSmithingRecipeGenerator extends FabricRecipeProvider {
 		registerEquipment(new TinkerersEquipment(Items.SHEARS, 2, false, Ingredient.ofItems(Items.IRON_INGOT)));
 		registerEquipment(new TinkerersEquipment(Items.TRIDENT, 3, false, Ingredient.ofItems(Items.PRISMARINE_CRYSTALS)));
 		registerEquipment(new TinkerersEquipment(Items.SHIELD, 1, false, Ingredient.ofItems(Items.IRON_INGOT)));
+
+		// Farmers Delight
+		registerEquipment(new TinkerersEquipment(ItemsRegistry.NETHERITE_KNIFE.get(), List.of("farmersdelight"), 1, false, Ingredient.ofItems(Items.NETHERITE_INGOT)));
+		registerEquipment(new TinkerersEquipment(ItemsRegistry.DIAMOND_KNIFE.get(), List.of("farmersdelight"), 1, false, Ingredient.ofItems(Items.DIAMOND)));
+		registerEquipment(new TinkerersEquipment(ItemsRegistry.IRON_KNIFE.get(), List.of("farmersdelight"), 1, false, Ingredient.ofItems(Items.IRON_INGOT), equipment.get(ItemsRegistry.DIAMOND_KNIFE.get())));
+		registerEquipment(new TinkerersEquipment(ItemsRegistry.FLINT_KNIFE.get(), List.of("farmersdelight"), 1, true, Ingredient.ofItems(Items.FLINT), equipment.get(ItemsRegistry.IRON_KNIFE.get())));
+
+
+		// Golden (maybe when this is data driven this could work via pseudo-tags - split files by material)
+		Collection<TinkerersEquipment> netheriteEquipment = equipment.values().stream().filter(te -> te.repairMaterial().test(Items.NETHERITE_INGOT.getDefaultStack())).toList();
+		registerEquipment(new TinkerersEquipment(Items.GOLDEN_SHOVEL, 1, false, Ingredient.ofItems(Items.GOLD_INGOT), netheriteEquipment, Items.NETHERITE_SHOVEL));
+		registerEquipment(new TinkerersEquipment(Items.GOLDEN_SWORD, 2, false, Ingredient.ofItems(Items.GOLD_INGOT), netheriteEquipment, Items.NETHERITE_SWORD));
+		registerEquipment(new TinkerersEquipment(Items.GOLDEN_HOE, 2, false, Ingredient.ofItems(Items.GOLD_INGOT), netheriteEquipment, Items.NETHERITE_HOE));
+		registerEquipment(new TinkerersEquipment(Items.GOLDEN_PICKAXE, 3, false, Ingredient.ofItems(Items.GOLD_INGOT), netheriteEquipment, Items.NETHERITE_PICKAXE));
+		registerEquipment(new TinkerersEquipment(Items.GOLDEN_AXE, 3, false, Ingredient.ofItems(Items.GOLD_INGOT), netheriteEquipment, Items.NETHERITE_AXE));
+		registerEquipment(new TinkerersEquipment(Items.GOLDEN_BOOTS, 4, false, Ingredient.ofItems(Items.GOLD_INGOT), netheriteEquipment, Items.NETHERITE_BOOTS));
+		registerEquipment(new TinkerersEquipment(Items.GOLDEN_HELMET, 5, false, Ingredient.ofItems(Items.GOLD_INGOT), netheriteEquipment, Items.NETHERITE_HELMET));
+		registerEquipment(new TinkerersEquipment(Items.GOLDEN_LEGGINGS, 7, false, Ingredient.ofItems(Items.GOLD_INGOT), netheriteEquipment, Items.NETHERITE_LEGGINGS));
+		registerEquipment(new TinkerersEquipment(Items.GOLDEN_CHESTPLATE, 8, false, Ingredient.ofItems(Items.GOLD_INGOT), netheriteEquipment, Items.NETHERITE_CHESTPLATE));
+		// Farmers Delight Golden
+		registerEquipment(new TinkerersEquipment(ItemsRegistry.GOLDEN_KNIFE.get(), List.of("farmersdelight"), 1, false, Ingredient.ofItems(Items.GOLD_INGOT), netheriteEquipment, ItemsRegistry.NETHERITE_KNIFE.get()));
+
 	}
 
 	@Override

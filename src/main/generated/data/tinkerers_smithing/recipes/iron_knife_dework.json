@@ -1,0 +1,27 @@
+{
+  "type": "nbtcrafting:smithing",
+  "base": {
+    "data": {
+      "require": {
+        "RepairCost": "$1.."
+      }
+    },
+    "item": "farmersdelight:iron_knife"
+  },
+  "fabric:load_conditions": {
+    "condition": "fabric:all_mods_loaded",
+    "value": [
+      "farmersdelight"
+    ]
+  },
+  "ingredient": {
+    "item": "minecraft:netherite_scrap"
+  },
+  "result": {
+    "data": {
+      "$": "base",
+      "RepairCost": "$((base.RepairCost + 1)/2)-1"
+    },
+    "item": "farmersdelight:iron_knife"
+  }
+}
