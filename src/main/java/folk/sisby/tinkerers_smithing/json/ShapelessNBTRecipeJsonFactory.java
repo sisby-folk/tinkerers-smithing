@@ -149,11 +149,13 @@ public class ShapelessNBTRecipeJsonFactory implements CraftingRecipeJsonFactory 
 		@Override
 		public void serialize(JsonObject json) {
 			if (!modRequirements.isEmpty()) {
-				JsonObject loadConditions = new JsonObject();
-				loadConditions.addProperty("condition","fabric:all_mods_loaded");
+				JsonArray loadConditions = new JsonArray();
+				JsonObject loadCondition = new JsonObject();
+				loadCondition.addProperty("condition","fabric:all_mods_loaded");
 				JsonArray modArray = new JsonArray();
 				modRequirements.forEach(modArray::add);
-				loadConditions.add("value", modArray);
+				loadCondition.add("value", modArray);
+				loadConditions.add(loadCondition);
 				json.add("fabric:load_conditions", loadConditions);
 			}
 
