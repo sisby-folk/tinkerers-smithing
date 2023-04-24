@@ -154,7 +154,7 @@ public class ShapelessNBTRecipeJsonFactory implements CraftingRecipeJsonFactory 
 				loadCondition.addProperty("condition","fabric:all_mods_loaded");
 				JsonArray modArray = new JsonArray();
 				modRequirements.forEach(modArray::add);
-				loadCondition.add("value", modArray);
+				loadCondition.add("values", modArray);
 				loadConditions.add(loadCondition);
 				json.add("fabric:load_conditions", loadConditions);
 			}
