@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "data": {
+        "require": {
+          "Damage": "$1.."
+        }
+      },
+      "item": "minecraft:carrot_on_a_stick"
+    },
+    {
+      "item": "minecraft:carrot"
+    }
+  ],
+  "result": {
+    "data": {
+      "$": "i0",
+      "Damage": "$(i0.Damage-25)*((2*(i0.Damage-25)+1)%2+1)/2"
+    },
+    "item": "minecraft:carrot_on_a_stick"
+  }
+}

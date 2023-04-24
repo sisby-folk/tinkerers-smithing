@@ -95,9 +95,11 @@ public class TinkerersSmithingRecipeGenerator extends FabricRecipeProvider {
 		registerEquipment(new TinkerersEquipment(Items.FLINT_AND_STEEL, 1, true, Ingredient.ofItems(Items.IRON_INGOT)));
 		registerEquipment(new TinkerersEquipment(Items.FISHING_ROD, 2, true, Ingredient.ofItems(Items.STRING)));
 		registerEquipment(new TinkerersEquipment(Items.BOW, 3, true, Ingredient.ofItems(Items.STRING)));
+		registerEquipment(new TinkerersEquipment(Items.CROSSBOW, 1, true, Ingredient.ofItems(Items.TRIPWIRE_HOOK)));
+		registerEquipment(new TinkerersEquipment(Items.CARROT_ON_A_STICK, 1, true, Ingredient.ofItems(Items.CARROT)));
+		registerEquipment(new TinkerersEquipment(Items.WARPED_FUNGUS_ON_A_STICK, 1, true, Ingredient.ofItems(Items.WARPED_FUNGUS)));
 
 		// Misc 3
-		registerEquipment(new TinkerersEquipment(Items.CROSSBOW, 1, true, Ingredient.ofItems(Items.TRIPWIRE_HOOK)));
 		registerEquipment(new TinkerersEquipment(Items.SHEARS, 2, false, Ingredient.ofItems(Items.IRON_INGOT)));
 		registerEquipment(new TinkerersEquipment(Items.TRIDENT, 3, false, Ingredient.ofItems(Items.PRISMARINE_CRYSTALS)));
 		registerEquipment(new TinkerersEquipment(Items.SHIELD, 1, false, Ingredient.ofItems(Items.IRON_INGOT)));

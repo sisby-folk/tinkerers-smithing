@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "data": {
+        "require": {
+          "Damage": "$1.."
+        }
+      },
+      "item": "minecraft:warped_fungus_on_a_stick"
+    },
+    {
+      "item": "minecraft:warped_fungus"
+    }
+  ],
+  "result": {
+    "data": {
+      "$": "i0",
+      "Damage": "$(i0.Damage-100)*((2*(i0.Damage-100)+1)%2+1)/2"
+    },
+    "item": "minecraft:warped_fungus_on_a_stick"
+  }
+}
