@@ -67,11 +67,13 @@ public record TinkerersEquipment(Item item, int unitCost, boolean useGrid, Ingre
 		resultNbt.putString("$", "base");
 		resultNbt.putString("Damage", "$%d".formatted((int) Math.floor(upgradeTo.item.getMaxDamage() * ((unitCost - 1) / 4.0))));
 
+
+
 		SmithingNBTRecipeJsonFactory.create(
 			ofAdvancedEntries(Stream.of(new IngredientStackEntry(baseStack))),
 			upgradeTo().repairMaterial,
 			resultStack
-		).offerTo(exporter, new Identifier(ID, "%s_upgrade".formatted(Registry.ITEM.getId(upgradeTo.item).getPath())));
+		).offerTo(exporter, new Identifier(ID, "%s_upgrade_%s".formatted(Registry.ITEM.getId(upgradeTo.item).getPath(), Registry.ITEM.getId(item).getPath().replaceFirst("_%s$".formatted(Registry.ITEM.getId(upgradeTo.item).getPath().split("_")[1]), ""))));
 	}
 
 	public void generateRepairRecipe(Consumer<RecipeJsonProvider> exporter) {
@@ -127,7 +129,7 @@ public record TinkerersEquipment(Item item, int unitCost, boolean useGrid, Ingre
 		for (int i = 0; i < unitCost; i++) {
 			factory.input(upgradeTo.repairMaterial);
 		}
-		factory.offerTo(exporter, new Identifier(ID, "%s_upgrade".formatted(Registry.ITEM.getId(upgradeTo.item).getPath())));
+		factory.offerTo(exporter, new Identifier(ID, "%s_upgrade_%s".formatted(Registry.ITEM.getId(upgradeTo.item).getPath(), Registry.ITEM.getId(item).getPath().replaceFirst("_%s$".formatted(Registry.ITEM.getId(upgradeTo.item).getPath().split("_")[1]), ""))));
 	}
 
 	public void generateShapelessRepairRecipes(Consumer<RecipeJsonProvider> exporter) {

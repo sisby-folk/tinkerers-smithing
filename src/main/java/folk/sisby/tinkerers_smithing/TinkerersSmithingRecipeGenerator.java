@@ -50,16 +50,16 @@ public class TinkerersSmithingRecipeGenerator extends FabricRecipeProvider {
 		registerEquipment(new TinkerersEquipment(Items.IRON_CHESTPLATE, 8, false, Ingredient.ofItems(Items.IRON_INGOT), equipment.get(Items.DIAMOND_CHESTPLATE)));
 
 		// Chain
-//		registerEquipment(new TinkerersEquipment(Items.CHAINMAIL_BOOTS, 4, false, Ingredient.ofItems(Items.IRON_INGOT), equipment.get(Items.DIAMOND_BOOTS)));
-//		registerEquipment(new TinkerersEquipment(Items.CHAINMAIL_HELMET, 5, false, Ingredient.ofItems(Items.IRON_INGOT), equipment.get(Items.DIAMOND_HELMET)));
-//		registerEquipment(new TinkerersEquipment(Items.CHAINMAIL_LEGGINGS, 7, false, Ingredient.ofItems(Items.IRON_INGOT), equipment.get(Items.DIAMOND_LEGGINGS)));
-//		registerEquipment(new TinkerersEquipment(Items.CHAINMAIL_CHESTPLATE, 8, false, Ingredient.ofItems(Items.IRON_INGOT), equipment.get(Items.DIAMOND_CHESTPLATE)));
+		registerEquipment(new TinkerersEquipment(Items.CHAINMAIL_BOOTS, 4, false, Ingredient.ofItems(Items.IRON_INGOT), equipment.get(Items.DIAMOND_BOOTS)));
+		registerEquipment(new TinkerersEquipment(Items.CHAINMAIL_HELMET, 5, false, Ingredient.ofItems(Items.IRON_INGOT), equipment.get(Items.DIAMOND_HELMET)));
+		registerEquipment(new TinkerersEquipment(Items.CHAINMAIL_LEGGINGS, 7, false, Ingredient.ofItems(Items.IRON_INGOT), equipment.get(Items.DIAMOND_LEGGINGS)));
+		registerEquipment(new TinkerersEquipment(Items.CHAINMAIL_CHESTPLATE, 8, false, Ingredient.ofItems(Items.IRON_INGOT), equipment.get(Items.DIAMOND_CHESTPLATE)));
 
 		// Leather
-//		registerEquipment(new TinkerersEquipment(Items.LEATHER_BOOTS, 4, true, Ingredient.ofItems(Items.LEATHER), equipment.get(Items.IRON_BOOTS)));
-//		registerEquipment(new TinkerersEquipment(Items.LEATHER_HELMET, 5, true, Ingredient.ofItems(Items.LEATHER), equipment.get(Items.IRON_HELMET)));
-//		registerEquipment(new TinkerersEquipment(Items.LEATHER_LEGGINGS, 7, true, Ingredient.ofItems(Items.LEATHER), equipment.get(Items.IRON_LEGGINGS)));
-//		registerEquipment(new TinkerersEquipment(Items.LEATHER_CHESTPLATE, 8, true, Ingredient.ofItems(Items.LEATHER), equipment.get(Items.IRON_CHESTPLATE)));
+		registerEquipment(new TinkerersEquipment(Items.LEATHER_BOOTS, 4, true, Ingredient.ofItems(Items.LEATHER), equipment.get(Items.IRON_BOOTS)));
+		registerEquipment(new TinkerersEquipment(Items.LEATHER_HELMET, 5, true, Ingredient.ofItems(Items.LEATHER), equipment.get(Items.IRON_HELMET)));
+		registerEquipment(new TinkerersEquipment(Items.LEATHER_LEGGINGS, 7, true, Ingredient.ofItems(Items.LEATHER), equipment.get(Items.IRON_LEGGINGS)));
+		registerEquipment(new TinkerersEquipment(Items.LEATHER_CHESTPLATE, 8, true, Ingredient.ofItems(Items.LEATHER), equipment.get(Items.IRON_CHESTPLATE)));
 
 		// Golden (maybe when this is data driven this could work via pseudo-tags - split files by material)
 		Collection<TinkerersEquipment> netheriteEquipment = equipment.values().stream().filter(te -> te.repairMaterial().test(Items.NETHERITE_INGOT.getDefaultStack())).toList();
@@ -86,18 +86,33 @@ public class TinkerersSmithingRecipeGenerator extends FabricRecipeProvider {
 		registerEquipment(new TinkerersEquipment(Items.WOODEN_HOE, 2, true, Ingredient.ofTag(ItemTags.PLANKS), equipment.get(Items.STONE_HOE)));
 		registerEquipment(new TinkerersEquipment(Items.WOODEN_PICKAXE, 3, true, Ingredient.ofTag(ItemTags.PLANKS), equipment.get(Items.STONE_PICKAXE)));
 		registerEquipment(new TinkerersEquipment(Items.WOODEN_AXE, 3, true, Ingredient.ofTag(ItemTags.PLANKS), equipment.get(Items.STONE_AXE)));
+
+		// Misc
+		registerEquipment(new TinkerersEquipment(Items.TURTLE_HELMET, 5, false, Ingredient.ofItems(Items.SCUTE)));
+		registerEquipment(new TinkerersEquipment(Items.ELYTRA, 1, false, Ingredient.ofItems(Items.PHANTOM_MEMBRANE)));
+
+		// Misc 2
+		registerEquipment(new TinkerersEquipment(Items.FLINT_AND_STEEL, 1, true, Ingredient.ofItems(Items.IRON_INGOT)));
+		registerEquipment(new TinkerersEquipment(Items.FISHING_ROD, 2, true, Ingredient.ofItems(Items.STRING)));
+		registerEquipment(new TinkerersEquipment(Items.BOW, 3, true, Ingredient.ofItems(Items.STRING)));
+
+		// Misc 3
+		registerEquipment(new TinkerersEquipment(Items.CROSSBOW, 1, true, Ingredient.ofItems(Items.TRIPWIRE_HOOK)));
+		registerEquipment(new TinkerersEquipment(Items.SHEARS, 2, false, Ingredient.ofItems(Items.IRON_INGOT)));
+		registerEquipment(new TinkerersEquipment(Items.TRIDENT, 3, false, Ingredient.ofItems(Items.PRISMARINE_CRYSTALS)));
+		registerEquipment(new TinkerersEquipment(Items.SHIELD, 1, false, Ingredient.ofItems(Items.IRON_INGOT)));
 	}
 
 	@Override
 	protected void generateRecipes(Consumer<RecipeJsonProvider> exporter) {
 		equipment.values().forEach(te -> {
+			te.generateDeWorkRecipe(exporter);
 			if (te.useGrid()) {
 				if (te.repairMaterial() != null) te.generateShapelessRepairRecipes(exporter);
 				if (te.upgradeTo() != null) te.generateShapelessUpgradeRecipe(exporter);
 			} else {
 				if (te.upgradeTo() != null && te.unitCost() <= 5) te.generateUpgradeRecipe(exporter);
 				if (te.repairMaterial() != null) te.generateRepairRecipe(exporter);
-				te.generateDeWorkRecipe(exporter);
 				if (te.sacrifices() != null) te.generateSacrificeRecipe(exporter);
 			}
 		});

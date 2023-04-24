@@ -1,0 +1,16 @@
+{
+  "type": "nbtcrafting:smithing",
+  "base": {
+    "item": "minecraft:chainmail_helmet"
+  },
+  "ingredient": {
+    "item": "minecraft:diamond"
+  },
+  "result": {
+    "data": {
+      "$": "base",
+      "Damage": "$363"
+    },
+    "item": "minecraft:diamond_helmet"
+  }
+}

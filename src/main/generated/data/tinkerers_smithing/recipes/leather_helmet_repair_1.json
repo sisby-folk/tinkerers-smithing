@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "data": {
+        "require": {
+          "Damage": "$1.."
+        }
+      },
+      "item": "minecraft:leather_helmet"
+    },
+    {
+      "item": "minecraft:leather"
+    }
+  ],
+  "result": {
+    "data": {
+      "$": "i0",
+      "Damage": "$(i0.Damage-11)*((2*(i0.Damage-11)+1)%2+1)/2"
+    },
+    "item": "minecraft:leather_helmet"
+  }
+}
