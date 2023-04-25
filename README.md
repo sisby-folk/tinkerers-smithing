@@ -76,6 +76,18 @@ Upgrading to **netherite** from **gold** utilizes specially-designed 'sacrificia
     - 1 sacrificial diamond will give a 1/2 durability sword, or a 1/3 durability pickaxe.
     - all gear types can be used as sacrifice, but some are very wasteful.
 
+## Mod Compatibility
+
+Incidentally, this mod includes conditionally loaded compatibility recipes for:
+
+- [Yttr](https://modrinth.com/mod/yttr)
+- [Farmer's Delight](https://modrinth.com/mod/farmers-delight-fabric)
+- [Botania](https://modrinth.com/mod/botania)
+- [Create](https://modrinth.com/mod/create-fabric)
+- [Chalk](https://modrinth.com/mod/chalk)
+- [Campanion](https://modrinth.com/mod/farmers-delight-fabric)
+- [Consistency+](https://modrinth.com/mod/consistencyplus)
+
 ### Afterword
 
 All mods are built on the work of many others.
