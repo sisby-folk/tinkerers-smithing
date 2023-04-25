@@ -8,6 +8,14 @@
     },
     "item": "yttr:brookite_hoe"
   },
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "yttr"
+      ]
+    }
+  ],
   "ingredient": {
     "item": "minecraft:netherite_scrap"
   },

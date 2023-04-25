@@ -130,11 +130,11 @@ public class TinkerersSmithingRecipeGenerator extends FabricRecipeProvider {
 		registerEquipment(new TinkerersEquipment(YItems.REINFORCED_CLEAVER, List.of("yttr"), 2, false, Ingredient.ofItems(YItems.GLASSY_VOID)));
 		registerEquipment(new TinkerersEquipment(YItems.CLEAVER, List.of("yttr"), 2, false, Ingredient.ofItems(YItems.GLASSY_VOID)));
 		// registerEquipment(new TinkerersEquipment(YItems.SHEARS, List.of("yttr"), 3, false, Ingredient.ofItems(YItems.YTTRIUM_INGOT)));
-		registerEquipment(new TinkerersEquipment(YItems.BROOKITE_SHOVEL, 1, false, Ingredient.ofItems(YItems.BROOKITE), equipment.get(Items.DIAMOND_SHOVEL)));
-		registerEquipment(new TinkerersEquipment(YItems.BROOKITE_SWORD, 2, false, Ingredient.ofItems(YItems.BROOKITE), equipment.get(Items.DIAMOND_SWORD)));
-		registerEquipment(new TinkerersEquipment(YItems.BROOKITE_HOE, 2, false, Ingredient.ofItems(YItems.BROOKITE), equipment.get(Items.DIAMOND_HOE)));
-		registerEquipment(new TinkerersEquipment(YItems.BROOKITE_PICKAXE, 3, false, Ingredient.ofItems(YItems.BROOKITE), equipment.get(Items.DIAMOND_PICKAXE)));
-		registerEquipment(new TinkerersEquipment(YItems.BROOKITE_AXE, 3, false, Ingredient.ofItems(YItems.BROOKITE), equipment.get(Items.DIAMOND_AXE)));
+		registerEquipment(new TinkerersEquipment(YItems.BROOKITE_SHOVEL, List.of("yttr"), 1, false, Ingredient.ofItems(YItems.BROOKITE), equipment.get(Items.DIAMOND_SHOVEL)));
+		registerEquipment(new TinkerersEquipment(YItems.BROOKITE_SWORD, List.of("yttr"), 2, false, Ingredient.ofItems(YItems.BROOKITE), equipment.get(Items.DIAMOND_SWORD)));
+		registerEquipment(new TinkerersEquipment(YItems.BROOKITE_HOE, List.of("yttr"), 2, false, Ingredient.ofItems(YItems.BROOKITE), equipment.get(Items.DIAMOND_HOE)));
+		registerEquipment(new TinkerersEquipment(YItems.BROOKITE_PICKAXE, List.of("yttr"), 3, false, Ingredient.ofItems(YItems.BROOKITE), equipment.get(Items.DIAMOND_PICKAXE)));
+		registerEquipment(new TinkerersEquipment(YItems.BROOKITE_AXE, List.of("yttr"), 3, false, Ingredient.ofItems(YItems.BROOKITE), equipment.get(Items.DIAMOND_AXE)));
 		registerEquipment(new TinkerersEquipment(YItems.SUIT_BOOTS, List.of("yttr"), 4, false, Ingredient.ofItems(YItems.ARMOR_PLATING)));
 		registerEquipment(new TinkerersEquipment(YItems.SUIT_HELMET, List.of("yttr"), 5, false, Ingredient.ofItems(YItems.ARMOR_PLATING)));
 		registerEquipment(new TinkerersEquipment(YItems.SUIT_LEGGINGS, List.of("yttr"), 7, false, Ingredient.ofItems(YItems.ARMOR_PLATING)));
