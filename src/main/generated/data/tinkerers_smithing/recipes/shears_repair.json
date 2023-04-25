@@ -6,24 +6,16 @@
         "Damage": "$1.."
       }
     },
-    "item": "yttr:shears"
+    "item": "minecraft:shears"
   },
-  "fabric:load_conditions": [
-    {
-      "condition": "fabric:all_mods_loaded",
-      "values": [
-        "yttr"
-      ]
-    }
-  ],
   "ingredient": {
-    "item": "yttr:yttrium_ingot"
+    "item": "minecraft:iron_ingot"
   },
   "result": {
     "data": {
       "$": "base",
-      "Damage": "$(base.Damage-128.0)*((2*(base.Damage-128.0)+1)%2+1)/2"
+      "Damage": "$(base.Damage-60.0)*((2*(base.Damage-60.0)+1)%2+1)/2"
     },
-    "item": "yttr:shears"
+    "item": "minecraft:shears"
   }
 }

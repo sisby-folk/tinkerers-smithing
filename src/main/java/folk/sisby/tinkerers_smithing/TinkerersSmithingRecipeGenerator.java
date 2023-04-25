@@ -98,7 +98,7 @@ public class TinkerersSmithingRecipeGenerator extends FabricRecipeProvider {
 		registerEquipment(new TinkerersEquipment(Items.WARPED_FUNGUS_ON_A_STICK, 1, true, Ingredient.ofItems(Items.WARPED_FUNGUS)));
 
 		// Misc 3
-		// registerEquipment(new TinkerersEquipment(Items.SHEARS, 2, false, Ingredient.ofItems(Items.IRON_INGOT)));
+		registerEquipment(new TinkerersEquipment(Items.SHEARS, 2, false, Ingredient.ofItems(Items.IRON_INGOT)));
 		registerEquipment(new TinkerersEquipment(Items.TRIDENT, 3, false, Ingredient.ofItems(Items.PRISMARINE_CRYSTALS)));
 		registerEquipment(new TinkerersEquipment(Items.SHIELD, 1, false, Ingredient.ofItems(Items.IRON_INGOT)));
 
@@ -129,7 +129,7 @@ public class TinkerersSmithingRecipeGenerator extends FabricRecipeProvider {
 		// Yttr
 		registerEquipment(new TinkerersEquipment(YItems.REINFORCED_CLEAVER, List.of("yttr"), 2, false, Ingredient.ofItems(YItems.GLASSY_VOID)));
 		registerEquipment(new TinkerersEquipment(YItems.CLEAVER, List.of("yttr"), 2, false, Ingredient.ofItems(YItems.GLASSY_VOID)));
-		registerEquipment(new TinkerersEquipment(YItems.SHEARS, List.of("yttr"), 3, false, Ingredient.ofItems(YItems.YTTRIUM_INGOT)));
+		// registerEquipment(new TinkerersEquipment(YItems.SHEARS, List.of("yttr"), 3, false, Ingredient.ofItems(YItems.YTTRIUM_INGOT)));
 		registerEquipment(new TinkerersEquipment(YItems.BROOKITE_SHOVEL, 1, false, Ingredient.ofItems(YItems.BROOKITE), equipment.get(Items.DIAMOND_SHOVEL)));
 		registerEquipment(new TinkerersEquipment(YItems.BROOKITE_SWORD, 2, false, Ingredient.ofItems(YItems.BROOKITE), equipment.get(Items.DIAMOND_SWORD)));
 		registerEquipment(new TinkerersEquipment(YItems.BROOKITE_HOE, 2, false, Ingredient.ofItems(YItems.BROOKITE), equipment.get(Items.DIAMOND_HOE)));
