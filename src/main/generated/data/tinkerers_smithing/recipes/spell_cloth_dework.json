@@ -6,13 +6,13 @@
         "RepairCost": "$1.."
       }
     },
-    "item": "yttr:shears"
+    "item": "botania:spell_cloth"
   },
   "fabric:load_conditions": [
     {
       "condition": "fabric:all_mods_loaded",
       "values": [
-        "yttr"
+        "botania"
       ]
     }
   ],
@@ -24,6 +24,6 @@
       "$": "base",
       "RepairCost": "$((base.RepairCost + 1)/2)-1"
     },
-    "item": "yttr:shears"
+    "item": "botania:spell_cloth"
   }
 }

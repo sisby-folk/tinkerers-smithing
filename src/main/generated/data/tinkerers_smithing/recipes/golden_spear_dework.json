@@ -6,13 +6,13 @@
         "RepairCost": "$1.."
       }
     },
-    "item": "yttr:shears"
+    "item": "campanion:golden_spear"
   },
   "fabric:load_conditions": [
     {
       "condition": "fabric:all_mods_loaded",
       "values": [
-        "yttr"
+        "campanion"
       ]
     }
   ],
@@ -24,6 +24,6 @@
       "$": "base",
       "RepairCost": "$((base.RepairCost + 1)/2)-1"
     },
-    "item": "yttr:shears"
+    "item": "campanion:golden_spear"
   }
 }

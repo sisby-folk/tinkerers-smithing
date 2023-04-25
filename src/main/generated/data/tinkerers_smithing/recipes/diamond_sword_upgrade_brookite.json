@@ -1,0 +1,16 @@
+{
+  "type": "nbtcrafting:smithing",
+  "base": {
+    "item": "yttr:brookite_sword"
+  },
+  "ingredient": {
+    "item": "minecraft:diamond"
+  },
+  "result": {
+    "data": {
+      "$": "base",
+      "Damage": "$390"
+    },
+    "item": "minecraft:diamond_sword"
+  }
+}

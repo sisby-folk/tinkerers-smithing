@@ -1,0 +1,24 @@
+{
+  "type": "nbtcrafting:smithing",
+  "base": {
+    "item": "minecraft:golden_hoe"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "campanion"
+      ]
+    }
+  ],
+  "ingredient": {
+    "item": "campanion:netherite_spear"
+  },
+  "result": {
+    "data": {
+      "$": "base",
+      "Damage": "$((2031-((2031-ingredient.Damage)*2031.0/4062))#i)*((2*((2031-((2031-ingredient.Damage)*2031.0/4062))#i)+1)%2+1)/2"
+    },
+    "item": "minecraft:netherite_hoe"
+  }
+}

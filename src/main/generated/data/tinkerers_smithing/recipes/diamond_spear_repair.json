@@ -3,27 +3,27 @@
   "base": {
     "data": {
       "require": {
-        "RepairCost": "$1.."
+        "Damage": "$1.."
       }
     },
-    "item": "yttr:shears"
+    "item": "campanion:diamond_spear"
   },
   "fabric:load_conditions": [
     {
       "condition": "fabric:all_mods_loaded",
       "values": [
-        "yttr"
+        "campanion"
       ]
     }
   ],
   "ingredient": {
-    "item": "minecraft:netherite_scrap"
+    "item": "minecraft:diamond"
   },
   "result": {
     "data": {
       "$": "base",
-      "RepairCost": "$((base.RepairCost + 1)/2)-1"
+      "Damage": "$(base.Damage-391.0)*((2*(base.Damage-391.0)+1)%2+1)/2"
     },
-    "item": "yttr:shears"
+    "item": "campanion:diamond_spear"
   }
 }

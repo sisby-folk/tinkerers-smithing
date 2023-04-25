@@ -1,0 +1,34 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "chalk"
+      ]
+    }
+  ],
+  "ingredients": [
+    {
+      "data": {
+        "require": {
+          "Damage": "$33.."
+        }
+      },
+      "item": "chalk:chalk"
+    },
+    {
+      "item": "minecraft:calcite"
+    },
+    {
+      "item": "minecraft:calcite"
+    }
+  ],
+  "result": {
+    "data": {
+      "$": "i0",
+      "Damage": "$(i0.Damage-64)*((2*(i0.Damage-64)+1)%2+1)/2"
+    },
+    "item": "chalk:chalk"
+  }
+}

@@ -6,7 +6,7 @@
         "RepairCost": "$1.."
       }
     },
-    "item": "yttr:shears"
+    "item": "yttr:cuprosteel_coil"
   },
   "fabric:load_conditions": [
     {
@@ -24,6 +24,6 @@
       "$": "base",
       "RepairCost": "$((base.RepairCost + 1)/2)-1"
     },
-    "item": "yttr:shears"
+    "item": "yttr:cuprosteel_coil"
   }
 }

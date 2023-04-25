@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "create"
+      ]
+    }
+  ],
+  "ingredients": [
+    {
+      "data": {
+        "require": {
+          "Damage": "$1.."
+        }
+      },
+      "item": "create:red_sand_paper"
+    },
+    {
+      "item": "minecraft:red_sand"
+    }
+  ],
+  "result": {
+    "data": {
+      "$": "i0",
+      "Damage": "$(i0.Damage-8)*((2*(i0.Damage-8)+1)%2+1)/2"
+    },
+    "item": "create:red_sand_paper"
+  }
+}

@@ -1,29 +1,24 @@
 {
   "type": "nbtcrafting:smithing",
   "base": {
-    "data": {
-      "require": {
-        "RepairCost": "$1.."
-      }
-    },
-    "item": "yttr:shears"
+    "item": "campanion:iron_spear"
   },
   "fabric:load_conditions": [
     {
       "condition": "fabric:all_mods_loaded",
       "values": [
-        "yttr"
+        "campanion"
       ]
     }
   ],
   "ingredient": {
-    "item": "minecraft:netherite_scrap"
+    "item": "minecraft:diamond"
   },
   "result": {
     "data": {
       "$": "base",
-      "RepairCost": "$((base.RepairCost + 1)/2)-1"
+      "Damage": "$0"
     },
-    "item": "yttr:shears"
+    "item": "campanion:diamond_spear"
   }
 }

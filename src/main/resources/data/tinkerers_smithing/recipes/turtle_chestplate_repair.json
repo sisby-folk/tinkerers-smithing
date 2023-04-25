@@ -6,24 +6,24 @@
         "Damage": "$1.."
       }
     },
-    "item": "yttr:shears"
+    "item": "consistency_plus:turtle_chestplate"
+  },
+  "ingredient": {
+    "item": "minecraft:scute"
   },
   "fabric:load_conditions": [
     {
       "condition": "fabric:all_mods_loaded",
       "values": [
-        "yttr"
+        "consistency_plus"
       ]
     }
   ],
-  "ingredient": {
-    "item": "yttr:yttrium_ingot"
-  },
   "result": {
     "data": {
       "$": "base",
-      "Damage": "$(base.Damage-128.0)*((2*(base.Damage-128.0)+1)%2+1)/2"
+      "Damage": "$(base.Damage-100.0)*((2*(base.Damage-100.0)+1)%2+1)/2"
     },
-    "item": "yttr:shears"
+    "item": "consistency_plus:turtle_chestplate"
   }
 }

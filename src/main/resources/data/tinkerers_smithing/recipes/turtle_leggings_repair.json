@@ -3,27 +3,27 @@
   "base": {
     "data": {
       "require": {
-        "RepairCost": "$1.."
+        "Damage": "$1.."
       }
     },
-    "item": "yttr:shears"
+    "item": "consistency_plus:turtle_leggings"
+  },
+  "ingredient": {
+    "item": "minecraft:scute"
   },
   "fabric:load_conditions": [
     {
       "condition": "fabric:all_mods_loaded",
       "values": [
-        "yttr"
+        "consistency_plus"
       ]
     }
   ],
-  "ingredient": {
-    "item": "minecraft:netherite_scrap"
-  },
   "result": {
     "data": {
       "$": "base",
-      "RepairCost": "$((base.RepairCost + 1)/2)-1"
+      "Damage": "$(base.Damage-94.0)*((2*(base.Damage-94.0)+1)%2+1)/2"
     },
-    "item": "yttr:shears"
+    "item": "consistency_plus:turtle_leggings"
   }
 }

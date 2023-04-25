@@ -6,13 +6,13 @@
         "RepairCost": "$1.."
       }
     },
-    "item": "yttr:shears"
+    "item": "create:super_glue"
   },
   "fabric:load_conditions": [
     {
       "condition": "fabric:all_mods_loaded",
       "values": [
-        "yttr"
+        "create"
       ]
     }
   ],
@@ -24,6 +24,6 @@
       "$": "base",
       "RepairCost": "$((base.RepairCost + 1)/2)-1"
     },
-    "item": "yttr:shears"
+    "item": "create:super_glue"
   }
 }

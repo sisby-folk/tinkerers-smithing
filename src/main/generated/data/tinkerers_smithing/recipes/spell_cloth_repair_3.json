@@ -1,0 +1,37 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "botania"
+      ]
+    }
+  ],
+  "ingredients": [
+    {
+      "data": {
+        "require": {
+          "Damage": "$19.."
+        }
+      },
+      "item": "botania:spell_cloth"
+    },
+    {
+      "item": "botania:manaweave_cloth"
+    },
+    {
+      "item": "botania:manaweave_cloth"
+    },
+    {
+      "item": "botania:manaweave_cloth"
+    }
+  ],
+  "result": {
+    "data": {
+      "$": "i0",
+      "Damage": "$(i0.Damage-27)*((2*(i0.Damage-27)+1)%2+1)/2"
+    },
+    "item": "botania:spell_cloth"
+  }
+}

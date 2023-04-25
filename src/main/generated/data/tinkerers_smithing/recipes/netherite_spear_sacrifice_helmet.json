@@ -1,0 +1,24 @@
+{
+  "type": "nbtcrafting:smithing",
+  "base": {
+    "item": "campanion:golden_spear"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "campanion"
+      ]
+    }
+  ],
+  "ingredient": {
+    "item": "minecraft:netherite_helmet"
+  },
+  "result": {
+    "data": {
+      "$": "base",
+      "Damage": "$((2031-((407-ingredient.Damage)*10155.0/407))#i)*((2*((2031-((407-ingredient.Damage)*10155.0/407))#i)+1)%2+1)/2"
+    },
+    "item": "campanion:netherite_spear"
+  }
+}

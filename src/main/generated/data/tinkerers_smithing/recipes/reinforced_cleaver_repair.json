@@ -3,10 +3,10 @@
   "base": {
     "data": {
       "require": {
-        "RepairCost": "$1.."
+        "Damage": "$1.."
       }
     },
-    "item": "yttr:shears"
+    "item": "yttr:reinforced_cleaver"
   },
   "fabric:load_conditions": [
     {
@@ -17,13 +17,13 @@
     }
   ],
   "ingredient": {
-    "item": "minecraft:netherite_scrap"
+    "item": "yttr:glassy_void"
   },
   "result": {
     "data": {
       "$": "base",
-      "RepairCost": "$((base.RepairCost + 1)/2)-1"
+      "Damage": "$(base.Damage-768.0)*((2*(base.Damage-768.0)+1)%2+1)/2"
     },
-    "item": "yttr:shears"
+    "item": "yttr:reinforced_cleaver"
   }
 }
