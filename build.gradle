@@ -226,6 +226,7 @@ if (System.getenv("MODRINTH_TOKEN")) {
 			required.project "nbt-crafting"
 		}
 		changelog = "Changelog: https://github.com/sisby-folk/tinkerers-smithing/releases/tag/v" + origVersion
+		syncBodyFrom = rootProject.file("README.md").text
 	}
 }
 
