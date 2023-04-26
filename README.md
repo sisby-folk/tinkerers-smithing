@@ -7,6 +7,11 @@ Requires <a href="https://modrinth.com/mod/nbt-crafting">NBT Crafting</a>, and w
 
 ---
 
+<center><span style="font-weight: bold">Packs:</span> <a href="https://modrinth.com/modpack/tinkerers-quilt">Tinkerer's Quilt</a> (<a href="https://modrinth.com/modpack/tinkerers-silk">Silk</a>) - <a href="https://modrinth.com/modpack/switchy-pack">Switchy Pack</a></center>
+<center><span style="font-weight: bold">Mods:</span> <a href="https://modrinth.com/mod/switchy">Switchy</a> (<a href="https://modrinth.com/mod/switchy-inventories">Inventories</a>) (<a href="https://modrinth.com/mod/switchy-proxy">Proxy</a>) - <a href="https://modrinth.com/mod/origins-minus">Origins Minus</a> (<a href="https://modrinth.com/mod/tinkerers-statures">Statures</a>) - Tinkerer's Smithing</center>
+
+---
+
 This mod:
 - Adds repair recipes for all equipment with no XP or prior work cost.
   - For basic tools, add up to 3 material in the crafting grid to repair based on tool cost.
