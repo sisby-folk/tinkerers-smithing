@@ -20,6 +20,9 @@
 		"entrypoints": {
 			"fabric-datagen": [
 				"folk.sisby.tinkerers_smithing.TinkerersSmithingDataGeneration"
+			],
+			"init": [
+				"folk.sisby.tinkerers_smithing.TinkerersSmithing"
 			]
 		},
 		"intermediate_mappings": "net.fabricmc:intermediary",
@@ -37,5 +40,6 @@
 				"versions": ">=2.2.3"
 			}
 		]
-	}
+	},
+	"mixin": "tinkerers_smithing.mixins.json"
 }
