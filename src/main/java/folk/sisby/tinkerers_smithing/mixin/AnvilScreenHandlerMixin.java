@@ -1,6 +1,9 @@
 package folk.sisby.tinkerers_smithing.mixin;
 
+import folk.sisby.tinkerers_smithing.TinkerersSmithing;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.screen.*;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Nullable;
@@ -34,5 +37,18 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 		if (this.repairItemUsage > 0) {
 			this.levelCost.set((StringUtils.isBlank(this.newItemName) && !this.input.getStack(0).hasCustomName()) || Objects.equals(this.input.getStack(0).getName().getString(), this.newItemName) ? 0 : 1);
 		}
+	}
+
+	@Redirect(method = "updateResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z", ordinal = 1))
+	private boolean applyDeworkMaterial(ItemStack result, Item item) {
+		ItemStack base = this.input.getStack(0);
+		ItemStack ingredient = this.input.getStack(1);
+		if (ingredient.isIn(TinkerersSmithing.DEWORK_INGREDIENTS) && base.getRepairCost() > 0) {
+			for(this.repairItemUsage = 1; result.getDamage() > 0 && this.repairItemUsage <= ingredient.getCount(); this.repairItemUsage++) {
+				result.setRepairCost(((result.getRepairCost() + 1)/2)-1);
+			}
+			return true;
+		}
+		return false;
 	}
 }
