@@ -93,26 +93,6 @@ public record TinkerersEquipment(Item item, Collection<String> modRequirements, 
 		factory.offerTo(exporter, new Identifier(ID, "%s_upgrade_%s".formatted(Registry.ITEM.getId(upgradeTo.item).getPath(), Registry.ITEM.getId(item).getPath().replaceFirst("_%s$".formatted(Registry.ITEM.getId(upgradeTo.item).getPath().split("_")[1]), ""))));
 	}
 
-	public void generateRepairRecipe(Consumer<RecipeJsonProvider> exporter) {
-		ItemStack baseStack = item.getDefaultStack();
-		NbtCompound baseNbt = baseStack.getOrCreateNbt();
-
-		baseNbt.putString("Damage", "$1..");
-
-		ItemStack resultStack = item.getDefaultStack();
-		NbtCompound resultNbt = resultStack.getOrCreateNbt();
-		resultNbt.putString("$", "base");
-		resultNbt.putString("Damage", clampPositive("base.Damage-%s".formatted(Math.ceil(item.getMaxDamage() / 4.0))));
-
-		SmithingNBTRecipeJsonFactory factory = SmithingNBTRecipeJsonFactory.create(
-			ofAdvancedEntries(Stream.of(new IngredientStackEntry(baseStack))),
-			repairMaterial,
-			resultStack
-		);
-		modRequirements.forEach(factory::requiresMod);
-		factory.offerTo(exporter, new Identifier(ID, "%s_repair".formatted(Registry.ITEM.getId(item).getPath())));
-	}
-
 	public void generateDeWorkRecipe(Consumer<RecipeJsonProvider> exporter) {
 		ItemStack baseStack = item.getDefaultStack();
 		NbtCompound baseNbt = baseStack.getOrCreateNbt();

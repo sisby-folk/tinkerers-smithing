@@ -11,7 +11,7 @@ public class TinkerersSmithing implements ModInitializer {
 
 	@Override
 	public void onInitialize(ModContainer mod) {
-		
+
 
 		LOGGER.info("[Tinkerer's Smithing] Initialized.");
 	}
