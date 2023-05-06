@@ -44,7 +44,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 		ItemStack base = this.input.getStack(0);
 		ItemStack ingredient = this.input.getStack(1);
 		if (ingredient.isIn(TinkerersSmithing.DEWORK_INGREDIENTS) && base.getRepairCost() > 0) {
-			for(this.repairItemUsage = 1; result.getDamage() > 0 && this.repairItemUsage <= ingredient.getCount(); this.repairItemUsage++) {
+			for(this.repairItemUsage = 1; result.getRepairCost() > 0 && this.repairItemUsage <= ingredient.getCount(); this.repairItemUsage++) {
 				result.setRepairCost(((result.getRepairCost() + 1)/2)-1);
 			}
 			return true;
