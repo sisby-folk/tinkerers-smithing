@@ -10,7 +10,6 @@ import folk.sisby.tinkerers_smithing.json.SmithingNBTRecipeJsonFactory;
 import net.minecraft.data.server.recipe.RecipeJsonProvider;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.util.Identifier;
@@ -91,28 +90,6 @@ public record TinkerersEquipment(Item item, Collection<String> modRequirements, 
 		requirements.addAll(upgradeTo.modRequirements);
 		requirements.forEach(factory::requiresMod);
 		factory.offerTo(exporter, new Identifier(ID, "%s_upgrade_%s".formatted(Registry.ITEM.getId(upgradeTo.item).getPath(), Registry.ITEM.getId(item).getPath().replaceFirst("_%s$".formatted(Registry.ITEM.getId(upgradeTo.item).getPath().split("_")[1]), ""))));
-	}
-
-	public void generateDeWorkRecipe(Consumer<RecipeJsonProvider> exporter) {
-		ItemStack baseStack = item.getDefaultStack();
-		NbtCompound baseNbt = baseStack.getOrCreateNbt();
-
-		baseNbt.remove("Damage");
-		baseNbt.putString("RepairCost", "$1..");
-
-		ItemStack resultStack = item.getDefaultStack();
-		NbtCompound resultNbt = resultStack.getOrCreateNbt();
-		resultNbt.putString("$", "base");
-		resultNbt.putString("RepairCost", "$((base.RepairCost + 1)/2)-1");
-		resultNbt.remove("Damage");
-
-		SmithingNBTRecipeJsonFactory factory = SmithingNBTRecipeJsonFactory.create(
-			ofAdvancedEntries(Stream.of(new IngredientStackEntry(baseStack))),
-			Ingredient.ofItems(Items.NETHERITE_SCRAP),
-			resultStack
-		);
-		modRequirements.forEach(factory::requiresMod);
-		factory.offerTo(exporter, new Identifier(ID, "%s_dework".formatted(Registry.ITEM.getId(item).getPath())));
 	}
 
 	public void generateShapelessUpgradeRecipe(Consumer<RecipeJsonProvider> exporter) {
