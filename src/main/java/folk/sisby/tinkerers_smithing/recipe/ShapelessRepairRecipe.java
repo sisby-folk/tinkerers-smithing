@@ -35,30 +35,33 @@ public class ShapelessRepairRecipe extends SpecialCraftingRecipe implements Craf
 
 	public static int getRepairMaterials(CraftingInventory craftingInventory, ItemStack equipment) {
 		Ingredient repairIngredient = TinkerersSmithing.getRepairIngredient(equipment.getItem());
-		int materials = 0;
+		int materialCount = 0;
 
 		if (repairIngredient != null) {
 			for(int i = 0; i < craftingInventory.size(); ++i) {
 				ItemStack itemStack = craftingInventory.getStack(i);
-				if (!itemStack.isOf(equipment.getItem())) {
+				if (!itemStack.isOf(equipment.getItem()) && !itemStack.isEmpty()) {
 					if (repairIngredient.test(itemStack)) {
-						materials++;
+						materialCount++;
 					} else {
 						return 0;
 					}
 				}
 			}
 		}
-		return materials;
+		return materialCount;
 	}
 
 	public boolean matches(CraftingInventory craftingInventory, World world) {
 		ItemStack equipmentStack = getSingleEquipmentStack(craftingInventory);
 		if (equipmentStack != null && !equipmentStack.hasEnchantments()) {
 			int repairCount = getRepairMaterials(craftingInventory, equipmentStack);
+			TinkerersSmithing.LOGGER.info("[Tinkerer's Smithing] ShapelessRepair: found equipment and {} materials", repairCount);
 			if (repairCount > 0 && equipmentStack.isDamageable() && equipmentStack.getItem() instanceof TinkerersSmithingItem tsi) {
+				TinkerersSmithing.LOGGER.info("[Tinkerer's Smithing] ShapelessRepair: found valid shape");
 				int unitCost = tsi.tinkerersSmithing$getUnitCost();
 				if (unitCost != 0) {
+					TinkerersSmithing.LOGGER.info("[Tinkerer's Smithing] ShapelessRepair: matched recipe");
 					return equipmentStack.getDamage() - ((int) Math.ceil((equipmentStack.getMaxDamage() * (repairCount - 1)) / (double) unitCost)) > 0;
 				}
 			}
@@ -89,6 +92,6 @@ public class ShapelessRepairRecipe extends SpecialCraftingRecipe implements Craf
 
 	@Override
 	public RecipeSerializer<?> getSerializer() {
-		return TinkerersSmithing.SHAPELESS_REPAIR;
+		return TinkerersSmithing.SHAPELESS_REPAIR_SERIALIZER;
 	}
 }
