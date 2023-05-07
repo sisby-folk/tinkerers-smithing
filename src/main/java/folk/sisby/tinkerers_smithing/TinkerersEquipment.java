@@ -113,28 +113,6 @@ public record TinkerersEquipment(Item item, Collection<String> modRequirements, 
 		factory.offerTo(exporter, new Identifier(ID, "%s_upgrade_%s".formatted(Registry.ITEM.getId(upgradeTo.item).getPath(), Registry.ITEM.getId(item).getPath().replaceFirst("_%s$".formatted(Registry.ITEM.getId(upgradeTo.item).getPath().split("_")[1]), ""))));
 	}
 
-	public void generateShapelessRepairRecipes(Consumer<RecipeJsonProvider> exporter) {
-		for (int ingredientsUsed = 1; ingredientsUsed <= unitCost; ingredientsUsed++) {
-			ItemStack baseStack = item.getDefaultStack();
-			NbtCompound baseNbt = baseStack.getOrCreateNbt();
-
-			baseNbt.putString("Damage", "$%d..".formatted((int) Math.ceil((item.getMaxDamage() * (ingredientsUsed - 1)) / (double) unitCost) + 1));
-
-			ItemStack resultStack = item.getDefaultStack();
-			NbtCompound resultNbt = resultStack.getOrCreateNbt();
-			resultNbt.putString("$", "i0");
-			resultNbt.putString("Damage", clampPositive("i0.Damage-%d".formatted((int) Math.ceil((item.getMaxDamage() * ingredientsUsed) / (double) unitCost))));
-
-			ShapelessNBTRecipeJsonFactory factory = ShapelessNBTRecipeJsonFactory.create(resultStack);
-			factory.input(ofAdvancedEntries(Stream.of(new IngredientStackEntry(baseStack))));
-			for (int i = 0; i < ingredientsUsed; i++) {
-				factory.input(repairMaterial);
-			}
-			modRequirements.forEach(factory::requiresMod);
-			factory.offerTo(exporter, new Identifier(ID, "%s_repair_%d".formatted(Registry.ITEM.getId(item).getPath(), ingredientsUsed)));
-		}
-	}
-
 	public void generateSacrificeRecipe(Consumer<RecipeJsonProvider> exporter) {
 		sacrifices.forEach(sacrifice -> {
 			ItemStack baseStack = item.getDefaultStack();

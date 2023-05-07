@@ -176,7 +176,6 @@ public class TinkerersSmithingRecipeGenerator extends FabricRecipeProvider {
 	protected void generateRecipes(Consumer<RecipeJsonProvider> exporter) {
 		equipment.values().forEach(te -> {
 			if (te.useGrid()) {
-				if (te.repairMaterial() != null) te.generateShapelessRepairRecipes(exporter);
 				if (te.upgradeTo() != null) te.generateShapelessUpgradeRecipe(exporter);
 			} else {
 				if (te.upgradeTo() != null && te.unitCost() <= 5) te.generateUpgradeRecipe(exporter);
