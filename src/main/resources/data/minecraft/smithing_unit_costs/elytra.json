@@ -3,15 +3,11 @@
   "values": [
     {
       "cost": 6,
-      "materials": [
-        "minecraft:leather"
-      ]
+      "item": "minecraft:leather"
     },
     {
       "cost": 2,
-      "materials": [
-        "minecraft:phantom_membrane"
-      ]
+      "item": "minecraft:phantom_membrane"
     }
   ]
 }

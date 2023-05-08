@@ -12,6 +12,9 @@ import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ShapelessRepairRecipe extends SpecialCraftingRecipe implements CraftingRecipe {
 	public ShapelessRepairRecipe(Identifier identifier) {
 		super(identifier);
@@ -33,36 +36,33 @@ public class ShapelessRepairRecipe extends SpecialCraftingRecipe implements Craf
 		return equipmentStack;
 	}
 
-	public static int getRepairMaterials(CraftingInventory craftingInventory, ItemStack equipment) {
+	public static List<ItemStack> getRepairMaterials(CraftingInventory craftingInventory, ItemStack equipment) {
 		Ingredient repairIngredient = TinkerersSmithing.getRepairIngredient(equipment.getItem());
-		int materialCount = 0;
+		List<ItemStack> outList = new ArrayList<>();
 
 		if (repairIngredient != null) {
 			for(int i = 0; i < craftingInventory.size(); ++i) {
 				ItemStack itemStack = craftingInventory.getStack(i);
 				if (!itemStack.isOf(equipment.getItem()) && !itemStack.isEmpty()) {
 					if (repairIngredient.test(itemStack)) {
-						materialCount++;
+						outList.add(itemStack);
 					} else {
-						return 0;
+						return null;
 					}
 				}
 			}
 		}
-		return materialCount;
+		return outList;
 	}
 
 	public boolean matches(CraftingInventory craftingInventory, World world) {
 		ItemStack equipmentStack = getSingleEquipmentStack(craftingInventory);
 		if (equipmentStack != null && !equipmentStack.hasEnchantments()) {
-			int repairCount = getRepairMaterials(craftingInventory, equipmentStack);
-			TinkerersSmithing.LOGGER.info("[Tinkerer's Smithing] ShapelessRepair: found equipment and {} materials", repairCount);
-			if (repairCount > 0 && equipmentStack.isDamageable() && equipmentStack.getItem() instanceof TinkerersSmithingItem tsi) {
-				TinkerersSmithing.LOGGER.info("[Tinkerer's Smithing] ShapelessRepair: found valid shape");
-				int unitCost = tsi.tinkerersSmithing$getUnitCost();
+			List<ItemStack> repairMaterials = getRepairMaterials(craftingInventory, equipmentStack);
+			if (repairMaterials != null && !repairMaterials.isEmpty() && equipmentStack.isDamageable() && equipmentStack.getItem() instanceof TinkerersSmithingItem tsi) {
+				int unitCost = tsi.tinkerersSmithing$getUnitCost(repairMaterials.get(0));
 				if (unitCost != 0) {
-					TinkerersSmithing.LOGGER.info("[Tinkerer's Smithing] ShapelessRepair: matched recipe");
-					return equipmentStack.getDamage() - ((int) Math.ceil((equipmentStack.getMaxDamage() * (repairCount - 1)) / (double) unitCost)) > 0;
+					return equipmentStack.getDamage() - ((int) Math.ceil((equipmentStack.getMaxDamage() * (repairMaterials.size() - 1)) / (double) unitCost)) > 0;
 				}
 			}
 		}
@@ -72,12 +72,12 @@ public class ShapelessRepairRecipe extends SpecialCraftingRecipe implements Craf
 	public ItemStack craft(CraftingInventory craftingInventory) {
 		ItemStack equipmentStack = getSingleEquipmentStack(craftingInventory);
 		if (equipmentStack != null && !equipmentStack.hasEnchantments()) {
-			int repairCount = getRepairMaterials(craftingInventory, equipmentStack);
-			if (repairCount > 0 && equipmentStack.isDamageable() && equipmentStack.getItem() instanceof TinkerersSmithingItem tsi) {
-				int unitCost = tsi.tinkerersSmithing$getUnitCost();
+			List<ItemStack> repairMaterials = getRepairMaterials(craftingInventory, equipmentStack);
+			if (repairMaterials != null && !repairMaterials.isEmpty() && equipmentStack.isDamageable() && equipmentStack.getItem() instanceof TinkerersSmithingItem tsi) {
+				int unitCost = tsi.tinkerersSmithing$getUnitCost(repairMaterials.get(0));
 				if (unitCost != 0) {
 					ItemStack result = equipmentStack.copy();
-					result.setDamage(Math.max(0, equipmentStack.getDamage() - ((int) Math.ceil((equipmentStack.getMaxDamage() * (repairCount)) / (double) unitCost))));
+					result.setDamage(Math.max(0, equipmentStack.getDamage() - ((int) Math.ceil((equipmentStack.getMaxDamage() * (repairMaterials.size())) / (double) unitCost))));
 					return result;
 				}
 			}

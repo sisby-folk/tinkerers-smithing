@@ -1,0 +1,22 @@
+{
+  "inheritFromItem": [
+    "minecraft:chainmail_helmet"
+  ],
+  "repairIngredients": [
+    {
+      "item": "minecraft:chain"
+    }
+  ],
+  "addItem": [
+    "minecraft:chainmail_helmet",
+    "minecraft:chainmail_chestplate",
+    "minecraft:chainmail_leggings",
+    "minecraft:chainmail_boots"
+  ],
+  "upgradesFrom": [
+    "minecraft:leather"
+  ],
+  "upgradesTo": [
+    "minecraft:diamond"
+  ]
+}

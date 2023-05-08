@@ -1,7 +1,12 @@
 package folk.sisby.tinkerers_smithing;
 
-public interface TinkerersSmithingItem {
-	void tinkerersSmithing$setUnitCost(int unitCost);
+import net.minecraft.item.ItemStack;
+import net.minecraft.recipe.Ingredient;
 
-	int tinkerersSmithing$getUnitCost();
+import java.util.Map;
+
+public interface TinkerersSmithingItem {
+	Map<Ingredient, Integer> tinkerersSmithing$getUnitCosts();
+
+	int tinkerersSmithing$getUnitCost(ItemStack stack);
 }
