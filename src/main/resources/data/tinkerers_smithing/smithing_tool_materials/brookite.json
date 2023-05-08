@@ -1,0 +1,16 @@
+{
+  "replace": false,
+  "repairMaterials": [
+  ],
+  "add": [
+  ],
+  "remove": [
+  ],
+  "fromMaterial": [
+    "iron",
+    "stone"
+  ],
+  "toMaterial": [
+    "diamond"
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "repairMaterials": [
+    "minecraft:chain",
+    "minecraft:iron_ingot"
+  ],
+  "add": [
+    "minecraft:chainmail_helmet",
+    "minecraft:chainmail_chestplate",
+    "minecraft:chainmail_leggings",
+    "minecraft:chainmail_boots"
+  ],
+  "remove": [
+  ],
+  "fromMaterial": [
+    "leather"
+  ],
+  "toMaterial": [
+    "diamond"
+  ]
+}
