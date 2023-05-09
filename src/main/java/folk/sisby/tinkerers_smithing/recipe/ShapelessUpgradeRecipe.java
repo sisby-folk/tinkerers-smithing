@@ -41,7 +41,6 @@ public class ShapelessUpgradeRecipe extends SpecialCraftingRecipe implements Cra
 			if (gridItem.getItem() instanceof TinkerersSmithingItem tsi && !tsi.tinkerersSmithing$getUnitCosts().isEmpty()) { // fix - won't work for upgrade-only items
 				if (equipmentStack == null) {
 					equipmentStack = gridItem;
-					gridItems.remove(gridItem);
 				} else {
 					return null; // can't have multiple
 				}
@@ -49,6 +48,7 @@ public class ShapelessUpgradeRecipe extends SpecialCraftingRecipe implements Cra
 		}
 
 		if (equipmentStack == null) return null;
+		gridItems.remove(equipmentStack);
 
 		for (Item upgradeItem : TinkerersSmithing.getUpgradePaths(equipmentStack.getItem())) {
 			if (upgradeItem instanceof TinkerersSmithingItem tsi) {

@@ -2,24 +2,18 @@ package folk.sisby.tinkerers_smithing.recipe;
 
 import folk.sisby.tinkerers_smithing.TinkerersSmithing;
 import folk.sisby.tinkerers_smithing.TinkerersSmithingItem;
-import net.minecraft.block.Blocks;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.Ingredient;
-import net.minecraft.recipe.Recipe;
-import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.recipe.RecipeType;
+import net.minecraft.recipe.*;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
 import java.util.Map;
 
-public class SmithingUpgradeRecipe implements Recipe<Inventory> {
-	private final Identifier identifier;
-
+public class SmithingUpgradeRecipe extends SmithingRecipe implements Recipe<Inventory> {
 	public SmithingUpgradeRecipe(Identifier identifier) {
-		this.identifier = identifier;
+		super(identifier, Ingredient.EMPTY, Ingredient.EMPTY, ItemStack.EMPTY);
 	}
 
 	public ItemStack getValidOutput(Inventory inventory) {
@@ -61,28 +55,13 @@ public class SmithingUpgradeRecipe implements Recipe<Inventory> {
 	}
 
 	@Override
-	public ItemStack createIcon() {
-		return new ItemStack(Blocks.SMITHING_TABLE);
-	}
-
-	@Override
-	public RecipeType<?> getType() {
-		return RecipeType.SMITHING;
-	}
-
-	@Override
-	public boolean fits(int width, int height) {
-		return width * height >= 2;
+	public boolean isEmpty() {
+		return true;
 	}
 
 	@Override
 	public RecipeSerializer<?> getSerializer() {
 		return TinkerersSmithing.SMITHING_UPGRADE_SERIALIZER;
-	}
-
-	@Override
-	public Identifier getId() {
-		return identifier;
 	}
 
 	@Override

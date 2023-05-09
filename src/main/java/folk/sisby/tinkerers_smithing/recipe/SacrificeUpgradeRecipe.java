@@ -1,30 +1,27 @@
 package folk.sisby.tinkerers_smithing.recipe;
 
 import folk.sisby.tinkerers_smithing.TinkerersSmithing;
-import net.minecraft.block.Blocks;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.recipe.RecipeType;
+import net.minecraft.recipe.SmithingRecipe;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
 import java.util.Map;
 
-public class SacrificeUpgradeRecipe implements Recipe<Inventory> {
-	private final Identifier identifier;
-
+public class SacrificeUpgradeRecipe extends SmithingRecipe implements Recipe<Inventory> {
 	public SacrificeUpgradeRecipe(Identifier identifier) {
-		this.identifier = identifier;
+		super(identifier, null, null, null);
 	}
 
 	public ItemStack getValidOutput(Inventory inventory) {
 		ItemStack base = inventory.getStack(0);
 		ItemStack ingredient = inventory.getStack(1);
 
-		if (!base.isEmpty() && !ingredient.isEmpty()) {
+		if (!base.isEmpty() && !ingredient.isEmpty() && base.isDamageable() && ingredient.isDamageable()) {
 			for (Map.Entry<Item, Map<Item, Integer>> sacrificePaths : TinkerersSmithing.getSacrificePaths(base.getItem()).entrySet()) {
 				Item resultItem = sacrificePaths.getKey();
 				Map<Item, Integer> sacrificeItems = sacrificePaths.getValue();
@@ -35,7 +32,9 @@ public class SacrificeUpgradeRecipe implements Recipe<Inventory> {
 
 					if (ingredient.getItem() == sacrificeItem) {
 						ItemStack resultStack = resultItem.getDefaultStack();
-						resultStack.setNbt(base.getOrCreateNbt().copy());
+						if (base.getNbt() != null) {
+							resultStack.setNbt(base.getNbt().copy());
+						}
 						resultStack.setDamage((int) Math.floor(resultItem.getMaxDamage()-((double) ((sacrificeItem.getMaxDamage() - ingredient.getDamage()) * (sacrificeUnits * resultItem.getMaxDamage())) /(sacrificeItem.getMaxDamage() * sacrificeUnits))));
 						return resultStack;
 					}
@@ -61,28 +60,13 @@ public class SacrificeUpgradeRecipe implements Recipe<Inventory> {
 	}
 
 	@Override
-	public ItemStack createIcon() {
-		return new ItemStack(Blocks.SMITHING_TABLE);
-	}
-
-	@Override
-	public RecipeType<?> getType() {
-		return RecipeType.SMITHING;
-	}
-
-	@Override
-	public boolean fits(int width, int height) {
-		return width * height >= 2;
+	public boolean isEmpty() {
+		return true;
 	}
 
 	@Override
 	public RecipeSerializer<?> getSerializer() {
 		return TinkerersSmithing.SACRIFICE_UPGRADE_SERIALIZER;
-	}
-
-	@Override
-	public Identifier getId() {
-		return identifier;
 	}
 
 	@Override
