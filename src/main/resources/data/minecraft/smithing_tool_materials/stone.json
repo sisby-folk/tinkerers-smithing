@@ -1,0 +1,8 @@
+{
+  "inheritFromItem": [
+    "minecraft:stone_pickaxe"
+  ],
+  "upgradeTo": [
+    "minecraft:iron"
+  ]
+}

@@ -13,9 +13,6 @@
     "minecraft:chainmail_leggings",
     "minecraft:chainmail_boots"
   ],
-  "upgradesFrom": [
-    "minecraft:leather"
-  ],
   "upgradesTo": [
     "minecraft:diamond"
   ]

@@ -1,0 +1,9 @@
+{
+  "inheritFromItem": [
+    "minecraft:netherite_pickaxe"
+  ],
+  "sacrificesVia": "minecraft:diamond",
+  "upgradesFrom": [
+    "minecraft:gold"
+  ]
+}

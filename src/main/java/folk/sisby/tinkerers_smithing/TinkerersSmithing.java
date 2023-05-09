@@ -8,7 +8,9 @@ import folk.sisby.tinkerers_smithing.recipe.SacrificeUpgradeRecipe;
 import folk.sisby.tinkerers_smithing.recipe.ShapelessRepairRecipe;
 import folk.sisby.tinkerers_smithing.recipe.ShapelessUpgradeRecipe;
 import folk.sisby.tinkerers_smithing.recipe.SmithingUpgradeRecipe;
+import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
+import net.minecraft.item.ToolItem;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.SpecialRecipeSerializer;
 import net.minecraft.resource.ResourceType;
@@ -25,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class TinkerersSmithing implements ModInitializer {
 	public static final String ID = "tinkerers_smithing";
@@ -128,8 +131,11 @@ public class TinkerersSmithing implements ModInitializer {
 
 	public static void generateUnitCosts(MinecraftServer server) {
 		if (server != null) {
+			AtomicInteger costsAdded = new AtomicInteger();
+			AtomicInteger costItemsAdded = new AtomicInteger();
 			Registry.ITEM.forEach(item -> {
-				if (item instanceof TinkerersSmithingItem tsi) {
+				List<Ingredient> repairIngredients = getMaterialRepairIngredients(item);
+				if (item instanceof TinkerersSmithingItem tsi && !repairIngredients.isEmpty()) {
 					Map<Ingredient, Integer> costs = tsi.tinkerersSmithing$getUnitCosts();
 					costs.clear();
 
@@ -139,25 +145,35 @@ public class TinkerersSmithing implements ModInitializer {
 						// Naively calculate unit cost by testing the recipe with the same ID as the item itself
 						server.getRecipeManager().get(Registry.ITEM.getId(item)).ifPresentOrElse(recipe -> {
 							if (recipe.getOutput().isOf(item)) {
-								List<Ingredient> repairIngredients = getMaterialRepairIngredients(item);
 								repairIngredients.forEach(repairIngredient -> {
 									int unitCost = Math.toIntExact(recipe.getIngredients().stream()
 										.filter(ingredient -> Arrays.stream(ingredient.getMatchingStacks()).allMatch(repairIngredient))
 										.filter(ingredient -> Arrays.stream(repairIngredient.getMatchingStacks()).allMatch(ingredient))
 										.count());
-									costs.put(repairIngredient, unitCost);
+									if (unitCost > 0) {
+										costsAdded.getAndIncrement();
+										costs.put(repairIngredient, unitCost);
+									}
 								});
 							}
 						}, () -> {
-							LOGGER.info("[Tinkerer's Smithing] No unit cost recipe for {}", Registry.ITEM.getId(item));
+							LOGGER.warn("[Tinkerer's Smithing] No unit cost recipe for {}", Registry.ITEM.getId(item));
 						});
 					}
 
 					if (override != null) {
 						costs.putAll(override.costs());
 					}
+					if (!costs.isEmpty()) costItemsAdded.getAndIncrement();
+				} else if (item instanceof ToolItem || item instanceof ArmorItem) {
+					LOGGER.warn("[Tinkerer's Smithing] No material registered for {}", Registry.ITEM.getId(item));
 				}
 			});
+			LOGGER.info("[Tinkerer's Smithing] Data Initialized.");
+			LOGGER.info("[Tinkerer's Smithing] Loaded {} Tool Materials with {} Items.", TOOL_MATERIALS.size(), TOOL_MATERIALS.values().stream().map(m -> m.items().size()).reduce(Integer::sum).get());
+			LOGGER.info("[Tinkerer's Smithing] Loaded {} Armor Materials with {} Items.", ARMOR_MATERIALS.size(), ARMOR_MATERIALS.values().stream().map(m -> m.items().size()).reduce(Integer::sum).get());
+			LOGGER.info("[Tinkerer's Smithing] Loaded {} Equipment Types with {} Items.", SMITHING_TYPES.size(), SMITHING_TYPES.values().stream().map(Collection::size).reduce(Integer::sum).get());
+			LOGGER.info("[Tinkerer's Smithing] Loaded {} Unit costs over {} Items.", costsAdded, costItemsAdded);
 		}
 	}
 
