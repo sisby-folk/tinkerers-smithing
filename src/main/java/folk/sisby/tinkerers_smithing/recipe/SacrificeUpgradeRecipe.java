@@ -4,6 +4,7 @@ import folk.sisby.tinkerers_smithing.TinkerersSmithing;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.SmithingRecipe;
@@ -14,7 +15,7 @@ import java.util.Map;
 
 public class SacrificeUpgradeRecipe extends SmithingRecipe implements Recipe<Inventory> {
 	public SacrificeUpgradeRecipe(Identifier identifier) {
-		super(identifier, null, null, null);
+		super(identifier, Ingredient.EMPTY, Ingredient.EMPTY, ItemStack.EMPTY);
 	}
 
 	public ItemStack getValidOutput(Inventory inventory) {
