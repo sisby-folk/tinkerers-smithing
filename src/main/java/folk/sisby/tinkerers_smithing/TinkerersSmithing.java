@@ -12,6 +12,7 @@ import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ToolItem;
 import net.minecraft.recipe.Ingredient;
+import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.SpecialRecipeSerializer;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.server.MinecraftServer;
@@ -137,7 +138,8 @@ public class TinkerersSmithing implements ModInitializer {
 												sacrifices.put(sacrificeItem, sacrificeViaCost);
 											}
 										}
-										if (!sacrifices.isEmpty()) outMap.put(upgradeItem, new Pair<>(upgradeViaCost, sacrifices));
+										if (!sacrifices.isEmpty())
+											outMap.put(upgradeItem, new Pair<>(upgradeViaCost, sacrifices));
 									}
 								}
 							}
@@ -164,9 +166,11 @@ public class TinkerersSmithing implements ModInitializer {
 
 					if (override == null || !override.replace()) {
 						// Naively calculate unit cost by testing the recipe with the same ID as the item itself
-						server.getRecipeManager().get(Registry.ITEM.getId(item)).ifPresentOrElse(recipe -> {
+						Recipe<?> recipe = server.getRecipeManager().get(Registry.ITEM.getId(item)).orElse(null);
+						if (recipe == null) recipe = server.getRecipeManager().get(new Identifier(Registry.ITEM.getId(item).getNamespace(), "crafting/" + Registry.ITEM.getId(item).getNamespace())).orElse(null);
+						if (recipe != null) {
 							if (recipe.getOutput().isOf(item)) {
-								repairIngredients.forEach(repairIngredient -> {
+								for (Ingredient repairIngredient : repairIngredients) {
 									int unitCost = Math.toIntExact(recipe.getIngredients().stream()
 										.filter(ingredient -> Arrays.stream(ingredient.getMatchingStacks()).allMatch(repairIngredient))
 										.filter(ingredient -> Arrays.stream(repairIngredient.getMatchingStacks()).allMatch(ingredient))
@@ -175,11 +179,11 @@ public class TinkerersSmithing implements ModInitializer {
 										costsAdded.getAndIncrement();
 										costs.put(repairIngredient, unitCost);
 									}
-								});
+								}
 							}
-						}, () -> {
+						} else {
 							LOGGER.warn("[Tinkerer's Smithing] No unit cost recipe for {}", Registry.ITEM.getId(item));
-						});
+						}
 					}
 
 					if (override != null) {

@@ -1,19 +1,15 @@
 {
   "inheritFromItem": [
-    "yttr:brookite_pickaxe"
-  ],
-  "upgradesFrom": [
-    "minecraft:iron",
-    "minecraft:stone"
+    "farmersdelight:flint_knife"
   ],
   "upgradesTo": [
-    "minecraft:diamond"
+    "minecraft:iron"
   ],
   "fabric:load_conditions": [
     {
       "condition": "fabric:all_mods_loaded",
       "values": [
-        "yttr"
+        "farmersdelight"
       ]
     }
   ]
