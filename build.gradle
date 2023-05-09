@@ -161,28 +161,6 @@ tasks.withType(JavaCompile).configureEach {
 	it.options.release = 17
 }
 
-loom {
-	runs {
-		datagenClient {
-			inherit client
-			name "Data Generation"
-			property('fabric-api.datagen')
-			property("fabric-api.datagen.output-dir=${file("src/main/generated")}")
-			property("fabric-api.datagen.modid=${archivesBaseName}")
-		}
-	}
-}
-
-sourceSets {
-	main {
-		resources {
-			srcDirs += [
-					'src/main/generated'
-			]
-		}
-	}
-}
-
 java {
 	withSourcesJar()
 

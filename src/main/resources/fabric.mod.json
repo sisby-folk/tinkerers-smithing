@@ -20,9 +20,6 @@
   "environment": "*",
 
   "entrypoints": {
-    "fabric-datagen": [
-      "folk.sisby.tinkerers_smithing.TinkerersSmithingDataGeneration"
-    ],
     "init": [
       "folk.sisby.tinkerers_smithing.TinkerersSmithing"
     ]
