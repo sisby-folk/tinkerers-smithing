@@ -10,11 +10,12 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @Mixin(Item.class)
 public class ItemMixin implements TinkerersSmithingItem {
-	@Unique Map<Ingredient, Integer> unitCosts;
+	@Unique Map<Ingredient, Integer> unitCosts = new HashMap<>();
 
 	@Override
 	public Map<Ingredient, Integer> tinkerersSmithing$getUnitCosts() {

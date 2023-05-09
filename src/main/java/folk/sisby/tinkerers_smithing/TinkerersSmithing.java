@@ -5,9 +5,7 @@ import folk.sisby.tinkerers_smithing.data.SmithingToolMaterialLoader;
 import folk.sisby.tinkerers_smithing.data.SmithingTypeLoader;
 import folk.sisby.tinkerers_smithing.data.SmithingUnitCostManager;
 import folk.sisby.tinkerers_smithing.recipe.ShapelessRepairRecipe;
-import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.ToolItem;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.SpecialRecipeSerializer;
 import net.minecraft.resource.ResourceType;
@@ -15,7 +13,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
-import org.jetbrains.annotations.Nullable;
 import org.quiltmc.loader.api.ModContainer;
 import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
 import org.quiltmc.qsl.lifecycle.api.event.ServerLifecycleEvents;
@@ -24,10 +21,7 @@ import org.quiltmc.qsl.resource.loader.api.ResourceLoaderEvents;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class TinkerersSmithing implements ModInitializer {
 	public static final String ID = "tinkerers_smithing";
@@ -41,55 +35,55 @@ public class TinkerersSmithing implements ModInitializer {
 	public static final Map<Identifier, TinkerersSmithingMaterial> TOOL_MATERIALS = new HashMap<>();
 	public static final Map<Identifier, TinkerersSmithingMaterial> ARMOR_MATERIALS = new HashMap<>();
 
-	public static @Nullable Ingredient getRepairIngredient(Item item) {
-		if (item.isDamageable()) {
-			if (item instanceof ArmorItem ai && ai.getMaterial() != null && ai.getMaterial().getRepairIngredient() != null && !ai.getMaterial().getRepairIngredient().isEmpty()) {
-				return ai.getMaterial().getRepairIngredient();
-			} else if (item instanceof ToolItem ti && ti.getMaterial().getRepairIngredient() != null && !ti.getMaterial().getRepairIngredient().isEmpty()) {
-				return ti.getMaterial().getRepairIngredient();
+	public static List<Ingredient> getMaterialRepairIngredients(Item item) {
+		List<Ingredient> outList = new ArrayList<>();
+
+		ARMOR_MATERIALS.values().forEach(material -> {
+			if (material.items().contains(item)) {
+				outList.addAll(material.repairMaterials());
 			}
-		}
-		return null;
+		});
+		TOOL_MATERIALS.values().forEach(material -> {
+			if (material.items().contains(item)) {
+				outList.addAll(material.repairMaterials());
+			}
+		});
+
+		return outList;
 	}
 
 	public static void generateUnitCosts(MinecraftServer server) {
 		if (server != null) {
 			Registry.ITEM.forEach(item -> {
-				((TinkerersSmithingItem) item).tinkerersSmithing$getUnitCosts().clear();
+				if (item instanceof  TinkerersSmithingItem tsi) {
+					Map<Ingredient, Integer> costs = tsi.tinkerersSmithing$getUnitCosts();
+					costs.clear();
 
-				SmithingUnitCostManager.UnitCostOverride override = SmithingUnitCostManager.INSTANCE.costOverrides.get(item);
-				Map<Ingredient, Integer> costs = new HashMap<>();
+					SmithingUnitCostManager.UnitCostOverride override = SmithingUnitCostManager.INSTANCE.costOverrides.get(item);
 
-				if (override == null || !override.replace()) {
-					Ingredient repairIngredient = TinkerersSmithing.getRepairIngredient(item);
-					if (repairIngredient != null) {
+					if (override == null || !override.replace()) {
 						// Naively calculate unit cost by testing the recipe with the same ID as the item itself
 						server.getRecipeManager().get(Registry.ITEM.getId(item)).ifPresentOrElse(recipe -> {
 							if (recipe.getOutput().isOf(item)) {
-								int unitCost = Math.toIntExact(recipe.getIngredients().stream()
-									.filter(ingredient -> Arrays.stream(ingredient.getMatchingStacks()).allMatch(repairIngredient))
-									.filter(ingredient -> Arrays.stream(repairIngredient.getMatchingStacks()).allMatch(ingredient))
-									.count());
-								costs.put(repairIngredient, unitCost);
-								if (unitCost != 0) {
-									LOGGER.info("[Tinkerer's Smithing] Derived unit cost of {} for {}", unitCost, Registry.ITEM.getId(item));
-								} else {
-									LOGGER.info("[Tinkerer's Smithing] Couldn't derive unit cost using recipe {}", Registry.ITEM.getId(item));
-								}
+								List<Ingredient> repairIngredients = getMaterialRepairIngredients(item);
+								repairIngredients.forEach(repairIngredient -> {
+									int unitCost = Math.toIntExact(recipe.getIngredients().stream()
+										.filter(ingredient -> Arrays.stream(ingredient.getMatchingStacks()).allMatch(repairIngredient))
+										.filter(ingredient -> Arrays.stream(repairIngredient.getMatchingStacks()).allMatch(ingredient))
+										.count());
+									costs.put(repairIngredient, unitCost);
+								});
 							}
 						}, () -> {
 							LOGGER.info("[Tinkerer's Smithing] No unit cost recipe for {}", Registry.ITEM.getId(item));
 						});
 					}
-				}
 
-				if (override != null) {
-					costs.putAll(override.costs());
+					if (override != null) {
+						costs.putAll(override.costs());
+					}
 				}
-
-				((TinkerersSmithingItem) item).tinkerersSmithing$getUnitCosts().putAll(costs);
 			});
-
 		}
 	}
 
