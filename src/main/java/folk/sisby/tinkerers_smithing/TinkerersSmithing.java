@@ -167,7 +167,7 @@ public class TinkerersSmithing implements ModInitializer {
 					if (override == null || !override.replace()) {
 						// Naively calculate unit cost by testing the recipe with the same ID as the item itself
 						Recipe<?> recipe = server.getRecipeManager().get(Registry.ITEM.getId(item)).orElse(null);
-						if (recipe == null) recipe = server.getRecipeManager().get(new Identifier(Registry.ITEM.getId(item).getNamespace(), "crafting/" + Registry.ITEM.getId(item).getNamespace())).orElse(null);
+						if (recipe == null) recipe = server.getRecipeManager().get(new Identifier(Registry.ITEM.getId(item).getNamespace(), "crafting/" + Registry.ITEM.getId(item).getPath())).orElse(null);
 						if (recipe != null) {
 							if (recipe.getOutput().isOf(item)) {
 								for (Ingredient repairIngredient : repairIngredients) {
