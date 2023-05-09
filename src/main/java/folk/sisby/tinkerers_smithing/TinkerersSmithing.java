@@ -157,6 +157,7 @@ public class TinkerersSmithing implements ModInitializer {
 			AtomicInteger costsAdded = new AtomicInteger();
 			AtomicInteger costItemsAdded = new AtomicInteger();
 			Registry.ITEM.forEach(item -> {
+				Identifier itemId = Registry.ITEM.getId(item);
 				List<Ingredient> repairIngredients = getMaterialRepairIngredients(item);
 				if (item instanceof TinkerersSmithingItem tsi && !repairIngredients.isEmpty()) {
 					Map<Ingredient, Integer> costs = tsi.tinkerersSmithing$getUnitCosts();
@@ -166,8 +167,8 @@ public class TinkerersSmithing implements ModInitializer {
 
 					if (override == null || !override.replace()) {
 						// Naively calculate unit cost by testing the recipe with the same ID as the item itself
-						Recipe<?> recipe = server.getRecipeManager().get(Registry.ITEM.getId(item)).orElse(null);
-						if (recipe == null) recipe = server.getRecipeManager().get(new Identifier(Registry.ITEM.getId(item).getNamespace(), "crafting/" + Registry.ITEM.getId(item).getPath())).orElse(null);
+						Recipe<?> recipe = server.getRecipeManager().get(itemId).orElse(null);
+						if (recipe == null) recipe = server.getRecipeManager().get(new Identifier(itemId.getNamespace(), "crafting/" + itemId.getPath())).orElse(null);
 						if (recipe != null) {
 							if (recipe.getOutput().isOf(item)) {
 								for (Ingredient repairIngredient : repairIngredients) {
@@ -182,7 +183,7 @@ public class TinkerersSmithing implements ModInitializer {
 								}
 							}
 						} else {
-							LOGGER.warn("[Tinkerer's Smithing] No unit cost recipe for {}", Registry.ITEM.getId(item));
+							LOGGER.warn("[Tinkerer's Smithing] No unit cost recipe for {}", itemId);
 						}
 					}
 
@@ -191,7 +192,7 @@ public class TinkerersSmithing implements ModInitializer {
 					}
 					if (!costs.isEmpty()) costItemsAdded.getAndIncrement();
 				} else if (item instanceof ToolItem || item instanceof ArmorItem) {
-					LOGGER.warn("[Tinkerer's Smithing] No material registered for {}", Registry.ITEM.getId(item));
+					LOGGER.warn("[Tinkerer's Smithing] No material registered for {}", itemId);
 				}
 			});
 			LOGGER.info("[Tinkerer's Smithing] Data Initialized.");
