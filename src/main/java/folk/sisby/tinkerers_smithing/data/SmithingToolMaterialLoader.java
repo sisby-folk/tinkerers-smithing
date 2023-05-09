@@ -35,4 +35,9 @@ public class SmithingToolMaterialLoader extends SmithingMaterialLoader implement
 		}
 		return null;
 	}
+
+	@Override
+	public boolean matchingMaterials(Item item1, Item item2) {
+		return item1 instanceof ToolItem ti1 && item2 instanceof ToolItem ti2 && ti1.getMaterial() == ti2.getMaterial();
+	}
 }

@@ -49,9 +49,13 @@ public abstract class SmithingMaterialLoader extends JsonDataLoader {
 			if (baseObject.has(KEY_INHERIT_FROM_ITEM)) {
 				Identifier inheritItemId = Identifier.tryParse(baseObject.get(KEY_INHERIT_FROM_ITEM).getAsString());
 				if (inheritItemId != null) {
-					Registry.ITEM.getOrEmpty(inheritItemId).ifPresent(item -> repairMaterials.add(getDefaultRepairIngredient(item)));
+					Registry.ITEM.getOrEmpty(inheritItemId).ifPresent(item -> {
+						repairMaterials.add(getDefaultRepairIngredient(item));
+						Registry.ITEM.forEach(matchingItem -> {
+							if (matchingMaterials(item, matchingItem)) items.add(matchingItem);
+						});
+					});
 				}
-				// Can we get other items of the same tool material or not? e.g. for chainmail
 			}
 			if (baseObject.has(KEY_REPAIR_MATERIALS)) {
 				baseObject.get(KEY_REPAIR_MATERIALS).getAsJsonArray().forEach(jsonIngredient -> repairMaterials.add(Ingredient.fromJson(jsonIngredient)));
@@ -84,4 +88,6 @@ public abstract class SmithingMaterialLoader extends JsonDataLoader {
 	}
 
 	public abstract Ingredient getDefaultRepairIngredient(Item item);
+
+	public abstract boolean matchingMaterials(Item item1, Item item2);
 }
