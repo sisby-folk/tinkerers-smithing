@@ -6,6 +6,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Ingredient;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Map;
 
@@ -28,5 +31,13 @@ public class ItemMixin implements TinkerersSmithingItem {
 			}
 		}
 		return 0;
+	}
+
+	@Inject(method = "canRepair", at = @At(value = "RETURN"), cancellable = true)
+	private void mixin(ItemStack stack, ItemStack ingredient, CallbackInfoReturnable<Boolean> cir) {
+		if (tinkerersSmithing$getUnitCost(ingredient) > 0) {
+			cir.setReturnValue(true);
+			cir.cancel();
+		}
 	}
 }
