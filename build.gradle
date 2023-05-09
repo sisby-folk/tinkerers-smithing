@@ -23,12 +23,11 @@ if (System.getenv("GITHUB_TOKEN")) {
 archivesBaseName = project.archives_base_name
 
 def mc_major = '1.19'
-def nbt_crafting = '2'
 def mc = mc_major + '.2'
-def default_branch = 'nbtc2'
+def default_branch = '1.19'
 
 def origVersion = project.version
-project.version = project.version + "+nbtc" + nbt_crafting
+project.version = project.version + "+" + mc_major
 group = project.maven_group
 
 repositories {
@@ -66,37 +65,37 @@ dependencies {
 	modLocalRuntime libs.emi
 
 	// // Compat Dependencies // //
-	modImplementation libs.lib39aqi
-	modImplementation libs.lib39core
-	modImplementation libs.lib39crowbar
-	modImplementation libs.lib39deferral
-	modImplementation libs.lib39dessicant
-	modImplementation libs.lib39fractal
-	modImplementation libs.lib39gesundheit
-	modImplementation libs.lib39keygen
-	modImplementation libs.lib39lockpick
-	modImplementation libs.lib39machination
-	modImplementation libs.lib39mesh
-	modImplementation libs.lib39phantom
-	modImplementation libs.lib39recoil
-	modImplementation libs.lib39ripple
-	modImplementation libs.lib39sandman
-	modImplementation libs.lib39tunnel
-	modImplementation libs.lib39util
-	modImplementation libs.lib39waypoint
-	modImplementation libs.lib39weld
+	modCompileOnly libs.lib39aqi
+	modCompileOnly libs.lib39core
+	modCompileOnly libs.lib39crowbar
+	modCompileOnly libs.lib39deferral
+	modCompileOnly libs.lib39dessicant
+	modCompileOnly libs.lib39fractal
+	modCompileOnly libs.lib39gesundheit
+	modCompileOnly libs.lib39keygen
+	modCompileOnly libs.lib39lockpick
+	modCompileOnly libs.lib39machination
+	modCompileOnly libs.lib39mesh
+	modCompileOnly libs.lib39phantom
+	modCompileOnly libs.lib39recoil
+	modCompileOnly libs.lib39ripple
+	modCompileOnly libs.lib39sandman
+	modCompileOnly libs.lib39tunnel
+	modCompileOnly libs.lib39util
+	modCompileOnly libs.lib39waypoint
+	modCompileOnly libs.lib39weld
 
-	modApi libs.forgeConfigApiPort
+	modCompileOnly libs.forgeConfigApiPort
 
 	// // Compat // //
-	modImplementation libs.farmersDelight
-	modImplementation libs.campanion
-	modImplementation libs.halfdoors
-	modImplementation libs.chalk
-	modImplementation libs.consistencyPlus
-	modImplementation libs.yttr
-	modImplementation libs.botania
-	modImplementation libs.create
+	modCompileOnly libs.farmersDelight
+	modCompileOnly libs.campanion
+	modCompileOnly libs.halfdoors
+	modCompileOnly libs.chalk
+	modCompileOnly libs.consistencyPlus
+	modCompileOnly libs.yttr
+	modCompileOnly libs.botania
+	modCompileOnly libs.create
 }
 
 processResources {
@@ -166,7 +165,9 @@ if (System.getenv("MODRINTH_TOKEN")) {
 		loaders = ['quilt']
 		detectLoaders = false
 		dependencies {
-			required.project "nbt-crafting"
+			required.project "qsl"
+			optional.project "emi"
+			optional.project "yttr"
 		}
 		changelog = "Changelog: https://github.com/sisby-folk/tinkerers-smithing/releases/tag/v" + origVersion
 		syncBodyFrom = rootProject.file("README.md").text
