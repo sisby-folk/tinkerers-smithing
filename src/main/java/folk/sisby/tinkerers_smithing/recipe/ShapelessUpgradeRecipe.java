@@ -57,7 +57,7 @@ public class ShapelessUpgradeRecipe extends SpecialCraftingRecipe implements Cra
 					Integer cost = entry.getValue();
 					if (gridItems.stream().allMatch(ingredient) && gridItems.size() == cost) {
 						ItemStack resultStack = upgradeItem.getDefaultStack();
-						resultStack.setNbt(equipmentStack.getNbt());
+						resultStack.setNbt(equipmentStack.getOrCreateNbt().copy());
 						return resultStack;
 					}
 				}

@@ -6,6 +6,7 @@ import folk.sisby.tinkerers_smithing.data.SmithingTypeLoader;
 import folk.sisby.tinkerers_smithing.data.SmithingUnitCostManager;
 import folk.sisby.tinkerers_smithing.recipe.ShapelessRepairRecipe;
 import folk.sisby.tinkerers_smithing.recipe.ShapelessUpgradeRecipe;
+import folk.sisby.tinkerers_smithing.recipe.SmithingUpgradeRecipe;
 import net.minecraft.item.Item;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.SpecialRecipeSerializer;
@@ -31,6 +32,7 @@ public class TinkerersSmithing implements ModInitializer {
 	public static final TagKey<Item> DEWORK_INGREDIENTS = TagKey.of(Registry.ITEM_KEY, new Identifier(ID, "dework_ingredients"));
 	public static final SpecialRecipeSerializer<ShapelessRepairRecipe> SHAPELESS_REPAIR_SERIALIZER = Registry.register(Registry.RECIPE_SERIALIZER, new Identifier(ID, "crafting_special_shapeless_repair"), new SpecialRecipeSerializer<>(ShapelessRepairRecipe::new));
 	public static final SpecialRecipeSerializer<ShapelessUpgradeRecipe> SHAPELESS_UPGRADE_SERIALIZER = Registry.register(Registry.RECIPE_SERIALIZER, new Identifier(ID, "crafting_special_shapeless_upgrade"), new SpecialRecipeSerializer<>(ShapelessUpgradeRecipe::new));
+	public static final SpecialRecipeSerializer<SmithingUpgradeRecipe> SMITHING_UPGRADE_SERIALIZER = Registry.register(Registry.RECIPE_SERIALIZER, new Identifier(ID, "crafting_special_smithing_upgrade"), new SpecialRecipeSerializer<>(SmithingUpgradeRecipe::new));
 
 	// Data
 	public static final Map<Identifier, Collection<Item>> SMITHING_TYPES = new HashMap<>();
@@ -64,19 +66,21 @@ public class TinkerersSmithing implements ModInitializer {
 			if (items.contains(item)) types.add(items);
 		});
 
-		getAllMaterials().forEach(material -> {
-			if (material.items().contains(item)) {
-				Map<Identifier, TinkerersSmithingMaterial> map = material.type() == TinkerersSmithingMaterial.EQUIPMENT_TYPE.ARMOR ? ARMOR_MATERIALS : TOOL_MATERIALS;
-				material.upgradeableTo().forEach(id -> {
-					TinkerersSmithingMaterial upgradeMaterial = map.get(id);
-					upgradeMaterial.items().forEach(upgradeItem -> {
-						if (types.stream().anyMatch(type -> type.contains(upgradeItem))) {
-							outSet.add(upgradeItem);
-						}
+		if (!types.isEmpty()) {
+			getAllMaterials().forEach(material -> {
+				if (material.items().contains(item)) {
+					Map<Identifier, TinkerersSmithingMaterial> map = material.type() == TinkerersSmithingMaterial.EQUIPMENT_TYPE.ARMOR ? ARMOR_MATERIALS : TOOL_MATERIALS;
+					material.upgradeableTo().forEach(id -> {
+						TinkerersSmithingMaterial upgradeMaterial = map.get(id);
+						upgradeMaterial.items().forEach(upgradeItem -> {
+							if (types.stream().anyMatch(type -> type.contains(upgradeItem))) {
+								outSet.add(upgradeItem);
+							}
+						});
 					});
-				});
-			}
-		});
+				}
+			});
+		}
 
 		return outSet;
 	}
