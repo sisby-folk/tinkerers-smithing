@@ -5,7 +5,6 @@ import folk.sisby.tinkerers_smithing.TinkerersSmithingItem;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.CraftingRecipe;
-import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.SpecialCraftingRecipe;
 import net.minecraft.util.Identifier;
@@ -25,7 +24,7 @@ public class ShapelessRepairRecipe extends SpecialCraftingRecipe implements Craf
 
 		for(int i = 0; i < craftingInventory.size(); ++i) {
 			ItemStack itemStack = craftingInventory.getStack(i);
-			if (TinkerersSmithing.getRepairIngredient(itemStack.getItem()) != null) {
+			if (itemStack.getItem() instanceof TinkerersSmithingItem tsi && !tsi.tinkerersSmithing$getUnitCosts().isEmpty()) {
 				if (equipmentStack == null) {
 					equipmentStack = itemStack;
 				} else {
@@ -37,14 +36,13 @@ public class ShapelessRepairRecipe extends SpecialCraftingRecipe implements Craf
 	}
 
 	public static List<ItemStack> getRepairMaterials(CraftingInventory craftingInventory, ItemStack equipment) {
-		Ingredient repairIngredient = TinkerersSmithing.getRepairIngredient(equipment.getItem());
 		List<ItemStack> outList = new ArrayList<>();
 
-		if (repairIngredient != null) {
+		if (equipment.getItem() instanceof TinkerersSmithingItem tsi) {
 			for(int i = 0; i < craftingInventory.size(); ++i) {
 				ItemStack itemStack = craftingInventory.getStack(i);
 				if (!itemStack.isOf(equipment.getItem()) && !itemStack.isEmpty()) {
-					if (repairIngredient.test(itemStack)) {
+					if (tsi.tinkerersSmithing$getUnitCost(itemStack) > 0 && (outList.isEmpty() || outList.get(0).getItem() == itemStack.getItem())) {
 						outList.add(itemStack);
 					} else {
 						return null;
