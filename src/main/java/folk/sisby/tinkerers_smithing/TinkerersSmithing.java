@@ -4,6 +4,7 @@ import folk.sisby.tinkerers_smithing.data.SmithingArmorMaterialLoader;
 import folk.sisby.tinkerers_smithing.data.SmithingToolMaterialLoader;
 import folk.sisby.tinkerers_smithing.data.SmithingTypeLoader;
 import folk.sisby.tinkerers_smithing.data.SmithingUnitCostManager;
+import folk.sisby.tinkerers_smithing.recipe.SacrificeUpgradeRecipe;
 import folk.sisby.tinkerers_smithing.recipe.ShapelessRepairRecipe;
 import folk.sisby.tinkerers_smithing.recipe.ShapelessUpgradeRecipe;
 import folk.sisby.tinkerers_smithing.recipe.SmithingUpgradeRecipe;
@@ -33,6 +34,7 @@ public class TinkerersSmithing implements ModInitializer {
 	public static final SpecialRecipeSerializer<ShapelessRepairRecipe> SHAPELESS_REPAIR_SERIALIZER = Registry.register(Registry.RECIPE_SERIALIZER, new Identifier(ID, "crafting_special_shapeless_repair"), new SpecialRecipeSerializer<>(ShapelessRepairRecipe::new));
 	public static final SpecialRecipeSerializer<ShapelessUpgradeRecipe> SHAPELESS_UPGRADE_SERIALIZER = Registry.register(Registry.RECIPE_SERIALIZER, new Identifier(ID, "crafting_special_shapeless_upgrade"), new SpecialRecipeSerializer<>(ShapelessUpgradeRecipe::new));
 	public static final SpecialRecipeSerializer<SmithingUpgradeRecipe> SMITHING_UPGRADE_SERIALIZER = Registry.register(Registry.RECIPE_SERIALIZER, new Identifier(ID, "crafting_special_smithing_upgrade"), new SpecialRecipeSerializer<>(SmithingUpgradeRecipe::new));
+	public static final SpecialRecipeSerializer<SacrificeUpgradeRecipe> SACRIFICE_UPGRADE_SERIALIZER = Registry.register(Registry.RECIPE_SERIALIZER, new Identifier(ID, "crafting_special_sacrifice_upgrade"), new SpecialRecipeSerializer<>(SacrificeUpgradeRecipe::new));
 
 	// Data
 	public static final Map<Identifier, Collection<Item>> SMITHING_TYPES = new HashMap<>();
@@ -57,6 +59,7 @@ public class TinkerersSmithing implements ModInitializer {
 
 		return outList;
 	}
+
 
 	public static Collection<Item> getUpgradePaths(Item item) {
 		Set<Item> outSet = new HashSet<>();
@@ -85,10 +88,48 @@ public class TinkerersSmithing implements ModInitializer {
 		return outSet;
 	}
 
+	public static Map<Item, Map<Item, Integer>> getSacrificePaths(Item item) { // This is gonna be ugly. This idea assumes a lot of 1:1ness in a system reworked to not do that.
+		Map<Item, Map<Item, Integer>> outMap = new HashMap<>();
+
+		List<Collection<Item>> types = new ArrayList<>();
+		SMITHING_TYPES.forEach((id, items) -> {
+			if (items.contains(item)) types.add(items);
+		});
+
+		if (!types.isEmpty()) {
+			getAllMaterials().forEach(material -> {
+				if (material.items().contains(item)) {
+					Map<Identifier, TinkerersSmithingMaterial> map = material.type() == TinkerersSmithingMaterial.EQUIPMENT_TYPE.ARMOR ? ARMOR_MATERIALS : TOOL_MATERIALS;
+					material.upgradeableTo().forEach(id -> {
+						TinkerersSmithingMaterial upgradeMaterial = map.get(id);
+						TinkerersSmithingMaterial viaMaterial = map.get(upgradeMaterial.sacrificeVia());
+						upgradeMaterial.items().forEach(upgradeItem -> {
+							Map<Item, Integer> sacrifices = new HashMap<>();
+							upgradeMaterial.items().forEach(sacrificeItem -> {
+								List<Collection<Item>> upgradeTypes = new ArrayList<>();
+								SMITHING_TYPES.forEach((typeId, items) -> {
+									if (items.contains(item)) upgradeTypes.add(items);
+								});
+								viaMaterial.items().forEach(viaItem -> {
+									if (upgradeTypes.stream().anyMatch(type -> type.contains(viaItem)) && viaItem instanceof TinkerersSmithingItem vtsi && !vtsi.tinkerersSmithing$getUnitCosts().isEmpty()) {
+										sacrifices.put(sacrificeItem, vtsi.tinkerersSmithing$getUnitCosts().values().stream().findFirst().get());
+									}
+								});
+							});
+							if (!sacrifices.isEmpty()) outMap.put(upgradeItem, sacrifices);
+						});
+					});
+				}
+			});
+		}
+
+		return outMap;
+	}
+
 	public static void generateUnitCosts(MinecraftServer server) {
 		if (server != null) {
 			Registry.ITEM.forEach(item -> {
-				if (item instanceof  TinkerersSmithingItem tsi) {
+				if (item instanceof TinkerersSmithingItem tsi) {
 					Map<Ingredient, Integer> costs = tsi.tinkerersSmithing$getUnitCosts();
 					costs.clear();
 
