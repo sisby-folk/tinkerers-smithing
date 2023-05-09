@@ -9,6 +9,7 @@ import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.SmithingRecipe;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Pair;
 import net.minecraft.world.World;
 
 import java.util.Map;
@@ -23,9 +24,10 @@ public class SacrificeUpgradeRecipe extends SmithingRecipe implements Recipe<Inv
 		ItemStack ingredient = inventory.getStack(1);
 
 		if (!base.isEmpty() && !ingredient.isEmpty() && base.isDamageable() && ingredient.isDamageable()) {
-			for (Map.Entry<Item, Map<Item, Integer>> sacrificePaths : TinkerersSmithing.getSacrificePaths(base.getItem()).entrySet()) {
+			for (Map.Entry<Item, Pair<Integer, Map<Item, Integer>>> sacrificePaths : TinkerersSmithing.getSacrificePaths(base.getItem()).entrySet()) {
 				Item resultItem = sacrificePaths.getKey();
-				Map<Item, Integer> sacrificeItems = sacrificePaths.getValue();
+				Integer resultViaUnits = sacrificePaths.getValue().getLeft();
+				Map<Item, Integer> sacrificeItems = sacrificePaths.getValue().getRight();
 
 				for (Map.Entry<Item, Integer> entry : sacrificeItems.entrySet()) {
 					Item sacrificeItem = entry.getKey();
@@ -36,7 +38,8 @@ public class SacrificeUpgradeRecipe extends SmithingRecipe implements Recipe<Inv
 						if (base.getNbt() != null) {
 							resultStack.setNbt(base.getNbt().copy());
 						}
-						resultStack.setDamage((int) Math.floor(resultItem.getMaxDamage()-((double) ((sacrificeItem.getMaxDamage() - ingredient.getDamage()) * (sacrificeUnits * resultItem.getMaxDamage())) /(sacrificeItem.getMaxDamage() * sacrificeUnits))));
+						int damage = (int) Math.ceil(resultItem.getMaxDamage() - ((sacrificeItem.getMaxDamage() - ingredient.getDamage()) * ((double) sacrificeUnits * resultItem.getMaxDamage()) / ((double)sacrificeItem.getMaxDamage() * resultViaUnits)));
+						resultStack.setDamage(damage);
 						return resultStack;
 					}
 				}

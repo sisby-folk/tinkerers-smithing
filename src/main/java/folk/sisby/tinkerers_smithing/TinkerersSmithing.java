@@ -17,6 +17,7 @@ import net.minecraft.resource.ResourceType;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Pair;
 import net.minecraft.util.registry.Registry;
 import org.quiltmc.loader.api.ModContainer;
 import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
@@ -91,8 +92,8 @@ public class TinkerersSmithing implements ModInitializer {
 		return outSet;
 	}
 
-	public static Map<Item, Map<Item, Integer>> getSacrificePaths(Item item) { // This is gonna be ugly. This idea assumes a lot of 1:1ness in a system reworked to not do that.
-		Map<Item, Map<Item, Integer>> outMap = new HashMap<>();
+	public static Map<Item, Pair<Integer, Map<Item, Integer>>> getSacrificePaths(Item item) { // This is gonna be ugly. This idea assumes a lot of 1:1ness in a system reworked to not do that.
+		Map<Item, Pair<Integer, Map<Item, Integer>>> outMap = new HashMap<>();
 
 		List<Collection<Item>> types = new ArrayList<>();
 		SMITHING_TYPES.forEach((id, items) -> {
@@ -100,34 +101,50 @@ public class TinkerersSmithing implements ModInitializer {
 		});
 
 		if (!types.isEmpty()) {
-			getAllMaterials().forEach(material -> {
+			for (TinkerersSmithingMaterial material : getAllMaterials()) {
 				if (material.items().contains(item)) {
 					Map<Identifier, TinkerersSmithingMaterial> map = material.type() == TinkerersSmithingMaterial.EQUIPMENT_TYPE.ARMOR ? ARMOR_MATERIALS : TOOL_MATERIALS;
-					material.upgradeableTo().forEach(id -> {
+					for (Identifier id : material.upgradeableTo()) {
 						TinkerersSmithingMaterial upgradeMaterial = map.get(id);
 						TinkerersSmithingMaterial viaMaterial = map.get(upgradeMaterial.sacrificeVia());
 						if (viaMaterial != null) {
-							upgradeMaterial.items().forEach(upgradeItem -> {
+							for (Item upgradeItem : upgradeMaterial.items()) {
 								if (types.stream().anyMatch(type -> type.contains(upgradeItem))) {
 									Map<Item, Integer> sacrifices = new HashMap<>();
-									upgradeMaterial.items().forEach(sacrificeItem -> {
-										List<Collection<Item>> upgradeTypes = new ArrayList<>();
-										SMITHING_TYPES.forEach((typeId, items) -> {
-											if (items.contains(item)) upgradeTypes.add(items);
-										});
-										viaMaterial.items().forEach(viaItem -> {
-											if (upgradeTypes.stream().anyMatch(type -> type.contains(viaItem)) && viaItem instanceof TinkerersSmithingItem vtsi && !vtsi.tinkerersSmithing$getUnitCosts().isEmpty()) {
-												sacrifices.put(sacrificeItem, vtsi.tinkerersSmithing$getUnitCosts().values().stream().findFirst().get());
+									int upgradeViaCost = 0;
+									for (Item viaItem : viaMaterial.items()) {
+										if (viaItem instanceof TinkerersSmithingItem vtsi && !vtsi.tinkerersSmithing$getUnitCosts().isEmpty()) {
+											if (types.stream().anyMatch(type -> type.contains(viaItem))) {
+												upgradeViaCost = vtsi.tinkerersSmithing$getUnitCosts().values().stream().findFirst().get();
 											}
-										});
-									});
-									if (!sacrifices.isEmpty()) outMap.put(upgradeItem, sacrifices);
+										}
+									}
+									if (upgradeViaCost > 0) {
+										for (Item sacrificeItem : upgradeMaterial.items()) {
+											List<Collection<Item>> sacrificeTypes = new ArrayList<>();
+											SMITHING_TYPES.forEach((typeId, items) -> {
+												if (items.contains(sacrificeItem)) sacrificeTypes.add(items);
+											});
+											int sacrificeViaCost = 0;
+											for (Item viaItem : viaMaterial.items()) {
+												if (viaItem instanceof TinkerersSmithingItem vtsi && !vtsi.tinkerersSmithing$getUnitCosts().isEmpty()) {
+													if (sacrificeTypes.stream().anyMatch(type -> type.contains(viaItem))) {
+														sacrificeViaCost = vtsi.tinkerersSmithing$getUnitCosts().values().stream().findFirst().get();
+													}
+												}
+											}
+											if (sacrificeViaCost > 0) {
+												sacrifices.put(sacrificeItem, sacrificeViaCost);
+											}
+										}
+										if (!sacrifices.isEmpty()) outMap.put(upgradeItem, new Pair<>(upgradeViaCost, sacrifices));
+									}
 								}
-							});
+							}
 						}
-					});
+					}
 				}
-			});
+			}
 		}
 
 		return outMap;
