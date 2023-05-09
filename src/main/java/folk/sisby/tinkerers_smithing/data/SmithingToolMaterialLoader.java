@@ -2,6 +2,7 @@ package folk.sisby.tinkerers_smithing.data;
 
 import com.google.gson.Gson;
 import folk.sisby.tinkerers_smithing.TinkerersSmithing;
+import folk.sisby.tinkerers_smithing.TinkerersSmithingMaterial;
 import net.minecraft.item.*;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.util.Identifier;
@@ -13,7 +14,7 @@ public class SmithingToolMaterialLoader extends SmithingMaterialLoader implement
 	public static final Identifier ID = new Identifier(TinkerersSmithing.ID, "smithing_tool_material_loader");
 
 	public SmithingToolMaterialLoader(Gson gson) {
-		super(gson, "smithing_tool_materials", TinkerersSmithing.TOOL_MATERIALS);
+		super(gson, "smithing_tool_materials", TinkerersSmithing.TOOL_MATERIALS, TinkerersSmithingMaterial.EQUIPMENT_TYPE.TOOL);
 	}
 
 	@Override

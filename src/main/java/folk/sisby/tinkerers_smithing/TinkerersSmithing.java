@@ -5,6 +5,7 @@ import folk.sisby.tinkerers_smithing.data.SmithingToolMaterialLoader;
 import folk.sisby.tinkerers_smithing.data.SmithingTypeLoader;
 import folk.sisby.tinkerers_smithing.data.SmithingUnitCostManager;
 import folk.sisby.tinkerers_smithing.recipe.ShapelessRepairRecipe;
+import folk.sisby.tinkerers_smithing.recipe.ShapelessUpgradeRecipe;
 import net.minecraft.item.Item;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.SpecialRecipeSerializer;
@@ -29,27 +30,55 @@ public class TinkerersSmithing implements ModInitializer {
 
 	public static final TagKey<Item> DEWORK_INGREDIENTS = TagKey.of(Registry.ITEM_KEY, new Identifier(ID, "dework_ingredients"));
 	public static final SpecialRecipeSerializer<ShapelessRepairRecipe> SHAPELESS_REPAIR_SERIALIZER = Registry.register(Registry.RECIPE_SERIALIZER, new Identifier(ID, "crafting_special_shapeless_repair"), new SpecialRecipeSerializer<>(ShapelessRepairRecipe::new));
+	public static final SpecialRecipeSerializer<ShapelessUpgradeRecipe> SHAPELESS_UPGRADE_SERIALIZER = Registry.register(Registry.RECIPE_SERIALIZER, new Identifier(ID, "crafting_special_shapeless_upgrade"), new SpecialRecipeSerializer<>(ShapelessUpgradeRecipe::new));
 
 	// Data
 	public static final Map<Identifier, Collection<Item>> SMITHING_TYPES = new HashMap<>();
 	public static final Map<Identifier, TinkerersSmithingMaterial> TOOL_MATERIALS = new HashMap<>();
 	public static final Map<Identifier, TinkerersSmithingMaterial> ARMOR_MATERIALS = new HashMap<>();
 
+	public static List<TinkerersSmithingMaterial> getAllMaterials() {
+		List<TinkerersSmithingMaterial> outList = new ArrayList<>();
+		outList.addAll(TOOL_MATERIALS.values());
+		outList.addAll(ARMOR_MATERIALS.values());
+		return outList;
+	}
+
 	public static List<Ingredient> getMaterialRepairIngredients(Item item) {
 		List<Ingredient> outList = new ArrayList<>();
 
-		ARMOR_MATERIALS.values().forEach(material -> {
-			if (material.items().contains(item)) {
-				outList.addAll(material.repairMaterials());
-			}
-		});
-		TOOL_MATERIALS.values().forEach(material -> {
+		getAllMaterials().forEach(material -> {
 			if (material.items().contains(item)) {
 				outList.addAll(material.repairMaterials());
 			}
 		});
 
 		return outList;
+	}
+
+	public static Collection<Item> getUpgradePaths(Item item) {
+		Set<Item> outSet = new HashSet<>();
+
+		List<Collection<Item>> types = new ArrayList<>();
+		SMITHING_TYPES.forEach((id, items) -> {
+			if (items.contains(item)) types.add(items);
+		});
+
+		getAllMaterials().forEach(material -> {
+			if (material.items().contains(item)) {
+				Map<Identifier, TinkerersSmithingMaterial> map = material.type() == TinkerersSmithingMaterial.EQUIPMENT_TYPE.ARMOR ? ARMOR_MATERIALS : TOOL_MATERIALS;
+				material.upgradeableTo().forEach(id -> {
+					TinkerersSmithingMaterial upgradeMaterial = map.get(id);
+					upgradeMaterial.items().forEach(upgradeItem -> {
+						if (types.stream().anyMatch(type -> type.contains(upgradeItem))) {
+							outSet.add(upgradeItem);
+						}
+					});
+				});
+			}
+		});
+
+		return outSet;
 	}
 
 	public static void generateUnitCosts(MinecraftServer server) {

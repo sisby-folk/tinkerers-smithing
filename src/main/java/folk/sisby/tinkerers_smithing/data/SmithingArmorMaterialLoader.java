@@ -2,6 +2,7 @@ package folk.sisby.tinkerers_smithing.data;
 
 import com.google.gson.Gson;
 import folk.sisby.tinkerers_smithing.TinkerersSmithing;
+import folk.sisby.tinkerers_smithing.TinkerersSmithingMaterial;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ArmorMaterial;
 import net.minecraft.item.Item;
@@ -15,7 +16,7 @@ public class SmithingArmorMaterialLoader extends SmithingMaterialLoader implemen
 	public static final Identifier ID = new Identifier(TinkerersSmithing.ID, "smithing_armor_material_loader");
 
 	public SmithingArmorMaterialLoader(Gson gson) {
-		super(gson, "smithing_armor_materials", TinkerersSmithing.ARMOR_MATERIALS);
+		super(gson, "smithing_armor_materials", TinkerersSmithing.ARMOR_MATERIALS, TinkerersSmithingMaterial.EQUIPMENT_TYPE.ARMOR);
 	}
 
 	@Override

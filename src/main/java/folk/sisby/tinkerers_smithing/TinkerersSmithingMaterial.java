@@ -6,5 +6,11 @@ import net.minecraft.util.Identifier;
 
 import java.util.List;
 
-public record TinkerersSmithingMaterial(List<Identifier> upgradeableTo, List<Ingredient> repairMaterials, List<Item> items, Identifier sacrificeVia) {
+public record TinkerersSmithingMaterial(EQUIPMENT_TYPE type, List<Identifier> upgradeableTo, List<Ingredient> repairMaterials, List<Item> items, Identifier sacrificeVia) {
+	public enum EQUIPMENT_TYPE {
+		TOOL,
+		ARMOR
+	}
+
+
 }

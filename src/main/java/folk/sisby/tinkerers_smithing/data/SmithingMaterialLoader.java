@@ -19,6 +19,7 @@ import java.util.Map;
 
 public abstract class SmithingMaterialLoader extends JsonDataLoader {
 	public final Map<Identifier, TinkerersSmithingMaterial> outputMap;
+	public final TinkerersSmithingMaterial.EQUIPMENT_TYPE type;
 
 	public static final String KEY_INHERIT_FROM_ITEM = "inheritFromItem";
 	public static final String KEY_REPAIR_MATERIALS = "repairMaterials";
@@ -28,9 +29,10 @@ public abstract class SmithingMaterialLoader extends JsonDataLoader {
 	public static final String KEY_UPGRADES_TO = "upgradesTo";
 	public static final String KEY_SACRIFICE_VIA = "sacrificesVia";
 
-	public SmithingMaterialLoader(Gson gson, String dataType, Map<Identifier, TinkerersSmithingMaterial> outputMap) {
+	public SmithingMaterialLoader(Gson gson, String dataType, Map<Identifier, TinkerersSmithingMaterial> outputMap, TinkerersSmithingMaterial.EQUIPMENT_TYPE type) {
 		super(gson, dataType);
 		this.outputMap = outputMap;
+		this.type = type;
 	}
 
 	@Override
@@ -72,7 +74,7 @@ public abstract class SmithingMaterialLoader extends JsonDataLoader {
 				sacrificeVia = new Identifier(baseObject.get(KEY_SACRIFICE_VIA).getAsString());
 			}
 
-			this.outputMap.put(id, new TinkerersSmithingMaterial(upgradeableTo, repairMaterials, items, sacrificeVia));
+			this.outputMap.put(id, new TinkerersSmithingMaterial(this.type, upgradeableTo, repairMaterials, items, sacrificeVia));
 		});
 		upgradeFromMap.forEach((identifier, identifiers) -> {
 			if (this.outputMap.containsKey(identifier)) {
