@@ -27,7 +27,7 @@ All added recipes keep tools as-is - with enchantments, custom names, and any mo
 
 Tinkerer's Smithing encourages enchanting and naming your tools much earlier - and keeping them in good condition with repairs and small improvements.
 
-If you'd prefer the datapack version for any reason, you can [download it from the repo](https://download-directory.github.io/?url=https://github.com/sisby-folk/tinkerers-smithing/tree/main/src/main/resources) (Direct Download Link)
+If you'd prefer the datapack version for any reason, you can directly download it for NBT Crafting [2.2.3](https://download-directory.github.io/?url=https://github.com/sisby-folk/tinkerers-smithing/tree/nbtc2/src/main/resources).
 
 ## Showcase
 
