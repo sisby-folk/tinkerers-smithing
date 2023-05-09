@@ -106,21 +106,25 @@ public class TinkerersSmithing implements ModInitializer {
 					material.upgradeableTo().forEach(id -> {
 						TinkerersSmithingMaterial upgradeMaterial = map.get(id);
 						TinkerersSmithingMaterial viaMaterial = map.get(upgradeMaterial.sacrificeVia());
-						upgradeMaterial.items().forEach(upgradeItem -> {
-							Map<Item, Integer> sacrifices = new HashMap<>();
-							upgradeMaterial.items().forEach(sacrificeItem -> {
-								List<Collection<Item>> upgradeTypes = new ArrayList<>();
-								SMITHING_TYPES.forEach((typeId, items) -> {
-									if (items.contains(item)) upgradeTypes.add(items);
-								});
-								viaMaterial.items().forEach(viaItem -> {
-									if (upgradeTypes.stream().anyMatch(type -> type.contains(viaItem)) && viaItem instanceof TinkerersSmithingItem vtsi && !vtsi.tinkerersSmithing$getUnitCosts().isEmpty()) {
-										sacrifices.put(sacrificeItem, vtsi.tinkerersSmithing$getUnitCosts().values().stream().findFirst().get());
-									}
-								});
+						if (viaMaterial != null) {
+							upgradeMaterial.items().forEach(upgradeItem -> {
+								if (types.stream().anyMatch(type -> type.contains(upgradeItem))) {
+									Map<Item, Integer> sacrifices = new HashMap<>();
+									upgradeMaterial.items().forEach(sacrificeItem -> {
+										List<Collection<Item>> upgradeTypes = new ArrayList<>();
+										SMITHING_TYPES.forEach((typeId, items) -> {
+											if (items.contains(item)) upgradeTypes.add(items);
+										});
+										viaMaterial.items().forEach(viaItem -> {
+											if (upgradeTypes.stream().anyMatch(type -> type.contains(viaItem)) && viaItem instanceof TinkerersSmithingItem vtsi && !vtsi.tinkerersSmithing$getUnitCosts().isEmpty()) {
+												sacrifices.put(sacrificeItem, vtsi.tinkerersSmithing$getUnitCosts().values().stream().findFirst().get());
+											}
+										});
+									});
+									if (!sacrifices.isEmpty()) outMap.put(upgradeItem, sacrifices);
+								}
 							});
-							if (!sacrifices.isEmpty()) outMap.put(upgradeItem, sacrifices);
-						});
+						}
 					});
 				}
 			});
