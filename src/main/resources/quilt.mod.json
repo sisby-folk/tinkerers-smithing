@@ -33,7 +33,7 @@
 				"versions": ">=${ql}"
 			},
 			{
-				"id": "qfapi",
+				"id": "quilted_fabric_api",
 				"versions": ">=${qfapi}"
 			},
 			{
