@@ -25,16 +25,61 @@
 		"intermediate_mappings": "net.fabricmc:intermediary",
 		"depends": [
 			{
-				"id": "quilt_loader",
-				"versions": ">=0.16.0-"
-			},
-			{
 				"id": "minecraft",
-				"versions": ">=1.15"
+				"versions": ">=${mc}"
 			},
 			{
-				"id": "nbtcrafting",
-				"versions": ">=2.2.3"
+				"id": "quilt_loader",
+				"versions": ">=${ql}"
+			},
+			{
+				"id": "qfapi",
+				"versions": ">=${qfapi}"
+			},
+			{
+				"id": "emi",
+				"versions": ">=${emi}",
+				"optional": true
+			},
+			{
+				"id": "farmersdelight",
+				"versions": ">=${farmersDelight}",
+				"optional": true
+			},
+			{
+				"id": "campanion",
+				"versions": ">=${campanion}",
+				"optional": true
+			},
+			{
+				"id": "yttr",
+				"versions": ">=${yttr}",
+				"optional": true
+			},
+			{
+				"id": "create",
+				"versions": ">=${create}",
+				"optional": true
+			},
+			{
+				"id": "botania",
+				"versions": ">=${botania}",
+				"optional": true
+			},
+			{
+				"id": "chalk",
+				"versions": ">=${chalk}",
+				"optional": true
+			},
+			{
+				"id": "consistency_plus",
+				"versions": ">=${consistencyPlus}",
+				"optional": true
+			},
+			{
+				"id": "halfdoors",
+				"versions": ">=${halfdoors}",
+				"optional": true
 			}
 		]
 	},

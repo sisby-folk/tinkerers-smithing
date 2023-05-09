@@ -32,82 +32,38 @@ project.version = project.version + "+nbtc" + nbt_crafting
 group = project.maven_group
 
 repositories {
-	// Add repositories to retrieve artifacts from in here.
-	// You should only use this when depending on other mods because
-	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
-	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
-	// for more information about repositories.
-
-	// Here go other maven servers
-	maven {
-		name "Siphalor's Maven"
-		url "https://maven.siphalor.de"
-	}
-
-	maven { // Cloth Config
-		url "https://maven.shedaniel.me/"
-	}
-	maven { // ModMenu
-		url "https://maven.terraformersmc.com/"
-	}
-	// For some testing dependencies of Nbt Crafting
-	maven {
-		name "Jitpack"
-		url "https://jitpack.io"
-	}
-	maven {
-		url "https://api.modrinth.com/maven"
-		content {
-			includeGroup "maven.modrinth"
-		}
-	}
-	// Compat
-	maven {
-		url 'https://repo.sleeping.town'
-	}
-	repositories {
-		maven { url 'https://maven.blamejared.com' }
-	}
-	maven {
-		url "https://maven.jamieswhiteshirt.com/libs-release"
-		content {
-			includeGroup "com.jamieswhiteshirt"
-		}
-	}
-	maven {
-		url 'https://ladysnake.jfrog.io/artifactory/mods'
-	}
-	maven {
-		url 'https://maven.cafeteria.dev'
-		content {
-			includeGroup 'net.adriantodt.fabricmc'
-		}
-	}
+	maven { url "https://maven.shedaniel.me/" }
+	maven { url "https://maven.terraformersmc.com/" }
+	maven { url "https://jitpack.io" }
+	maven { url "https://api.modrinth.com/maven" }
+	maven { url 'https://repo.sleeping.town' }
+	maven { url 'https://maven.blamejared.com' }
+	maven { url "https://maven.jamieswhiteshirt.com/libs-release" }
+	maven { url 'https://ladysnake.jfrog.io/artifactory/mods' }
+	maven { url 'https://maven.cafeteria.dev' }
 	// Create
-	maven { url = "https://dvs1.progwml6.com/files/maven/" } // JEI
-	maven { url = "https://maven.parchmentmc.org" } // Parchment mappings
-	maven { url = "https://maven.quiltmc.org/repository/release" } // Quilt Mappings
-	maven { url = "https://mvn.devos.one/snapshots/" } // Create, Porting Lib, Forge Tags, Milk Lib, Registrate
-	maven { url = "https://cursemaven.com" } // Forge Config API Port
-	maven {
-		name = "Fuzs Mod Resources"
-		url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/"
-	}
-	maven { url = "https://maven.tterrag.com/" } // Flywheel
+	maven { url "https://dvs1.progwml6.com/files/maven/" }
+	maven { url "https://maven.parchmentmc.org" }
+	maven { url "https://maven.quiltmc.org/repository/release" }
+	maven { url "https://mvn.devos.one/snapshots/" }
+	maven { url "https://cursemaven.com" }
+	maven { url "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/" }
+	maven { url "https://maven.tterrag.com/" }
 }
 
 // All the dependencies are declared at gradle/libs.version.toml and referenced with "libs.<id>"
 // See https://docs.gradle.org/current/userguide/platforms.html for information on how version catalogs work.
 dependencies {
 	// // Base // //
-	minecraft libs.minecraft
+	minecraft libs.mc
 	mappings variantOf(libs.qm) { classifier "intermediary-v2" }
 	modImplementation libs.ql
 	modImplementation libs.qsl
 	modImplementation libs.qfapi
 
 	// // Libraries // //
-	modImplementation libs.nbtCrafting
+	modCompileOnly libs.emi
+	modLocalRuntime libs.emi
 
 	// // Compat Dependencies // //
 	modImplementation libs.lib39aqi
@@ -143,17 +99,26 @@ dependencies {
 	modImplementation libs.create
 }
 
-
 processResources {
-	inputs.property "version", version
+	final Map<String, String> map = [
+		"version"        : version.toString(),
+		"mc"             : libs.versions.mc.get(),
+		"ql"             : libs.versions.ql.get(),
+		"qsl"            : libs.versions.qsl.get(),
+		"qfapi"          : libs.versions.qfapi.get(),
+		"emi"            : libs.versions.emi.get(),
+		"farmersDelight" : libs.versions.farmersDelight.get(),
+		"campanion"      : libs.versions.campanion.get(),
+		"yttr"           : libs.versions.yttr.get(),
+		"create"         : libs.versions.create.get(),
+		"botania"        : libs.versions.botania.get(),
+		"chalk"          : libs.versions.chalk.get(),
+		"consistencyPlus": libs.versions.consistencyPlus.get(),
+		"halfdoors"      : libs.versions.halfdoors.get(),
+	]
 
-	filesMatching('quilt.mod.json') {
-		expand "version": version
-	}
-
-	filesMatching('fabric.mod.json') {
-		expand "version": version
-	}
+	inputs.properties(map)
+	filesMatching('quilt.mod.json') { expand(map) }
 }
 
 tasks.withType(JavaCompile).configureEach {
@@ -197,8 +162,8 @@ if (System.getenv("MODRINTH_TOKEN")) {
 		versionName = origVersion
 		versionType = 'release'
 		uploadFile = remapJar
-		gameVersions = ['1.15', '1.15.1', '1.15.2', '1.16', '1.16.1', '1.16.2', '1.16.3', '1.16.4', '1.16.5', '1.17', '1.17.1', '1.18', '1.18.1', '1.18.2', '1.19', '1.19.1', '1.19.2']
-		loaders = ['quilt', 'fabric']
+		gameVersions = [mc]
+		loaders = ['quilt']
 		detectLoaders = false
 		dependencies {
 			required.project "nbt-crafting"

@@ -20,27 +20,27 @@ dependencyResolutionManagement {
 			def mc = mc_major + '.2'
 
 			// // Build Tools // //
-			version('loom', '1.0.+')
+			version('loom', '1.1.+')
 
 			plugin('loom', 'org.quiltmc.loom').versionRef('loom')
 
 			// // Base // //
-			version('minecraft', mc)
+			version('mc', mc)
 			version('ql', "0.17.10")
 			version('qm', "${mc}+build.21")
 			version('qsl', "3.0.0-beta.29+${mc}")
 			version('qfapi', "4.0.0-beta.28+0.73.2-${mc}")
 
-			library('minecraft', 'mojang', 'minecraft').versionRef('minecraft')
+			library('mc', 'mojang', 'minecraft').versionRef('mc')
 			library('ql', 'org.quiltmc', 'quilt-loader').versionRef('ql')
 			library('qm', 'org.quiltmc', 'quilt-mappings').versionRef('qm')
 			library('qsl', 'org.quiltmc', 'qsl').versionRef('qsl')
 			library('qfapi', 'org.quiltmc.quilted-fabric-api', 'quilted-fabric-api',).versionRef('qfapi')
 
 			// // Libraries // //
-			version('nbtCrafting', "2.2.3+mc${mc_major}")
+			version('emi', "0.7.3+${mc}")
 
-			library('nbtCrafting', 'de.siphalor', 'nbtcrafting-' + mc_major).versionRef('nbtCrafting')
+			library('emi', 'dev.emi', 'emi').versionRef('emi')
 
 
 			// // Compat // //
