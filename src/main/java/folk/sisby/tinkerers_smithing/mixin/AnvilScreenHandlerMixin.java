@@ -38,6 +38,14 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 		}
 	}
 
+	@Redirect(method = "canTakeOutput", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/Property;get()I", ordinal = 1))
+	private int allowTakingFreeOutput(Property instance) {
+		if (this.repairItemUsage > 0) {
+			return 1;
+		}
+		return instance.get();
+	}
+
 	@Inject(method = "updateResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z", ordinal = 1), cancellable = true)
 	private void applyDeworkMaterial(CallbackInfo ci) {
 		ItemStack base = this.input.getStack(0);

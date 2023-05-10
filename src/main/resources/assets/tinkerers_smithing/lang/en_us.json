@@ -1,3 +1,4 @@
 {
-  "container.repair.work": "Work Cost: %d"
+  "container.repair.work": "Work Cost: %d",
+  "tag.tinkerers_smithing.dework_ingredients": "De-working Materials"
 }
