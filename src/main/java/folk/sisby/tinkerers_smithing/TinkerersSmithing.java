@@ -239,13 +239,13 @@ public class TinkerersSmithing implements ModInitializer {
 				}
 			}
 			LOGGER.info("[Tinkerer's Smithing] Data Initialized.");
-			LOGGER.info("[Tinkerer's Smithing] Loaded {} Tool Materials with {} Items: [{}]", TOOL_MATERIALS.size(), TOOL_MATERIALS.values().stream().map(m -> m.items.size()).reduce(Integer::sum).get(), TOOL_MATERIALS.entrySet().stream().map(e -> e.getKey().toString() + "(" + e.getValue().items.size() + ")").collect(Collectors.joining(", ")));
-			LOGGER.info("[Tinkerer's Smithing] Loaded {} Armor Materials with {} Items: [{}].", ARMOR_MATERIALS.size(), ARMOR_MATERIALS.values().stream().map(m -> m.items.size()).reduce(Integer::sum).get(), ARMOR_MATERIALS.entrySet().stream().map(e -> e.getKey().toString() + "(" + e.getValue().items.size() + ")").collect(Collectors.joining(", ")));
-			LOGGER.info("[Tinkerer's Smithing] Loaded {} Equipment Types with {} Items: [{}]", SMITHING_TYPES.size(), SMITHING_TYPES.values().stream().map(Collection::size).reduce(Integer::sum).get(), SMITHING_TYPES.entrySet().stream().map(e -> e.getKey().toString() + "(" + e.getValue().size() + ")").collect(Collectors.joining(", ")));
-			LOGGER.info("[Tinkerer's Smithing] Loaded {} Unit costs over {} Items", costsAdded, costItemsAdded);
-			if (!noUnitCostRecipes.isEmpty()) LOGGER.info("[Tinkerer's Smithing] {} equipment items without unit cost recipes: [{}]", noUnitCostRecipes.size(), noUnitCostRecipes.stream().map(Identifier::toString).collect(Collectors.joining(", ")));
-			if (!noMaterialsDamageable.isEmpty()) LOGGER.info("[Tinkerer's Smithing] {} damageable items without repair materials: [{}]", noMaterialsDamageable.size(), noMaterialsDamageable.stream().map(Identifier::toString).collect(Collectors.joining(", ")));
-			if (!defaultedMaterial.isEmpty()) LOGGER.info("[Tinkerer's Smithing] {} equipment items without registered repair materials: [{}]", defaultedMaterial.size(), defaultedMaterial.stream().map(Identifier::toString).collect(Collectors.joining(", ")));
+			LOGGER.info("[Tinkerer's Smithing] Registered {} Tool Materials with {} items: [{}]", TOOL_MATERIALS.size(), TOOL_MATERIALS.values().stream().map(m -> m.items.size()).reduce(Integer::sum).get(), TOOL_MATERIALS.entrySet().stream().map(e -> e.getKey().toString() + "(" + e.getValue().items.size() + ")").collect(Collectors.joining(", ")));
+			LOGGER.info("[Tinkerer's Smithing] Registered {} Armor Materials with {} items: [{}].", ARMOR_MATERIALS.size(), ARMOR_MATERIALS.values().stream().map(m -> m.items.size()).reduce(Integer::sum).get(), ARMOR_MATERIALS.entrySet().stream().map(e -> e.getKey().toString() + "(" + e.getValue().items.size() + ")").collect(Collectors.joining(", ")));
+			LOGGER.info("[Tinkerer's Smithing] Registered {} Equipment Types with {} items: [{}]", SMITHING_TYPES.size(), SMITHING_TYPES.values().stream().map(Collection::size).reduce(Integer::sum).get(), SMITHING_TYPES.entrySet().stream().map(e -> e.getKey().toString() + "(" + e.getValue().size() + ")").collect(Collectors.joining(", ")));
+			LOGGER.info("[Tinkerer's Smithing] Applied {} Unit Costs to {} items", costsAdded, costItemsAdded);
+			if (!noUnitCostRecipes.isEmpty()) LOGGER.warn("[Tinkerer's Smithing] Found {} equipment items without unit cost recipes: [{}]", noUnitCostRecipes.size(), noUnitCostRecipes.stream().map(Identifier::toString).collect(Collectors.joining(", ")));
+			if (!noMaterialsDamageable.isEmpty()) LOGGER.warn("[Tinkerer's Smithing] Found {} damageable items without repair materials: [{}]", noMaterialsDamageable.size(), noMaterialsDamageable.stream().map(Identifier::toString).collect(Collectors.joining(", ")));
+			if (!defaultedMaterial.isEmpty()) LOGGER.warn("[Tinkerer's Smithing] Found {} equipment items without registered repair materials: [{}]", defaultedMaterial.size(), defaultedMaterial.stream().map(Identifier::toString).collect(Collectors.joining(", ")));
 		}
 	}
 
