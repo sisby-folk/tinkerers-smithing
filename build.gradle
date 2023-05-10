@@ -31,23 +31,7 @@ project.version = project.version + "+" + mc_major
 group = project.maven_group
 
 repositories {
-	maven { url "https://maven.shedaniel.me/" }
 	maven { url "https://maven.terraformersmc.com/" }
-	maven { url "https://jitpack.io" }
-	maven { url "https://api.modrinth.com/maven" }
-	maven { url 'https://repo.sleeping.town' }
-	maven { url 'https://maven.blamejared.com' }
-	maven { url "https://maven.jamieswhiteshirt.com/libs-release" }
-	maven { url 'https://ladysnake.jfrog.io/artifactory/mods' }
-	maven { url 'https://maven.cafeteria.dev' }
-	// Create
-	maven { url "https://dvs1.progwml6.com/files/maven/" }
-	maven { url "https://maven.parchmentmc.org" }
-	maven { url "https://maven.quiltmc.org/repository/release" }
-	maven { url "https://mvn.devos.one/snapshots/" }
-	maven { url "https://cursemaven.com" }
-	maven { url "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/" }
-	maven { url "https://maven.tterrag.com/" }
 }
 
 // All the dependencies are declared at gradle/libs.version.toml and referenced with "libs.<id>"
@@ -63,39 +47,6 @@ dependencies {
 	// // Libraries // //
 	modCompileOnly libs.emi
 	modLocalRuntime libs.emi
-
-	// // Compat Dependencies // //
-	modCompileOnly libs.lib39aqi
-	modCompileOnly libs.lib39core
-	modCompileOnly libs.lib39crowbar
-	modCompileOnly libs.lib39deferral
-	modCompileOnly libs.lib39dessicant
-	modCompileOnly libs.lib39fractal
-	modCompileOnly libs.lib39gesundheit
-	modCompileOnly libs.lib39keygen
-	modCompileOnly libs.lib39lockpick
-	modCompileOnly libs.lib39machination
-	modCompileOnly libs.lib39mesh
-	modCompileOnly libs.lib39phantom
-	modCompileOnly libs.lib39recoil
-	modCompileOnly libs.lib39ripple
-	modCompileOnly libs.lib39sandman
-	modCompileOnly libs.lib39tunnel
-	modCompileOnly libs.lib39util
-	modCompileOnly libs.lib39waypoint
-	modCompileOnly libs.lib39weld
-
-	modCompileOnly libs.forgeConfigApiPort
-
-	// // Compat // //
-	modCompileOnly libs.farmersDelight
-	modCompileOnly libs.campanion
-	modCompileOnly libs.halfdoors
-	modCompileOnly libs.chalk
-	modCompileOnly libs.consistencyPlus
-	modCompileOnly libs.yttr
-	modCompileOnly libs.botania
-	modCompileOnly libs.create
 }
 
 processResources {
@@ -105,15 +56,7 @@ processResources {
 		"ql"             : libs.versions.ql.get(),
 		"qsl"            : libs.versions.qsl.get(),
 		"qfapi"          : libs.versions.qfapi.get(),
-		"emi"            : libs.versions.emi.get(),
-		"farmersDelight" : libs.versions.farmersDelight.get(),
-		"campanion"      : libs.versions.campanion.get(),
-		"yttr"           : libs.versions.yttr.get(),
-		"create"         : libs.versions.create.get(),
-		"botania"        : libs.versions.botania.get(),
-		"chalk"          : libs.versions.chalk.get(),
-		"consistencyPlus": libs.versions.consistencyPlus.get(),
-		"halfdoors"      : libs.versions.halfdoors.get(),
+		"emi"            : libs.versions.emi.get()
 	]
 
 	inputs.properties(map)

@@ -43,22 +43,18 @@
 			},
 			{
 				"id": "farmersdelight",
-				"versions": ">=${farmersDelight}",
 				"optional": true
 			},
 			{
 				"id": "campanion",
-				"versions": ">=${campanion}",
 				"optional": true
 			},
 			{
 				"id": "yttr",
-				"versions": ">=${yttr}",
 				"optional": true
 			},
 			{
 				"id": "create",
-				"versions": ">=${create}",
 				"optional": true
 			},
 			{
@@ -67,17 +63,14 @@
 			},
 			{
 				"id": "chalk",
-				"versions": ">=${chalk}",
 				"optional": true
 			},
 			{
 				"id": "consistency_plus",
-				"versions": ">=${consistencyPlus}",
 				"optional": true
 			},
 			{
 				"id": "halfdoors",
-				"versions": ">=${halfdoors}",
 				"optional": true
 			}
 		]
