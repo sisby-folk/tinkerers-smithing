@@ -20,11 +20,6 @@ public class SmithingArmorMaterialLoader extends SmithingMaterialLoader implemen
 	}
 
 	@Override
-	public @NotNull Identifier getQuiltId() {
-		return ID;
-	}
-
-	@Override
 	public Ingredient getDefaultRepairIngredient(Item item) {
 		if (item.isDamageable() && item instanceof ArmorItem ai) {
 			ArmorMaterial material = ai.getMaterial();
@@ -41,5 +36,10 @@ public class SmithingArmorMaterialLoader extends SmithingMaterialLoader implemen
 	@Override
 	public boolean matchingMaterials(Item item1, Item item2) {
 		return item1 instanceof ArmorItem ai1 && item2 instanceof ArmorItem ai2 && ai1.getMaterial() == ai2.getMaterial();
+	}
+
+	@Override
+	public @NotNull Identifier getQuiltId() {
+		return ID;
 	}
 }

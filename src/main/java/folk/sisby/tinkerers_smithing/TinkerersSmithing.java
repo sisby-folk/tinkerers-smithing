@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 public class TinkerersSmithing implements ModInitializer {
 	public static final String ID = "tinkerers_smithing";
@@ -57,8 +58,8 @@ public class TinkerersSmithing implements ModInitializer {
 		List<Ingredient> outList = new ArrayList<>();
 
 		getAllMaterials().forEach(material -> {
-			if (material.items().contains(item)) {
-				outList.addAll(material.repairMaterials());
+			if (material.items.contains(item)) {
+				outList.addAll(material.repairMaterials);
 			}
 		});
 
@@ -76,11 +77,11 @@ public class TinkerersSmithing implements ModInitializer {
 
 		if (!types.isEmpty()) {
 			getAllMaterials().forEach(material -> {
-				if (material.items().contains(item)) {
-					Map<Identifier, TinkerersSmithingMaterial> map = material.type() == TinkerersSmithingMaterial.EQUIPMENT_TYPE.ARMOR ? ARMOR_MATERIALS : TOOL_MATERIALS;
-					material.upgradeableTo().forEach(id -> {
+				if (material.items.contains(item)) {
+					Map<Identifier, TinkerersSmithingMaterial> map = material.type == TinkerersSmithingMaterial.EQUIPMENT_TYPE.ARMOR ? ARMOR_MATERIALS : TOOL_MATERIALS;
+					material.upgradeableTo.forEach(id -> {
 						TinkerersSmithingMaterial upgradeMaterial = map.get(id);
-						upgradeMaterial.items().forEach(upgradeItem -> {
+						upgradeMaterial.items.forEach(upgradeItem -> {
 							if (types.stream().anyMatch(type -> type.contains(upgradeItem))) {
 								outSet.add(upgradeItem);
 							}
@@ -103,17 +104,17 @@ public class TinkerersSmithing implements ModInitializer {
 
 		if (!types.isEmpty()) {
 			for (TinkerersSmithingMaterial material : getAllMaterials()) {
-				if (material.items().contains(item)) {
-					Map<Identifier, TinkerersSmithingMaterial> map = material.type() == TinkerersSmithingMaterial.EQUIPMENT_TYPE.ARMOR ? ARMOR_MATERIALS : TOOL_MATERIALS;
-					for (Identifier id : material.upgradeableTo()) {
+				if (material.items.contains(item)) {
+					Map<Identifier, TinkerersSmithingMaterial> map = material.type == TinkerersSmithingMaterial.EQUIPMENT_TYPE.ARMOR ? ARMOR_MATERIALS : TOOL_MATERIALS;
+					for (Identifier id : material.upgradeableTo) {
 						TinkerersSmithingMaterial upgradeMaterial = map.get(id);
-						TinkerersSmithingMaterial viaMaterial = map.get(upgradeMaterial.sacrificeVia());
+						TinkerersSmithingMaterial viaMaterial = map.get(upgradeMaterial.sacrificeVia);
 						if (viaMaterial != null) {
-							for (Item upgradeItem : upgradeMaterial.items()) {
+							for (Item upgradeItem : upgradeMaterial.items) {
 								if (types.stream().anyMatch(type -> type.contains(upgradeItem))) {
 									Map<Item, Integer> sacrifices = new HashMap<>();
 									int upgradeViaCost = 0;
-									for (Item viaItem : viaMaterial.items()) {
+									for (Item viaItem : viaMaterial.items) {
 										if (viaItem instanceof TinkerersSmithingItem vtsi && !vtsi.tinkerersSmithing$getUnitCosts().isEmpty()) {
 											if (types.stream().anyMatch(type -> type.contains(viaItem))) {
 												upgradeViaCost = vtsi.tinkerersSmithing$getUnitCosts().values().stream().findFirst().get();
@@ -121,13 +122,13 @@ public class TinkerersSmithing implements ModInitializer {
 										}
 									}
 									if (upgradeViaCost > 0) {
-										for (Item sacrificeItem : upgradeMaterial.items()) {
+										for (Item sacrificeItem : upgradeMaterial.items) {
 											List<Collection<Item>> sacrificeTypes = new ArrayList<>();
 											SMITHING_TYPES.forEach((typeId, items) -> {
 												if (items.contains(sacrificeItem)) sacrificeTypes.add(items);
 											});
 											int sacrificeViaCost = 0;
-											for (Item viaItem : viaMaterial.items()) {
+											for (Item viaItem : viaMaterial.items) {
 												if (viaItem instanceof TinkerersSmithingItem vtsi && !vtsi.tinkerersSmithing$getUnitCosts().isEmpty()) {
 													if (sacrificeTypes.stream().anyMatch(type -> type.contains(viaItem))) {
 														sacrificeViaCost = vtsi.tinkerersSmithing$getUnitCosts().values().stream().findFirst().get();
@@ -186,7 +187,6 @@ public class TinkerersSmithing implements ModInitializer {
 							LOGGER.warn("[Tinkerer's Smithing] No unit cost recipe for {}", itemId);
 						}
 					}
-
 					if (override != null) {
 						costs.putAll(override.costs());
 					}
@@ -196,9 +196,9 @@ public class TinkerersSmithing implements ModInitializer {
 				}
 			});
 			LOGGER.info("[Tinkerer's Smithing] Data Initialized.");
-			LOGGER.info("[Tinkerer's Smithing] Loaded {} Tool Materials with {} Items.", TOOL_MATERIALS.size(), TOOL_MATERIALS.values().stream().map(m -> m.items().size()).reduce(Integer::sum).get());
-			LOGGER.info("[Tinkerer's Smithing] Loaded {} Armor Materials with {} Items.", ARMOR_MATERIALS.size(), ARMOR_MATERIALS.values().stream().map(m -> m.items().size()).reduce(Integer::sum).get());
-			LOGGER.info("[Tinkerer's Smithing] Loaded {} Equipment Types with {} Items.", SMITHING_TYPES.size(), SMITHING_TYPES.values().stream().map(Collection::size).reduce(Integer::sum).get());
+			LOGGER.info("[Tinkerer's Smithing] Loaded {} Tool Materials with {} Items: {}", TOOL_MATERIALS.size(), TOOL_MATERIALS.values().stream().map(m -> m.items.size()).reduce(Integer::sum).get(), TOOL_MATERIALS.entrySet().stream().map(e -> e.getKey().toString() + "(" + e.getValue().items.size() + ")").collect(Collectors.joining(", ")));
+			LOGGER.info("[Tinkerer's Smithing] Loaded {} Armor Materials with {} Items: {}.", ARMOR_MATERIALS.size(), ARMOR_MATERIALS.values().stream().map(m -> m.items.size()).reduce(Integer::sum).get(), ARMOR_MATERIALS.entrySet().stream().map(e -> e.getKey().toString() + "(" + e.getValue().items.size() + ")").collect(Collectors.joining(", ")));
+			LOGGER.info("[Tinkerer's Smithing] Loaded {} Equipment Types with {} Items: {}", SMITHING_TYPES.size(), SMITHING_TYPES.values().stream().map(Collection::size).reduce(Integer::sum).get(), SMITHING_TYPES.entrySet().stream().map(e -> e.getKey().toString() + "(" + e.getValue().size() + ")").collect(Collectors.joining(", ")));
 			LOGGER.info("[Tinkerer's Smithing] Loaded {} Unit costs over {} Items.", costsAdded, costItemsAdded);
 		}
 	}

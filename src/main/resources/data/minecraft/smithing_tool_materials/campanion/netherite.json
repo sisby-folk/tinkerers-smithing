@@ -1,0 +1,13 @@
+{
+  "addItem": [
+    "campanion:netherite_spear"
+  ],
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "campanion"
+      ]
+    }
+  ]
+}

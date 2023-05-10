@@ -3,7 +3,9 @@ package folk.sisby.tinkerers_smithing.data;
 import com.google.gson.Gson;
 import folk.sisby.tinkerers_smithing.TinkerersSmithing;
 import folk.sisby.tinkerers_smithing.TinkerersSmithingMaterial;
-import net.minecraft.item.*;
+import net.minecraft.item.Item;
+import net.minecraft.item.ToolItem;
+import net.minecraft.item.ToolMaterial;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
@@ -15,11 +17,6 @@ public class SmithingToolMaterialLoader extends SmithingMaterialLoader implement
 
 	public SmithingToolMaterialLoader(Gson gson) {
 		super(gson, "smithing_tool_materials", TinkerersSmithing.TOOL_MATERIALS, TinkerersSmithingMaterial.EQUIPMENT_TYPE.TOOL);
-	}
-
-	@Override
-	public @NotNull Identifier getQuiltId() {
-		return ID;
 	}
 
 	@Override
@@ -39,5 +36,10 @@ public class SmithingToolMaterialLoader extends SmithingMaterialLoader implement
 	@Override
 	public boolean matchingMaterials(Item item1, Item item2) {
 		return item1 instanceof ToolItem ti1 && item2 instanceof ToolItem ti2 && ti1.getMaterial() == ti2.getMaterial();
+	}
+
+	@Override
+	public @NotNull Identifier getQuiltId() {
+		return ID;
 	}
 }
