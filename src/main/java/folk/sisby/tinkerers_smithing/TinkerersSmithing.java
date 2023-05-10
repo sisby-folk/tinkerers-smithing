@@ -8,9 +8,7 @@ import folk.sisby.tinkerers_smithing.recipe.SacrificeUpgradeRecipe;
 import folk.sisby.tinkerers_smithing.recipe.ShapelessRepairRecipe;
 import folk.sisby.tinkerers_smithing.recipe.ShapelessUpgradeRecipe;
 import folk.sisby.tinkerers_smithing.recipe.SmithingUpgradeRecipe;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ToolItem;
+import net.minecraft.item.*;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.SpecialRecipeSerializer;
@@ -29,7 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class TinkerersSmithing implements ModInitializer {
@@ -54,7 +52,7 @@ public class TinkerersSmithing implements ModInitializer {
 		return outList;
 	}
 
-	public static List<Ingredient> getMaterialRepairIngredients(Item item) {
+	public static List<Ingredient> getMaterialRepairIngredients(Consumer<Identifier> defaultConsumer, Item item) {
 		List<Ingredient> outList = new ArrayList<>();
 
 		getAllMaterials().forEach(material -> {
@@ -62,6 +60,31 @@ public class TinkerersSmithing implements ModInitializer {
 				outList.addAll(material.repairMaterials);
 			}
 		});
+
+		if (outList.isEmpty()) {
+			if (item instanceof ArmorItem || item instanceof ToolItem) {
+				defaultConsumer.accept(Registry.ITEM.getId(item));
+			}
+			if (item.isDamageable() && item instanceof ArmorItem ai) {
+				ArmorMaterial material = ai.getMaterial();
+				if (material != null) {
+					Ingredient repairIngredient = material.getRepairIngredient();
+					if (repairIngredient != null && !repairIngredient.isEmpty()) {
+						outList.add(repairIngredient);
+					}
+				}
+			}
+			if (item.isDamageable() && item instanceof ToolItem ti) {
+				ToolMaterial material = ti.getMaterial();
+				if (material != null) {
+					Ingredient repairIngredient = material.getRepairIngredient();
+					if (repairIngredient != null && !repairIngredient.isEmpty()) {
+						outList.add(repairIngredient);
+					}
+				}
+			}
+		}
+
 
 		return outList;
 	}
@@ -166,11 +189,14 @@ public class TinkerersSmithing implements ModInitializer {
 
 	public static void generateUnitCosts(MinecraftServer server) {
 		if (server != null) {
-			AtomicInteger costsAdded = new AtomicInteger();
-			AtomicInteger costItemsAdded = new AtomicInteger();
-			Registry.ITEM.forEach(item -> {
+			int costsAdded = 0;
+			int costItemsAdded = 0;
+			List<Identifier> noUnitCostRecipes = new ArrayList<>();
+			List<Identifier> noMaterialsDamageable = new ArrayList<>();
+			List<Identifier> defaultedMaterial = new ArrayList<>();
+			for (Item item : Registry.ITEM) {
 				Identifier itemId = Registry.ITEM.getId(item);
-				List<Ingredient> repairIngredients = getMaterialRepairIngredients(item);
+				List<Ingredient> repairIngredients = getMaterialRepairIngredients(defaultedMaterial::add, item);
 				if (item instanceof TinkerersSmithingItem tsi && !repairIngredients.isEmpty()) {
 					Map<Ingredient, Integer> costs = tsi.tinkerersSmithing$getUnitCosts();
 					costs.clear();
@@ -178,40 +204,48 @@ public class TinkerersSmithing implements ModInitializer {
 					SmithingUnitCostManager.UnitCostOverride override = SmithingUnitCostManager.INSTANCE.costOverrides.get(item);
 
 					if (override == null || !override.replace()) {
-						// Naively calculate unit cost by testing the recipe with the same ID as the item itself
-						Recipe<?> recipe = server.getRecipeManager().get(itemId).orElse(null);
-						if (recipe == null)
-							recipe = server.getRecipeManager().get(new Identifier(itemId.getNamespace(), "crafting/" + itemId.getPath())).orElse(null);
-						if (recipe != null) {
-							if (recipe.getOutput().isOf(item)) {
-								for (Ingredient repairIngredient : repairIngredients) {
-									int unitCost = Math.toIntExact(recipe.getIngredients().stream()
-										.filter(ingredient -> Arrays.stream(ingredient.getMatchingStacks()).allMatch(repairIngredient))
-										.filter(ingredient -> Arrays.stream(repairIngredient.getMatchingStacks()).allMatch(ingredient))
-										.count());
-									if (unitCost > 0) {
-										costsAdded.getAndIncrement();
-										costs.put(repairIngredient, unitCost);
+						// Naively calculate unit cost by testing the recipe with the same ID as the item itself (ignoring path directories)
+						List<Identifier> recipeIds = server.getRecipeManager().keys().filter(id -> id.getNamespace().equals(itemId.getNamespace()) && itemId.getPath().equals(id.getPath().substring(id.getPath().lastIndexOf('/') + 1))).toList();
+
+						for (Identifier recipeId : recipeIds) {
+							Recipe<?> recipe = server.getRecipeManager().get(recipeId).orElse(null);
+							if (recipe != null) {
+								if (recipe.getOutput().isOf(item)) {
+									for (Ingredient repairIngredient : repairIngredients) {
+										int unitCost = Math.toIntExact(recipe.getIngredients().stream()
+											.filter(ingredient -> Arrays.stream(ingredient.getMatchingStacks()).allMatch(repairIngredient))
+											.filter(ingredient -> Arrays.stream(repairIngredient.getMatchingStacks()).allMatch(ingredient))
+											.count());
+										if (unitCost > 0) {
+											costsAdded++;
+											costs.put(repairIngredient, unitCost);
+										}
 									}
 								}
 							}
-						} else {
-							LOGGER.warn("[Tinkerer's Smithing] No unit cost recipe for {}", itemId);
+						}
+						if (recipeIds.isEmpty()) {
+							noUnitCostRecipes.add(itemId);
 						}
 					}
 					if (override != null) {
 						costs.putAll(override.costs());
 					}
-					if (!costs.isEmpty()) costItemsAdded.getAndIncrement();
-				} else if (item instanceof ToolItem || item instanceof ArmorItem) {
-					LOGGER.warn("[Tinkerer's Smithing] No material registered for {}", itemId);
+					if (!costs.isEmpty()) {
+						costItemsAdded++;
+					}
+				} else if (item.isDamageable()) {
+					noMaterialsDamageable.add(itemId);
 				}
-			});
+			}
 			LOGGER.info("[Tinkerer's Smithing] Data Initialized.");
-			LOGGER.info("[Tinkerer's Smithing] Loaded {} Tool Materials with {} Items: {}", TOOL_MATERIALS.size(), TOOL_MATERIALS.values().stream().map(m -> m.items.size()).reduce(Integer::sum).get(), TOOL_MATERIALS.entrySet().stream().map(e -> e.getKey().toString() + "(" + e.getValue().items.size() + ")").collect(Collectors.joining(", ")));
-			LOGGER.info("[Tinkerer's Smithing] Loaded {} Armor Materials with {} Items: {}.", ARMOR_MATERIALS.size(), ARMOR_MATERIALS.values().stream().map(m -> m.items.size()).reduce(Integer::sum).get(), ARMOR_MATERIALS.entrySet().stream().map(e -> e.getKey().toString() + "(" + e.getValue().items.size() + ")").collect(Collectors.joining(", ")));
-			LOGGER.info("[Tinkerer's Smithing] Loaded {} Equipment Types with {} Items: {}", SMITHING_TYPES.size(), SMITHING_TYPES.values().stream().map(Collection::size).reduce(Integer::sum).get(), SMITHING_TYPES.entrySet().stream().map(e -> e.getKey().toString() + "(" + e.getValue().size() + ")").collect(Collectors.joining(", ")));
-			LOGGER.info("[Tinkerer's Smithing] Loaded {} Unit costs over {} Items.", costsAdded, costItemsAdded);
+			LOGGER.info("[Tinkerer's Smithing] Loaded {} Tool Materials with {} Items: [{}]", TOOL_MATERIALS.size(), TOOL_MATERIALS.values().stream().map(m -> m.items.size()).reduce(Integer::sum).get(), TOOL_MATERIALS.entrySet().stream().map(e -> e.getKey().toString() + "(" + e.getValue().items.size() + ")").collect(Collectors.joining(", ")));
+			LOGGER.info("[Tinkerer's Smithing] Loaded {} Armor Materials with {} Items: [{}].", ARMOR_MATERIALS.size(), ARMOR_MATERIALS.values().stream().map(m -> m.items.size()).reduce(Integer::sum).get(), ARMOR_MATERIALS.entrySet().stream().map(e -> e.getKey().toString() + "(" + e.getValue().items.size() + ")").collect(Collectors.joining(", ")));
+			LOGGER.info("[Tinkerer's Smithing] Loaded {} Equipment Types with {} Items: [{}]", SMITHING_TYPES.size(), SMITHING_TYPES.values().stream().map(Collection::size).reduce(Integer::sum).get(), SMITHING_TYPES.entrySet().stream().map(e -> e.getKey().toString() + "(" + e.getValue().size() + ")").collect(Collectors.joining(", ")));
+			LOGGER.info("[Tinkerer's Smithing] Loaded {} Unit costs over {} Items", costsAdded, costItemsAdded);
+			if (!noUnitCostRecipes.isEmpty()) LOGGER.info("[Tinkerer's Smithing] {} equipment items without unit cost recipes: [{}]", noUnitCostRecipes.size(), noUnitCostRecipes.stream().map(Identifier::toString).collect(Collectors.joining(", ")));
+			if (!noMaterialsDamageable.isEmpty()) LOGGER.info("[Tinkerer's Smithing] {} damageable items without repair materials: [{}]", noMaterialsDamageable.size(), noMaterialsDamageable.stream().map(Identifier::toString).collect(Collectors.joining(", ")));
+			if (!defaultedMaterial.isEmpty()) LOGGER.info("[Tinkerer's Smithing] {} equipment items without registered repair materials: [{}]", defaultedMaterial.size(), defaultedMaterial.stream().map(Identifier::toString).collect(Collectors.joining(", ")));
 		}
 	}
 
