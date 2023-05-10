@@ -47,7 +47,7 @@ public class ShapelessUpgradeRecipe extends SpecialCraftingRecipe implements Cra
 			}
 		}
 
-		if (equipmentStack == null) return null;
+		if (equipmentStack == null || equipmentStack.hasEnchantments()) return null;
 		gridItems.remove(equipmentStack);
 
 		for (Item upgradeItem : TinkerersSmithing.getUpgradePaths(equipmentStack.getItem())) {

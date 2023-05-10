@@ -20,7 +20,7 @@ dependencyResolutionManagement {
 			def mc = mc_major + '.2'
 
 			// // Build Tools // //
-			version('loom', '1.1.+')
+			version('loom', '1.0.+')
 
 			plugin('loom', 'org.quiltmc.loom').versionRef('loom')
 

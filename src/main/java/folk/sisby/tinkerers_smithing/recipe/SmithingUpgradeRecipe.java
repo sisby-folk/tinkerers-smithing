@@ -5,8 +5,12 @@ import folk.sisby.tinkerers_smithing.TinkerersSmithingItem;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.*;
+import net.minecraft.recipe.Ingredient;
+import net.minecraft.recipe.Recipe;
+import net.minecraft.recipe.RecipeSerializer;
+import net.minecraft.recipe.SmithingRecipe;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Pair;
 import net.minecraft.world.World;
 
 import java.util.Map;
@@ -16,23 +20,31 @@ public class SmithingUpgradeRecipe extends SmithingRecipe implements Recipe<Inve
 		super(identifier, Ingredient.EMPTY, Ingredient.EMPTY, ItemStack.EMPTY);
 	}
 
+	public Pair<Integer, Integer> getUsedRepairStacksAndCost(Item result, ItemStack ingredient) {
+		if (result instanceof TinkerersSmithingItem tsi) {
+			for (Map.Entry<Ingredient, Integer> entry : tsi.tinkerersSmithing$getUnitCosts().entrySet()) {
+				Ingredient upgradeIngredient = entry.getKey();
+				Integer cost = entry.getValue();
+				if (upgradeIngredient.test(ingredient) && ingredient.getCount() >= cost - 4) {
+					return new Pair<>(Math.min(ingredient.getCount(), cost), cost);
+				}
+			}
+		}
+		return null;
+	}
+
 	public ItemStack getValidOutput(Inventory inventory) {
 		ItemStack base = inventory.getStack(0);
 		ItemStack ingredient = inventory.getStack(1);
 
 		if (!base.isEmpty() && !ingredient.isEmpty()) {
 			for (Item upgradeItem : TinkerersSmithing.getUpgradePaths(base.getItem())) {
-				if (upgradeItem instanceof TinkerersSmithingItem tsi) {
-					for (Map.Entry<Ingredient, Integer> entry : tsi.tinkerersSmithing$getUnitCosts().entrySet()) {
-						Ingredient upgradeIngredient = entry.getKey();
-						Integer cost = entry.getValue();
-						if (upgradeIngredient.test(ingredient) && cost <= 5) {
-							ItemStack resultStack = upgradeItem.getDefaultStack();
-							resultStack.setNbt(base.getOrCreateNbt().copy());
-							resultStack.setDamage((int) Math.floor(upgradeItem.getMaxDamage() * ((cost - 1) / 4.0)));
-							return resultStack;
-						}
-					}
+				Pair<Integer, Integer> usedAndCost = getUsedRepairStacksAndCost(upgradeItem, ingredient);
+				if (usedAndCost != null) {
+					ItemStack resultStack = upgradeItem.getDefaultStack();
+					resultStack.setNbt(base.getOrCreateNbt().copy());
+					resultStack.setDamage((int) Math.floor(upgradeItem.getMaxDamage() * ((usedAndCost.getRight() - usedAndCost.getLeft()) / 4.0)));
+					return resultStack;
 				}
 			}
 		}
