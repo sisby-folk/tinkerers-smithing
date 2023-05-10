@@ -195,47 +195,50 @@ public class TinkerersSmithing implements ModInitializer {
 			List<Identifier> noMaterialsDamageable = new ArrayList<>();
 			List<Identifier> defaultedMaterial = new ArrayList<>();
 			for (Item item : Registry.ITEM) {
-				Identifier itemId = Registry.ITEM.getId(item);
-				List<Ingredient> repairIngredients = getMaterialRepairIngredients(defaultedMaterial::add, item);
-				if (item instanceof TinkerersSmithingItem tsi && !repairIngredients.isEmpty()) {
+				if (item instanceof TinkerersSmithingItem tsi) {
+					Identifier itemId = Registry.ITEM.getId(item);
 					Map<Ingredient, Integer> costs = tsi.tinkerersSmithing$getUnitCosts();
 					costs.clear();
 
 					SmithingUnitCostManager.UnitCostOverride override = SmithingUnitCostManager.INSTANCE.costOverrides.get(item);
+					List<Ingredient> repairIngredients = getMaterialRepairIngredients(defaultedMaterial::add, item);
 
-					if (override == null || !override.replace()) {
+					if ((override == null || !override.replace()) && repairIngredients.isEmpty() && item.isDamageable()) {
+						noMaterialsDamageable.add(itemId);
+					}
+
+					if ((override == null || !override.replace()) && !repairIngredients.isEmpty()) {
 						// Naively calculate unit cost by testing the recipe with the same ID as the item itself (ignoring path directories)
 						List<Identifier> recipeIds = server.getRecipeManager().keys().filter(id -> id.getNamespace().equals(itemId.getNamespace()) && itemId.getPath().equals(id.getPath().substring(id.getPath().lastIndexOf('/') + 1))).toList();
-
-						for (Identifier recipeId : recipeIds) {
-							Recipe<?> recipe = server.getRecipeManager().get(recipeId).orElse(null);
-							if (recipe != null) {
-								if (recipe.getOutput().isOf(item)) {
-									for (Ingredient repairIngredient : repairIngredients) {
-										int unitCost = Math.toIntExact(recipe.getIngredients().stream()
-											.filter(ingredient -> Arrays.stream(ingredient.getMatchingStacks()).allMatch(repairIngredient))
-											.filter(ingredient -> Arrays.stream(repairIngredient.getMatchingStacks()).allMatch(ingredient))
-											.count());
-										if (unitCost > 0) {
-											costsAdded++;
-											costs.put(repairIngredient, unitCost);
+						if (!recipeIds.isEmpty()) {
+							for (Identifier recipeId : recipeIds) {
+								Recipe<?> recipe = server.getRecipeManager().get(recipeId).orElse(null);
+								if (recipe != null) {
+									if (recipe.getOutput().isOf(item)) {
+										for (Ingredient repairIngredient : repairIngredients) {
+											int unitCost = Math.toIntExact(recipe.getIngredients().stream()
+												.filter(ingredient -> Arrays.stream(ingredient.getMatchingStacks()).allMatch(repairIngredient))
+												.filter(ingredient -> Arrays.stream(repairIngredient.getMatchingStacks()).allMatch(ingredient))
+												.count());
+											if (unitCost > 0) {
+												costsAdded++;
+												costs.put(repairIngredient, unitCost);
+											}
 										}
 									}
 								}
 							}
-						}
-						if (recipeIds.isEmpty()) {
+						} else {
 							noUnitCostRecipes.add(itemId);
 						}
 					}
 					if (override != null) {
 						costs.putAll(override.costs());
+						costsAdded += override.costs().size();
 					}
 					if (!costs.isEmpty()) {
 						costItemsAdded++;
 					}
-				} else if (item.isDamageable()) {
-					noMaterialsDamageable.add(itemId);
 				}
 			}
 			LOGGER.info("[Tinkerer's Smithing] Data Initialized.");
@@ -243,10 +246,14 @@ public class TinkerersSmithing implements ModInitializer {
 			LOGGER.info("[Tinkerer's Smithing] Registered {} Armor Materials with {} items: [{}].", ARMOR_MATERIALS.size(), ARMOR_MATERIALS.values().stream().map(m -> m.items.size()).reduce(Integer::sum).get(), ARMOR_MATERIALS.entrySet().stream().map(e -> e.getKey().toString() + "(" + e.getValue().items.size() + ")").collect(Collectors.joining(", ")));
 			LOGGER.info("[Tinkerer's Smithing] Registered {} Equipment Types with {} items: [{}]", SMITHING_TYPES.size(), SMITHING_TYPES.values().stream().map(Collection::size).reduce(Integer::sum).get(), SMITHING_TYPES.entrySet().stream().map(e -> e.getKey().toString() + "(" + e.getValue().size() + ")").collect(Collectors.joining(", ")));
 			LOGGER.info("[Tinkerer's Smithing] Applied {} Unit Costs to {} items", costsAdded, costItemsAdded);
-			if (!noUnitCostRecipes.isEmpty()) LOGGER.warn("[Tinkerer's Smithing] Found {} equipment items without unit cost recipes: [{}]", noUnitCostRecipes.size(), noUnitCostRecipes.stream().map(Identifier::toString).collect(Collectors.joining(", ")));
-			if (!noMaterialsDamageable.isEmpty()) LOGGER.warn("[Tinkerer's Smithing] Found {} damageable items without repair materials: [{}]", noMaterialsDamageable.size(), noMaterialsDamageable.stream().map(Identifier::toString).collect(Collectors.joining(", ")));
-			if (!defaultedMaterial.isEmpty()) LOGGER.warn("[Tinkerer's Smithing] Found {} equipment items without registered repair materials: [{}]", defaultedMaterial.size(), defaultedMaterial.stream().map(Identifier::toString).collect(Collectors.joining(", ")));
+			if (!noUnitCostRecipes.isEmpty())
+				LOGGER.warn("[Tinkerer's Smithing] Found {} equipment items without unit cost recipes: [{}]", noUnitCostRecipes.size(), noUnitCostRecipes.stream().map(Identifier::toString).collect(Collectors.joining(", ")));
+			if (!noMaterialsDamageable.isEmpty())
+				LOGGER.warn("[Tinkerer's Smithing] Found {} damageable items without repair materials: [{}]", noMaterialsDamageable.size(), noMaterialsDamageable.stream().map(Identifier::toString).collect(Collectors.joining(", ")));
+			if (!defaultedMaterial.isEmpty())
+				LOGGER.warn("[Tinkerer's Smithing] Found {} equipment items without registered repair materials: [{}]", defaultedMaterial.size(), defaultedMaterial.stream().map(Identifier::toString).collect(Collectors.joining(", ")));
 		}
+
 	}
 
 	@Override

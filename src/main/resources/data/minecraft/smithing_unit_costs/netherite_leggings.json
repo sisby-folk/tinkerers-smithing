@@ -1,0 +1,9 @@
+{
+  "replace": true,
+  "values": [
+    {
+      "cost": 7,
+      "item": "minecraft:netherite_ingot"
+    }
+  ]
+}
