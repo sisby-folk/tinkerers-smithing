@@ -106,15 +106,26 @@ public class TinkerersSmithing implements ModInitializer {
 			for (TinkerersSmithingMaterial material : getAllMaterials()) {
 				if (material.items.contains(item)) {
 					Map<Identifier, TinkerersSmithingMaterial> map = material.type == TinkerersSmithingMaterial.EQUIPMENT_TYPE.ARMOR ? ARMOR_MATERIALS : TOOL_MATERIALS;
-					for (Identifier id : material.upgradeableTo) {
-						TinkerersSmithingMaterial upgradeMaterial = map.get(id);
-						TinkerersSmithingMaterial viaMaterial = map.get(upgradeMaterial.sacrificeVia);
-						if (viaMaterial != null) {
+					Map<Identifier, TinkerersSmithingMaterial> otherMap = material.type == TinkerersSmithingMaterial.EQUIPMENT_TYPE.ARMOR ? TOOL_MATERIALS : ARMOR_MATERIALS;
+					for (Identifier upgradeId : material.upgradeableTo) {
+						TinkerersSmithingMaterial upgradeMaterial = map.get(upgradeId);
+						if (upgradeMaterial.sacrificeVia != null) {
+							List<Item> sacrificeViaItems = new ArrayList<>(map.get(upgradeMaterial.sacrificeVia).items);
+							List<Item> sacrificeItems = new ArrayList<>(map.get(upgradeId).items);
+
+							if (otherMap.containsKey(upgradeId)) {
+								TinkerersSmithingMaterial otherUpgradeMaterial = otherMap.get(upgradeId);
+								if (otherUpgradeMaterial.sacrificeVia.equals(upgradeMaterial.sacrificeVia)) {
+									sacrificeViaItems.addAll(otherMap.get(otherUpgradeMaterial.sacrificeVia).items);
+									sacrificeItems.addAll(otherUpgradeMaterial.items);
+								}
+							}
+
 							for (Item upgradeItem : upgradeMaterial.items) {
 								if (types.stream().anyMatch(type -> type.contains(upgradeItem))) {
 									Map<Item, Integer> sacrifices = new HashMap<>();
 									int upgradeViaCost = 0;
-									for (Item viaItem : viaMaterial.items) {
+									for (Item viaItem : map.get(upgradeMaterial.sacrificeVia).items) {
 										if (viaItem instanceof TinkerersSmithingItem vtsi && !vtsi.tinkerersSmithing$getUnitCosts().isEmpty()) {
 											if (types.stream().anyMatch(type -> type.contains(viaItem))) {
 												upgradeViaCost = vtsi.tinkerersSmithing$getUnitCosts().values().stream().findFirst().get();
@@ -122,13 +133,13 @@ public class TinkerersSmithing implements ModInitializer {
 										}
 									}
 									if (upgradeViaCost > 0) {
-										for (Item sacrificeItem : upgradeMaterial.items) {
+										for (Item sacrificeItem : sacrificeItems) {
 											List<Collection<Item>> sacrificeTypes = new ArrayList<>();
 											SMITHING_TYPES.forEach((typeId, items) -> {
 												if (items.contains(sacrificeItem)) sacrificeTypes.add(items);
 											});
 											int sacrificeViaCost = 0;
-											for (Item viaItem : viaMaterial.items) {
+											for (Item viaItem : sacrificeViaItems) {
 												if (viaItem instanceof TinkerersSmithingItem vtsi && !vtsi.tinkerersSmithing$getUnitCosts().isEmpty()) {
 													if (sacrificeTypes.stream().anyMatch(type -> type.contains(viaItem))) {
 														sacrificeViaCost = vtsi.tinkerersSmithing$getUnitCosts().values().stream().findFirst().get();
@@ -169,7 +180,8 @@ public class TinkerersSmithing implements ModInitializer {
 					if (override == null || !override.replace()) {
 						// Naively calculate unit cost by testing the recipe with the same ID as the item itself
 						Recipe<?> recipe = server.getRecipeManager().get(itemId).orElse(null);
-						if (recipe == null) recipe = server.getRecipeManager().get(new Identifier(itemId.getNamespace(), "crafting/" + itemId.getPath())).orElse(null);
+						if (recipe == null)
+							recipe = server.getRecipeManager().get(new Identifier(itemId.getNamespace(), "crafting/" + itemId.getPath())).orElse(null);
 						if (recipe != null) {
 							if (recipe.getOutput().isOf(item)) {
 								for (Ingredient repairIngredient : repairIngredients) {
