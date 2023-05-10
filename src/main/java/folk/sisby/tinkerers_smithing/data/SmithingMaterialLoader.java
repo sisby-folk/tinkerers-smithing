@@ -9,6 +9,7 @@ import net.minecraft.item.Item;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Pair;
 import net.minecraft.util.profiler.Profiler;
 import net.minecraft.util.registry.Registry;
 
@@ -51,7 +52,7 @@ public abstract class SmithingMaterialLoader extends MultiJsonDataLoader {
 	}
 
 	@Override
-	protected void apply(Map<Identifier, Collection<JsonElement>> prepared, ResourceManager manager, Profiler profiler) {
+	protected void apply(Map<Identifier, Collection<Pair<JsonElement, String>>> prepared, ResourceManager manager, Profiler profiler) {
 		this.outputMap.clear();
 		Map<Identifier, List<Identifier>> upgradeFromMap = new HashMap<>();
 		prepared.forEach((id, jsons) -> {
@@ -60,8 +61,8 @@ public abstract class SmithingMaterialLoader extends MultiJsonDataLoader {
 			Set<Item> items = new HashSet<>();
 			Identifier sacrificeVia = null;
 
-			for (JsonElement json : jsons) {
-				JsonObject baseObject = json.getAsJsonObject();
+			for (Pair<JsonElement, String> entry : jsons) {
+				JsonObject baseObject = entry.getLeft().getAsJsonObject();
 				if (baseObject.has(KEY_INHERIT_FROM_ITEM)) {
 					Identifier inheritItemId = Identifier.tryParse(baseObject.get(KEY_INHERIT_FROM_ITEM).getAsString());
 					if (inheritItemId != null) {
