@@ -87,11 +87,13 @@ public class TinkerersSmithingLoader {
 					Map<Identifier, TinkerersSmithingMaterial> map = material.type == TinkerersSmithingMaterial.EQUIPMENT_TYPE.ARMOR ? ARMOR_MATERIALS : TOOL_MATERIALS;
 					material.upgradeableTo.forEach(id -> {
 						TinkerersSmithingMaterial upgradeMaterial = map.get(id);
-						upgradeMaterial.items.forEach(upgradeItem -> {
-							if (types.stream().anyMatch(type -> type.contains(upgradeItem))) {
-								outSet.add(upgradeItem);
-							}
-						});
+						if (upgradeMaterial.sacrificeVia == null) {
+							upgradeMaterial.items.forEach(upgradeItem -> {
+								if (types.stream().anyMatch(type -> type.contains(upgradeItem))) {
+									outSet.add(upgradeItem);
+								}
+							});
+						}
 					});
 				}
 			});
