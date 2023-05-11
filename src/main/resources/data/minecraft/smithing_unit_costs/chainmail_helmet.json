@@ -4,10 +4,6 @@
     {
       "cost": 5,
       "item": "minecraft:chain"
-    },
-    {
-      "cost": 5,
-      "item": "minecraft:iron_ingot"
     }
   ]
 }
