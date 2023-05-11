@@ -9,12 +9,14 @@ import folk.sisby.tinkerers_smithing.recipe.ShapelessRepairRecipe;
 import folk.sisby.tinkerers_smithing.recipe.ShapelessUpgradeRecipe;
 import folk.sisby.tinkerers_smithing.recipe.SmithingUpgradeRecipe;
 import net.minecraft.item.Item;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.SpecialRecipeSerializer;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
+import org.jetbrains.annotations.Nullable;
 import org.quiltmc.loader.api.ModContainer;
 import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
 import org.quiltmc.qsl.lifecycle.api.event.ServerLifecycleEvents;
@@ -40,14 +42,19 @@ public class TinkerersSmithing implements ModInitializer {
 		return LOADER_INSTANCE;
 	}
 
+	public static @Nullable PacketByteBuf SMITHING_RELOAD_BUF = null;
+
 	private static void generateSmithingData(MinecraftServer server) {
 		if (server != null) {
 			getLoaderInstance().generateItemSmithingData(server);
 			LOADER_INSTANCE = null;
+			SMITHING_RELOAD_BUF = TinkerersSmithingNetworking.createSmithingReloadBuf();
+			TinkerersSmithingNetworking.smithingReload(server, SMITHING_RELOAD_BUF);
 		}
 	}
 
 	private static void resetLoader() {
+		SMITHING_RELOAD_BUF = null;
 		LOADER_INSTANCE = new TinkerersSmithingLoader();
 	}
 

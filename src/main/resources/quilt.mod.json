@@ -20,6 +20,15 @@
 		"entrypoints": {
 			"init": [
 				"folk.sisby.tinkerers_smithing.TinkerersSmithing"
+			],
+			"events": [
+				"folk.sisby.tinkerers_smithing.TinkerersSmithingNetworking"
+			],
+			"client_init": [
+				"folk.sisby.tinkerers_smithing.client.TinkerersSmithingClient"
+			],
+			"emi": [
+				"folk.sisby.tinkerers_smithing.client.emi.TinkerersSmithingPlugin"
 			]
 		},
 		"intermediate_mappings": "net.fabricmc:intermediary",
