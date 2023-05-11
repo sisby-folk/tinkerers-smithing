@@ -54,10 +54,10 @@ public abstract class SmithingMaterialLoader extends MultiJsonDataLoader {
 		Map<Identifier, TinkerersSmithingMaterial> outputMap = this.getOutputMap();
 		Map<Identifier, List<Identifier>> upgradeFromMap = new HashMap<>();
 		prepared.forEach((id, jsons) -> {
-			Set<Identifier> upgradeableTo = new HashSet<>();
+			Set<Identifier> upgradesTo = new HashSet<>();
 			List<Ingredient> repairMaterials = new ArrayList<>();
 			Set<Item> items = new HashSet<>();
-			Identifier sacrificeVia = null;
+			Identifier sacrificesVia = null;
 
 			for (Pair<JsonElement, String> entry : jsons) {
 				JsonObject baseObject = entry.getLeft().getAsJsonObject();
@@ -88,29 +88,29 @@ public abstract class SmithingMaterialLoader extends MultiJsonDataLoader {
 					});
 				}
 				if (baseObject.has(KEY_UPGRADES_TO)) {
-					baseObject.get(KEY_UPGRADES_TO).getAsJsonArray().forEach(jsonMaterialId -> upgradeableTo.add(new Identifier(jsonMaterialId.getAsString())));
+					baseObject.get(KEY_UPGRADES_TO).getAsJsonArray().forEach(jsonMaterialId -> upgradesTo.add(new Identifier(jsonMaterialId.getAsString())));
 				}
 				if (baseObject.has(KEY_SACRIFICE_VIA)) {
-					sacrificeVia = new Identifier(baseObject.get(KEY_SACRIFICE_VIA).getAsString());
+					sacrificesVia = new Identifier(baseObject.get(KEY_SACRIFICE_VIA).getAsString());
 				}
 			}
 
-			outputMap.put(id, new TinkerersSmithingMaterial(this.type, upgradeableTo, repairMaterials, items, sacrificeVia));
+			outputMap.put(id, new TinkerersSmithingMaterial(this.type, upgradesTo, repairMaterials, items, sacrificesVia));
 		});
 		upgradeFromMap.forEach((identifier, identifiers) -> {
 			if (outputMap.containsKey(identifier)) {
-				outputMap.get(identifier).upgradeableTo.addAll(identifiers);
+				outputMap.get(identifier).upgradesTo.addAll(identifiers);
 			}
 		});
 		// Remove and warn invalid material references
 		outputMap.forEach((id, material) -> {
-			material.upgradeableTo.stream().filter(i -> !outputMap.containsKey(i)).toList().forEach(removeId -> {
+			material.upgradesTo.stream().filter(i -> !outputMap.containsKey(i)).toList().forEach(removeId -> {
 				TinkerersSmithing.LOGGER.warn("[Tinkerer's Smithing] Invalid upgrade {} in {}", removeId, id);
-				material.upgradeableTo.remove(removeId);
+				material.upgradesTo.remove(removeId);
 			});
-			if (material.sacrificeVia != null && !outputMap.containsKey(material.sacrificeVia)) {
-				TinkerersSmithing.LOGGER.warn("[Tinkerer's Smithing] Invalid via {} in {}", material.sacrificeVia, id);
-				material.sacrificeVia = null;
+			if (material.sacrificesVia != null && !outputMap.containsKey(material.sacrificesVia)) {
+				TinkerersSmithing.LOGGER.warn("[Tinkerer's Smithing] Invalid via {} in {}", material.sacrificesVia, id);
+				material.sacrificesVia = null;
 			}
 		});
 	}

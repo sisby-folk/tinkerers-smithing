@@ -9,17 +9,17 @@ import java.util.Set;
 
 public final class TinkerersSmithingMaterial {
 	public final EQUIPMENT_TYPE type;
-	public final Set<Identifier> upgradeableTo;
+	public final Set<Identifier> upgradesTo;
 	public final List<Ingredient> repairMaterials;
 	public final Set<Item> items;
-	public Identifier sacrificeVia;
+	public Identifier sacrificesVia;
 
-	public TinkerersSmithingMaterial(EQUIPMENT_TYPE type, Set<Identifier> upgradeableTo, List<Ingredient> repairMaterials, Set<Item> items, Identifier sacrificeVia) {
+	public TinkerersSmithingMaterial(EQUIPMENT_TYPE type, Set<Identifier> upgradesTo, List<Ingredient> repairMaterials, Set<Item> items, Identifier sacrificesVia) {
 		this.type = type;
-		this.upgradeableTo = upgradeableTo;
+		this.upgradesTo = upgradesTo;
 		this.repairMaterials = repairMaterials;
 		this.items = items;
-		this.sacrificeVia = sacrificeVia;
+		this.sacrificesVia = sacrificesVia;
 	}
 
 	public enum EQUIPMENT_TYPE {

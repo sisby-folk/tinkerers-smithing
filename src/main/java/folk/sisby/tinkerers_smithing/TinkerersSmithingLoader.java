@@ -85,9 +85,9 @@ public class TinkerersSmithingLoader {
 			getAllMaterials().forEach(material -> {
 				if (material.items.contains(item)) {
 					Map<Identifier, TinkerersSmithingMaterial> map = material.type == TinkerersSmithingMaterial.EQUIPMENT_TYPE.ARMOR ? ARMOR_MATERIALS : TOOL_MATERIALS;
-					material.upgradeableTo.forEach(id -> {
+					material.upgradesTo.forEach(id -> {
 						TinkerersSmithingMaterial upgradeMaterial = map.get(id);
-						if (upgradeMaterial.sacrificeVia == null) {
+						if (upgradeMaterial.sacrificesVia == null) {
 							upgradeMaterial.items.forEach(upgradeItem -> {
 								if (types.stream().anyMatch(type -> type.contains(upgradeItem))) {
 									outSet.add(upgradeItem);
@@ -170,51 +170,46 @@ public class TinkerersSmithingLoader {
 				if (material.items.contains(item)) {
 					Map<Identifier, TinkerersSmithingMaterial> map = material.type == TinkerersSmithingMaterial.EQUIPMENT_TYPE.ARMOR ? ARMOR_MATERIALS : TOOL_MATERIALS;
 					Map<Identifier, TinkerersSmithingMaterial> otherMap = material.type == TinkerersSmithingMaterial.EQUIPMENT_TYPE.ARMOR ? TOOL_MATERIALS : ARMOR_MATERIALS;
-					for (Identifier upgradeId : material.upgradeableTo) {
+					for (Identifier upgradeId : material.upgradesTo) {
 						TinkerersSmithingMaterial upgradeMaterial = map.get(upgradeId);
-						if (upgradeMaterial.sacrificeVia != null) {
-							List<Item> sacrificeViaItems = new ArrayList<>(map.get(upgradeMaterial.sacrificeVia).items);
+						if (upgradeMaterial.sacrificesVia != null) {
+							List<Item> sacrificesViaItems = new ArrayList<>(map.get(upgradeMaterial.sacrificesVia).items);
 							List<Item> sacrificeItems = new ArrayList<>(map.get(upgradeId).items);
 
 							if (otherMap.containsKey(upgradeId)) {
 								TinkerersSmithingMaterial otherUpgradeMaterial = otherMap.get(upgradeId);
-								if (otherUpgradeMaterial.sacrificeVia.equals(upgradeMaterial.sacrificeVia)) {
-									sacrificeViaItems.addAll(otherMap.get(otherUpgradeMaterial.sacrificeVia).items);
+								if (otherUpgradeMaterial.sacrificesVia.equals(upgradeMaterial.sacrificesVia)) {
+									sacrificesViaItems.addAll(otherMap.get(otherUpgradeMaterial.sacrificesVia).items);
 									sacrificeItems.addAll(otherUpgradeMaterial.items);
 								}
 							}
 
-							for (Item upgradeItem : upgradeMaterial.items) {
-								if (types.stream().anyMatch(type -> type.contains(upgradeItem))) {
-									Map<Item, Integer> sacrifices = new HashMap<>();
-									int upgradeViaCost = 0;
-									for (Item viaItem : map.get(upgradeMaterial.sacrificeVia).items) {
-										if (viaItem instanceof TinkerersSmithingItem vtsi && !vtsi.tinkerersSmithing$getUnitCosts().isEmpty()) {
-											if (types.stream().anyMatch(type -> type.contains(viaItem))) {
-												upgradeViaCost = vtsi.tinkerersSmithing$getUnitCosts().values().stream().findFirst().orElse(0);
+							for (Item upgradeItem : upgradeMaterial.items.stream().filter(upgradeItem -> types.stream().anyMatch(type -> type.contains(upgradeItem))).toList()) {
+								Map<Item, Integer> sacrifices = new HashMap<>();
+								int upgradeViaCost = 0;
+								for (Item viaItem : map.get(upgradeMaterial.sacrificesVia).items.stream().filter(viaItem -> types.stream().anyMatch(type -> type.contains(viaItem))).toList()) {
+									if (viaItem instanceof TinkerersSmithingItem vtsi && !vtsi.tinkerersSmithing$getUnitCosts().isEmpty()) {
+										upgradeViaCost = vtsi.tinkerersSmithing$getUnitCosts().values().stream().findFirst().orElse(0);
+									}
+								}
+								if (upgradeViaCost > 0) {
+									for (Item sacrificeItem : sacrificeItems) {
+										List<Collection<Item>> sacrificeTypes = new ArrayList<>();
+										SMITHING_TYPES.forEach((typeId, items) -> {
+											if (items.contains(sacrificeItem)) sacrificeTypes.add(items);
+										});
+										int sacrificesViaCost = 0;
+										for (Item viaItem : sacrificesViaItems.stream().filter(viaItem -> sacrificeTypes.stream().anyMatch(type -> type.contains(viaItem))).toList()) {
+											if (viaItem instanceof TinkerersSmithingItem vtsi && !vtsi.tinkerersSmithing$getUnitCosts().isEmpty()) {
+												sacrificesViaCost = vtsi.tinkerersSmithing$getUnitCosts().values().stream().findFirst().orElse(0);
 											}
+										}
+										if (sacrificesViaCost > 0) {
+											sacrifices.put(sacrificeItem, sacrificesViaCost);
 										}
 									}
-									if (upgradeViaCost > 0) {
-										for (Item sacrificeItem : sacrificeItems) {
-											List<Collection<Item>> sacrificeTypes = new ArrayList<>();
-											SMITHING_TYPES.forEach((typeId, items) -> {
-												if (items.contains(sacrificeItem)) sacrificeTypes.add(items);
-											});
-											int sacrificeViaCost = 0;
-											for (Item viaItem : sacrificeViaItems) {
-												if (viaItem instanceof TinkerersSmithingItem vtsi && !vtsi.tinkerersSmithing$getUnitCosts().isEmpty()) {
-													if (sacrificeTypes.stream().anyMatch(type -> type.contains(viaItem))) {
-														sacrificeViaCost = vtsi.tinkerersSmithing$getUnitCosts().values().stream().findFirst().orElse(0);
-													}
-												}
-											}
-											if (sacrificeViaCost > 0) {
-												sacrifices.put(sacrificeItem, sacrificeViaCost);
-											}
-										}
-										if (!sacrifices.isEmpty())
-											outMap.put(upgradeItem, new Pair<>(upgradeViaCost, sacrifices));
+									if (!sacrifices.isEmpty()) {
+										outMap.put(upgradeItem, new Pair<>(upgradeViaCost, sacrifices));
 									}
 								}
 							}
@@ -253,8 +248,11 @@ public class TinkerersSmithingLoader {
 		TinkerersSmithing.LOGGER.info("[Tinkerer's Smithing] Applied {} Unit Costs to {} items", INFO_ADDED_COSTS, INFO_ADDED_COST_ITEMS);
 		TinkerersSmithing.LOGGER.info("[Tinkerer's Smithing] Applied {} Upgrade Paths to {} items", INFO_ADDED_UPGRADES, INFO_ADDED_UPGRADE_ITEMS);
 		TinkerersSmithing.LOGGER.info("[Tinkerer's Smithing] Applied {} Sacrifice Paths to {} items", INFO_ADDED_SACRIFICES, INFO_ADDED_SACRIFICE_ITEMS);
-		if (!WARN_DEFAULT_MATERIAL.isEmpty()) TinkerersSmithing.LOGGER.warn("[Tinkerer's Smithing] Found {} equipment items without registered repair materials: [{}]", WARN_DEFAULT_MATERIAL.size(), WARN_DEFAULT_MATERIAL.stream().map(Identifier::toString).collect(Collectors.joining(", ")));
-		if (!WARN_NO_RECIPE.isEmpty()) TinkerersSmithing.LOGGER.warn("[Tinkerer's Smithing] Found {} equipment items without unit cost recipes: [{}]", WARN_NO_RECIPE.size(), WARN_NO_RECIPE.stream().map(Identifier::toString).collect(Collectors.joining(", ")));
-		if (!WARN_NO_MATERIALS.isEmpty()) TinkerersSmithing.LOGGER.warn("[Tinkerer's Smithing] Found {} damageable items without repair materials: [{}]", WARN_NO_MATERIALS.size(), WARN_NO_MATERIALS.stream().map(Identifier::toString).collect(Collectors.joining(", ")));
+		if (!WARN_DEFAULT_MATERIAL.isEmpty())
+			TinkerersSmithing.LOGGER.warn("[Tinkerer's Smithing] Found {} equipment items without registered repair materials: [{}]", WARN_DEFAULT_MATERIAL.size(), WARN_DEFAULT_MATERIAL.stream().map(Identifier::toString).collect(Collectors.joining(", ")));
+		if (!WARN_NO_RECIPE.isEmpty())
+			TinkerersSmithing.LOGGER.warn("[Tinkerer's Smithing] Found {} equipment items without unit cost recipes: [{}]", WARN_NO_RECIPE.size(), WARN_NO_RECIPE.stream().map(Identifier::toString).collect(Collectors.joining(", ")));
+		if (!WARN_NO_MATERIALS.isEmpty())
+			TinkerersSmithing.LOGGER.warn("[Tinkerer's Smithing] Found {} damageable items without repair materials: [{}]", WARN_NO_MATERIALS.size(), WARN_NO_MATERIALS.stream().map(Identifier::toString).collect(Collectors.joining(", ")));
 	}
 }
