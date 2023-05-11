@@ -43,6 +43,7 @@ public class TinkerersSmithing implements ModInitializer {
 	private static void generateSmithingData(MinecraftServer server) {
 		if (server != null) {
 			getLoaderInstance().generateItemSmithingData(server);
+			LOADER_INSTANCE = null;
 		}
 	}
 
