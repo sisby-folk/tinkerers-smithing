@@ -7,8 +7,10 @@ import folk.sisby.tinkerers_smithing.TinkerersSmithingItemData;
 import folk.sisby.tinkerers_smithing.client.TinkerersSmithingClient;
 import folk.sisby.tinkerers_smithing.client.emi.recipe.EmiAnvilDeworkRecipe;
 import folk.sisby.tinkerers_smithing.client.emi.recipe.EmiAnvilRepairRecipe;
+import folk.sisby.tinkerers_smithing.client.emi.recipe.EmiSmithingSacrificeRecipe;
 import folk.sisby.tinkerers_smithing.client.emi.recipe.EmiSmithingUpgradeRecipe;
 import net.minecraft.enchantment.Enchantments;
+import net.minecraft.item.Item;
 import net.minecraft.recipe.Ingredient;
 
 import java.util.List;
@@ -38,6 +40,11 @@ public class TinkerersSmithingPlugin implements EmiPlugin {
 				invertedCosts.forEach((cost, ingredients) -> {
 					registry.addRecipe(new EmiSmithingUpgradeRecipe(itemData.item(), ingredients, upgradeItem, cost));
 				});
+			});
+			itemData.sacrificePaths().forEach((upgradeItem, sacrificeData) -> {
+				int resultCost = sacrificeData.getLeft();
+				Map<Item, Integer> sacrificeTools = sacrificeData.getRight();
+				registry.addRecipe(new EmiSmithingSacrificeRecipe(itemData.item(), sacrificeTools, upgradeItem, resultCost));
 			});
 		}
 	}
