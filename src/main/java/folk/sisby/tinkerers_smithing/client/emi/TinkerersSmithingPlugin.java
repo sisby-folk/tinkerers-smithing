@@ -7,6 +7,7 @@ import folk.sisby.tinkerers_smithing.TinkerersSmithingItemData;
 import folk.sisby.tinkerers_smithing.client.TinkerersSmithingClient;
 import folk.sisby.tinkerers_smithing.client.emi.recipe.EmiAnvilDeworkRecipe;
 import folk.sisby.tinkerers_smithing.client.emi.recipe.EmiAnvilRepairRecipe;
+import folk.sisby.tinkerers_smithing.client.emi.recipe.EmiSmithingUpgradeRecipe;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.recipe.Ingredient;
 
@@ -15,6 +16,10 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class TinkerersSmithingPlugin implements EmiPlugin {
+	private static Map<Integer, List<Ingredient>> invertCosts(Map<Ingredient, Integer> map) {
+		return map.entrySet().stream().collect(Collectors.groupingBy(Map.Entry::getValue, Collectors.mapping(Map.Entry::getKey, Collectors.toList())));
+	}
+
 	@Override
 	public void register(EmiRegistry registry) {
 		for (TinkerersSmithingItemData itemData : TinkerersSmithingClient.SERVER_SMITHING_ITEMS.values()) {
@@ -22,12 +27,18 @@ public class TinkerersSmithingPlugin implements EmiPlugin {
 				registry.addRecipe(new EmiAnvilDeworkRecipe(itemData.item()));
 			}
 			if (!itemData.unitCosts().isEmpty()) {
-				Map<Integer, List<Ingredient>> invertedCosts = itemData.unitCosts().entrySet().stream().collect(Collectors.groupingBy(Map.Entry::getValue, Collectors.mapping(Map.Entry::getKey, Collectors.toList())));
+				Map<Integer, List<Ingredient>> invertedCosts = invertCosts(itemData.unitCosts());
 				invertedCosts.forEach((cost, ingredients) -> {
 					registry.removeRecipes(r -> r instanceof EmiAnvilRecipe ear && ear.getOutputs().stream().allMatch(es -> es.getItemStack().isOf(itemData.item())));
 					registry.addRecipe(new EmiAnvilRepairRecipe(itemData.item(), ingredients));
 				});
 			}
+			itemData.upgradePaths().forEach(upgradeItem -> {
+				Map<Integer, List<Ingredient>> invertedCosts = invertCosts(TinkerersSmithingClient.SERVER_SMITHING_ITEMS.get(upgradeItem).unitCosts());
+				invertedCosts.forEach((cost, ingredients) -> {
+					registry.addRecipe(new EmiSmithingUpgradeRecipe(itemData.item(), ingredients, upgradeItem, cost));
+				});
+			});
 		}
 	}
 }
