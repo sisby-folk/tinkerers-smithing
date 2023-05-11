@@ -1,4 +1,4 @@
-<center><img alt="tinkerer's smithing banner" src="https://github.com/sisby-folk/tinkerers-smithing/assets/55819817/c5bd0685-7edf-49d1-bcc7-29b7c2482954" /></center>
+<center><img alt="tinkerer's smithing banner" src="https://github.com/sisby-folk/tinkerers-smithing/assets/55819817/c5bd0685-7edf-49d1-bcc7-29b7c2482954" /></center><br/>
 
 <center>A sentimental and convenient rebalance of gear crafting, repair, enchanting, and upgrading.<br/>
 Works well with <a href="https://modrinth.com/mod/emi">EMI</a> and <a href="https://modrinth.com/mod/inspecio">Inspecio</a>.
