@@ -232,13 +232,17 @@ public class TinkerersSmithingLoader {
 		for (Item item : Registry.ITEM) {
 			if (item instanceof TinkerersSmithingItem tsi) {
 				Map<Ingredient, Integer> unitCosts = tsi.tinkerersSmithing$getUnitCosts();
-				Set<Item> upgradePaths = tsi.tinkerersSmithing$getUpgradePaths();
-				Map<Item, Pair<Integer, Map<Item, Integer>>> sacrificePaths = tsi.tinkerersSmithing$getSacrificePaths();
 				unitCosts.clear();
-				upgradePaths.clear();
-				sacrificePaths.clear();
 				unitCosts.putAll(getUnitCosts(item, server.getRecipeManager()));
+			}
+		}
+		for (Item item : Registry.ITEM) {
+			if (item instanceof TinkerersSmithingItem tsi) {
+				Set<Item> upgradePaths = tsi.tinkerersSmithing$getUpgradePaths();
+				upgradePaths.clear();
 				upgradePaths.addAll(getUpgradePaths(item));
+				Map<Item, Pair<Integer, Map<Item, Integer>>> sacrificePaths = tsi.tinkerersSmithing$getSacrificePaths();
+				sacrificePaths.clear();
 				sacrificePaths.putAll(getSacrificePaths(item));
 			}
 		}
