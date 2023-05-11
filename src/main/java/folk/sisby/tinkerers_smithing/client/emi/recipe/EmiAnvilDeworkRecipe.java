@@ -75,7 +75,7 @@ public class EmiAnvilDeworkRecipe implements EmiRecipe {
 
 	private int getWork(Random r, int modifyUses) {
 		//return (int) Math.pow(2, r.nextInt(5) + 1 + modifyUses) - 1;
-		return 15; // moves too fast.
+		return 15 - (modifyUses * 8); // moves too fast.
 	}
 
 	private EmiIngredient getTool(Random r, boolean applied) {
