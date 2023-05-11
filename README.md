@@ -23,34 +23,28 @@ The more limited datapack version is also available for NBT Crafting [2.2.3](htt
 
 ## Recipe Types
 
-**Anvil Unit Repair**<br>
-*As seen in vanilla, TSmithing removes the XP and prior work cost.*
-
+**Anvil Unit Repair**<br/>
+*As seen in vanilla, TSmithing removes the XP and prior work cost.*<br/>
 ![javaw_OIZieX7Glu](https://github.com/sisby-folk/tinkerers-smithing/assets/55819817/da8a9f26-3d5d-42ca-a850-9c6a32714230)
 
-**Anvil De-Working**<br>
-*Take worked equipment and add netherite scrap to regress repair cost by one stage.*
-
+**Anvil De-Working**<br/>
+*Take worked equipment and add netherite scrap to regress repair cost by one stage.*<br/>
 ![javaw_elv1L3lfwB](https://github.com/sisby-folk/tinkerers-smithing/assets/55819817/16f46c0a-fc08-438f-b460-eb9296a04a3c)
 
-**Shapeless Unit Repair**<br>
-*Repair unenchanted equipment based on the cost of crafting it fresh.*
-
+**Shapeless Unit Repair**<br/>
+*Repair unenchanted equipment based on the cost of crafting it fresh.*<br/>
 ![javaw_L9dtvIzhSd](https://github.com/sisby-folk/tinkerers-smithing/assets/55819817/a21ccfd2-31de-4e80-9538-cad96cbd5edf)
 
-**Shapeless Upgrade**<br>
-*Upgrade unenchanted equipment based on the cost of crafting it fresh.*
-
+**Shapeless Upgrade**<br/>
+*Upgrade unenchanted equipment based on the cost of crafting it fresh.*<br/>
 ![javaw_8yYw7Taj7T](https://github.com/sisby-folk/tinkerers-smithing/assets/55819817/d0beebb1-c334-40d0-812e-fef373575d09)
 
-**Smithing Upgrade**<br>
-*Upgrade equipment in full, or use less units for a partial durability result.*
-
+**Smithing Upgrade**<br/>
+*Upgrade equipment in full, or use less units for a partial durability result.*<br/>
 ![javaw_Jlbm8mh92M](https://github.com/sisby-folk/tinkerers-smithing/assets/55819817/b5c753c0-3d98-4c88-8924-95b4ee673157)
 
-**Smithing Sacrificial Upgrade**<br>
-Upgrade straight to 'gilded' tiers (netherite) by sacrificing an existing item of that tier.
-
+**Smithing Sacrificial Upgrade**<br/>
+Upgrade straight to 'gilded' tiers (netherite) by sacrificing an existing item of that tier.<br/>
 ![javaw_sJbMWenD1D](https://github.com/sisby-folk/tinkerers-smithing/assets/55819817/b3908f7b-8acf-4570-bce8-79f7aec5c83a)
 
 ## Design - Vanilla Recipe Cost
@@ -60,7 +54,7 @@ Upgrade straight to 'gilded' tiers (netherite) by sacrificing an existing item o
 - Anvil repair keeps anvil balancing - One unit repairs 25% no matter what.
 
 ### Upgrading
-- Shapeless upgrades cost the same units as the fresh tool.
+- Shapeless upgrades cost the same units as the fresh tool. Great for going wood -> stone -> iron.
     - As a convenience cost, damage to the tool will be "passed on" to the new tool - as if left in the handle.
 - Smithing upgrades cost as much as the full cost, or up to four less, leveraging repair mechanics.
     - An iron chestplate upgraded with 5 diamonds will have 25% durability, requiring 3 more in repairs to reach full.
