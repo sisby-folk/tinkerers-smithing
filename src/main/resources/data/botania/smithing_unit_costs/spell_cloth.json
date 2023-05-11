@@ -1,9 +1,10 @@
 {
-  "inheritFromItem": [
-    "botania:elementium_pickaxe"
-  ],
-  "addItem": [
-    "botania:elementium_shears"
+  "replace": true,
+  "values": [
+    {
+      "cost": 4,
+      "item": "botania:manaweave_cloth"
+    }
   ],
   "fabric:load_conditions": [
     {

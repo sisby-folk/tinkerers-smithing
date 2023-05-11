@@ -1,9 +1,10 @@
 {
-  "inheritFromItem": [
-    "botania:elementium_pickaxe"
-  ],
-  "addItem": [
-    "botania:elementium_shears"
+  "replace": true,
+  "values": [
+    {
+      "cost": 2,
+      "item": "botania:dragonstone"
+    }
   ],
   "fabric:load_conditions": [
     {

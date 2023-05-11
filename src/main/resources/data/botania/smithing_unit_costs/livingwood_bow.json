@@ -1,9 +1,10 @@
 {
-  "inheritFromItem": [
-    "botania:elementium_pickaxe"
-  ],
-  "addItem": [
-    "botania:elementium_shears"
+  "replace": true,
+  "values": [
+    {
+      "cost": 3,
+      "item": "botania:mana_string"
+    }
   ],
   "fabric:load_conditions": [
     {

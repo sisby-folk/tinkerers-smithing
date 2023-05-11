@@ -234,6 +234,7 @@ public class TinkerersSmithing implements ModInitializer {
 					}
 					if (override != null) {
 						costs.putAll(override.costs());
+						if (override.replace()) defaultedMaterial.remove(itemId);
 						costsAdded += override.costs().size();
 					}
 					if (!costs.isEmpty()) {

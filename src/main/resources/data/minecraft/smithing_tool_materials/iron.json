@@ -2,6 +2,9 @@
   "inheritFromItem": [
     "minecraft:iron_pickaxe"
   ],
+  "addItem": [
+    "minecraft:shears"
+  ],
   "upgradesTo": [
     "minecraft:diamond"
   ]
