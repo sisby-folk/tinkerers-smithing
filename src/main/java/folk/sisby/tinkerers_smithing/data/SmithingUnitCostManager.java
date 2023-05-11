@@ -3,7 +3,6 @@ package folk.sisby.tinkerers_smithing.data;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import folk.sisby.tinkerers_smithing.TinkerersSmithing;
-import net.minecraft.item.Item;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.resource.JsonDataLoader;
 import net.minecraft.resource.ResourceManager;
@@ -24,8 +23,6 @@ public class SmithingUnitCostManager extends JsonDataLoader implements Identifia
 	public static final String KEY_VALUES = "values";
 	public static final String KEY_VALUE_COST = "cost";
 
-	public final Map<Item, UnitCostOverride> costOverrides = new HashMap<>();
-
 	public SmithingUnitCostManager(Gson gson) {
 		super(gson, "smithing_unit_costs");
 	}
@@ -41,7 +38,7 @@ public class SmithingUnitCostManager extends JsonDataLoader implements Identifia
 					int cost = jsonValue.getAsJsonObject().get(KEY_VALUE_COST).getAsInt();
 					costs.put(ingredient, cost);
 				});
-				costOverrides.put(item, new UnitCostOverride(replace, costs));
+				TinkerersSmithing.getLoaderInstance().COST_OVERRIDES.put(item, new UnitCostOverride(replace, costs));
 			}, () -> {
 				TinkerersSmithing.LOGGER.warn("[Tinkerer's Smithing] Failed to override cost for invalid item {}", id);
 			});

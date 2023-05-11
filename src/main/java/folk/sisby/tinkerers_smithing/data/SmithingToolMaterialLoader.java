@@ -11,12 +11,14 @@ import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
 import org.quiltmc.qsl.resource.loader.api.reloader.IdentifiableResourceReloader;
 
+import java.util.Map;
+
 public class SmithingToolMaterialLoader extends SmithingMaterialLoader implements IdentifiableResourceReloader {
 	public static final SmithingToolMaterialLoader INSTANCE = new SmithingToolMaterialLoader(new Gson());
 	public static final Identifier ID = new Identifier(TinkerersSmithing.ID, "smithing_tool_material_loader");
 
 	public SmithingToolMaterialLoader(Gson gson) {
-		super(gson, "smithing_tool_materials", TinkerersSmithing.TOOL_MATERIALS, TinkerersSmithingMaterial.EQUIPMENT_TYPE.TOOL);
+		super(gson, "smithing_tool_materials", TinkerersSmithingMaterial.EQUIPMENT_TYPE.TOOL);
 	}
 
 	@Override
@@ -36,6 +38,11 @@ public class SmithingToolMaterialLoader extends SmithingMaterialLoader implement
 	@Override
 	public boolean matchingMaterials(Item item1, Item item2) {
 		return item1 instanceof ToolItem ti1 && item2 instanceof ToolItem ti2 && ti1.getMaterial() == ti2.getMaterial();
+	}
+
+	@Override
+	public Map<Identifier, TinkerersSmithingMaterial> getOutputMap() {
+		return TinkerersSmithing.getLoaderInstance().TOOL_MATERIALS;
 	}
 
 	@Override

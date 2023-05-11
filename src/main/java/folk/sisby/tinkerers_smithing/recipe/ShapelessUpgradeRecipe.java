@@ -50,15 +50,17 @@ public class ShapelessUpgradeRecipe extends SpecialCraftingRecipe implements Cra
 		if (equipmentStack == null || equipmentStack.hasEnchantments()) return null;
 		gridItems.remove(equipmentStack);
 
-		for (Item upgradeItem : TinkerersSmithing.getUpgradePaths(equipmentStack.getItem())) {
-			if (upgradeItem instanceof TinkerersSmithingItem tsi) {
-				for (Map.Entry<Ingredient, Integer> entry : tsi.tinkerersSmithing$getUnitCosts().entrySet()) {
-					Ingredient ingredient = entry.getKey();
-					Integer cost = entry.getValue();
-					if (gridItems.stream().allMatch(ingredient) && gridItems.size() == cost) {
-						ItemStack resultStack = upgradeItem.getDefaultStack();
-						resultStack.setNbt(equipmentStack.getOrCreateNbt().copy());
-						return resultStack;
+		if (equipmentStack.getItem() instanceof TinkerersSmithingItem tsi) {
+			for (Item upgradeItem : tsi.tinkerersSmithing$getUpgradePaths()) {
+				if (upgradeItem instanceof TinkerersSmithingItem utsi) {
+					for (Map.Entry<Ingredient, Integer> entry : utsi.tinkerersSmithing$getUnitCosts().entrySet()) {
+						Ingredient ingredient = entry.getKey();
+						Integer cost = entry.getValue();
+						if (gridItems.stream().allMatch(ingredient) && gridItems.size() == cost) {
+							ItemStack resultStack = upgradeItem.getDefaultStack();
+							resultStack.setNbt(equipmentStack.getOrCreateNbt().copy());
+							return resultStack;
+						}
 					}
 				}
 			}

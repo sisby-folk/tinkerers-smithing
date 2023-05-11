@@ -1,6 +1,7 @@
 package folk.sisby.tinkerers_smithing.recipe;
 
 import folk.sisby.tinkerers_smithing.TinkerersSmithing;
+import folk.sisby.tinkerers_smithing.TinkerersSmithingItem;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -23,8 +24,8 @@ public class SacrificeUpgradeRecipe extends SmithingRecipe implements Recipe<Inv
 		ItemStack base = inventory.getStack(0);
 		ItemStack ingredient = inventory.getStack(1);
 
-		if (!base.isEmpty() && !ingredient.isEmpty() && base.isDamageable() && ingredient.isDamageable()) {
-			for (Map.Entry<Item, Pair<Integer, Map<Item, Integer>>> sacrificePaths : TinkerersSmithing.getSacrificePaths(base.getItem()).entrySet()) {
+		if (!base.isEmpty() && !ingredient.isEmpty() && base.isDamageable() && ingredient.isDamageable() && base.getItem() instanceof TinkerersSmithingItem tsi) {
+			for (Map.Entry<Item, Pair<Integer, Map<Item, Integer>>> sacrificePaths : tsi.tinkerersSmithing$getSacrificePaths().entrySet()) {
 				Item resultItem = sacrificePaths.getKey();
 				Integer resultViaUnits = sacrificePaths.getValue().getLeft();
 				Map<Item, Integer> sacrificeItems = sacrificePaths.getValue().getRight();

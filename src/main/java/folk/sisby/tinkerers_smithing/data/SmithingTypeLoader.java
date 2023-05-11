@@ -78,7 +78,6 @@ public class SmithingTypeLoader extends MultiJsonDataLoader implements Identifia
 				}
 			}
 		}
-		TinkerersSmithing.SMITHING_TYPES.clear();
-		TinkerersSmithing.SMITHING_TYPES.putAll(tags);
+		TinkerersSmithing.getLoaderInstance().SMITHING_TYPES.putAll(tags);
 	}
 }

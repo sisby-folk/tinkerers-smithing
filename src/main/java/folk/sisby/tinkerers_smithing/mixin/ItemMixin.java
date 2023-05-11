@@ -4,6 +4,7 @@ import folk.sisby.tinkerers_smithing.TinkerersSmithingItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Ingredient;
+import net.minecraft.util.Pair;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -11,15 +12,29 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 @Mixin(Item.class)
 public class ItemMixin implements TinkerersSmithingItem {
-	@Unique Map<Ingredient, Integer> unitCosts = new HashMap<>();
+	@Unique final Map<Ingredient, Integer> unitCosts = new HashMap<>();
+	@Unique final Set<Item> upgradePaths = new HashSet<>();
+	@Unique final Map<Item, Pair<Integer, Map<Item, Integer>>> sacrificePaths = new HashMap<>();
 
 	@Override
 	public Map<Ingredient, Integer> tinkerersSmithing$getUnitCosts() {
 		return this.unitCosts;
+	}
+
+	@Override
+	public Set<Item> tinkerersSmithing$getUpgradePaths() {
+		return this.upgradePaths;
+	}
+
+	@Override
+	public Map<Item, Pair<Integer, Map<Item, Integer>>> tinkerersSmithing$getSacrificePaths() {
+		return this.sacrificePaths;
 	}
 
 	@Override
@@ -35,7 +50,7 @@ public class ItemMixin implements TinkerersSmithingItem {
 	}
 
 	@Inject(method = "canRepair", at = @At(value = "RETURN"), cancellable = true)
-	private void mixin(ItemStack stack, ItemStack ingredient, CallbackInfoReturnable<Boolean> cir) {
+	private void overrideAnvilRepairIngredients(ItemStack stack, ItemStack ingredient, CallbackInfoReturnable<Boolean> cir) {
 		if (tinkerersSmithing$getUnitCost(ingredient) > 0) {
 			cir.setReturnValue(true);
 			cir.cancel();

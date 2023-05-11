@@ -37,8 +37,8 @@ public class SmithingUpgradeRecipe extends SmithingRecipe implements Recipe<Inve
 		ItemStack base = inventory.getStack(0);
 		ItemStack ingredient = inventory.getStack(1);
 
-		if (!base.isEmpty() && !ingredient.isEmpty()) {
-			for (Item upgradeItem : TinkerersSmithing.getUpgradePaths(base.getItem())) {
+		if (!base.isEmpty() && !ingredient.isEmpty() && base.getItem() instanceof TinkerersSmithingItem tsi) {
+			for (Item upgradeItem : tsi.tinkerersSmithing$getUpgradePaths()) {
 				Pair<Integer, Integer> usedAndCost = getUsedRepairStacksAndCost(upgradeItem, ingredient);
 				if (usedAndCost != null) {
 					ItemStack resultStack = upgradeItem.getDefaultStack();
