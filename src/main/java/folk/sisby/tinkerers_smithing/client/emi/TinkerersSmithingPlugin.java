@@ -30,6 +30,7 @@ public class TinkerersSmithingPlugin implements EmiPlugin {
 				invertedCosts.forEach((cost, ingredients) -> {
 					registry.removeRecipes(r -> r instanceof EmiAnvilRecipe ear && ear.getOutputs().stream().allMatch(es -> es.getItemStack().isOf(itemData.item())));
 					registry.addRecipe(new EmiAnvilRepairRecipe(itemData.item(), ingredients));
+					registry.addRecipe(new EmiCraftingRepairRecipe(itemData.item(), ingredients, cost));
 				});
 			}
 			itemData.upgradePaths().forEach(upgradeItem -> {
