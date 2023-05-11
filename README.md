@@ -15,18 +15,31 @@ As of 2.0, the mod has been completely rewritten. It adds six recipe types to re
 
 All of them are data-driven, and preserve enchantments and names.
 
-1. Anvil Unit Repair: As seen in vanilla, TSmithing removes the XP and prior work cost.
-2. Anvil De-Working: Take worked equipment and add netherite scrap to regress repair cost by one stage.
-3. Shapeless Unit Repair: Repair unenchanted equipment based on the cost of crafting it fresh.
-4. Shapeless Upgrade: Upgrade unenchanted equipment based on the cost of crafting it fresh.
-5. Smithing Upgrade: Upgrade equipment in full, or use less units for a partial durability result.
-6. Smithing Sacrificial Upgrade: Upgrade straight to 'gilded' tiers (netherite) by sacrificing an existing item of that tier.
-
 Out of the box, TSmithing makes **every damageable vanilla item repairable** and **every vanilla equipment upgradeable** (yes, even chain).
 
 As a result of these changes, it's easier to enchant and name your tools much earlier - keeping them in good condition with repairs and small improvements.
 
 The more limited datapack version is also available for NBT Crafting [2.2.3](https://download-directory.github.io/?url=https://github.com/sisby-folk/tinkerers-smithing/tree/nbtc2/src/main/resources) - see the [old readme](https://github.com/sisby-folk/tinkerers-smithing/blob/nbtc2-experiments/README.md) for a rough idea of what's there.
+
+## Recipe Types
+
+**Anvil Unit Repair**<br>
+*As seen in vanilla, TSmithing removes the XP and prior work cost.*
+
+**Anvil De-Working**<br>
+*Take worked equipment and add netherite scrap to regress repair cost by one stage.*
+
+**Shapeless Unit Repair**<br>
+*Repair unenchanted equipment based on the cost of crafting it fresh.*
+
+**Shapeless Upgrade**<br>
+*Upgrade unenchanted equipment based on the cost of crafting it fresh.*
+
+**Smithing Upgrade**<br>
+*Upgrade equipment in full, or use less units for a partial durability result.*
+
+**Smithing Sacrificial Upgrade**<br>
+Upgrade straight to 'gilded' tiers (netherite) by sacrificing an existing item of that tier.
 
 ## Showcase
 
