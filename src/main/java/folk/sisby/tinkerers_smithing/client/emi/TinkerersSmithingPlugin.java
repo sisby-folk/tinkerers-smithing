@@ -5,10 +5,7 @@ import dev.emi.emi.api.EmiRegistry;
 import dev.emi.emi.recipe.EmiAnvilRecipe;
 import folk.sisby.tinkerers_smithing.TinkerersSmithingItemData;
 import folk.sisby.tinkerers_smithing.client.TinkerersSmithingClient;
-import folk.sisby.tinkerers_smithing.client.emi.recipe.EmiAnvilDeworkRecipe;
-import folk.sisby.tinkerers_smithing.client.emi.recipe.EmiAnvilRepairRecipe;
-import folk.sisby.tinkerers_smithing.client.emi.recipe.EmiSmithingSacrificeRecipe;
-import folk.sisby.tinkerers_smithing.client.emi.recipe.EmiSmithingUpgradeRecipe;
+import folk.sisby.tinkerers_smithing.client.emi.recipe.*;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.Item;
 import net.minecraft.recipe.Ingredient;
@@ -39,6 +36,7 @@ public class TinkerersSmithingPlugin implements EmiPlugin {
 				Map<Integer, List<Ingredient>> invertedCosts = invertCosts(TinkerersSmithingClient.SERVER_SMITHING_ITEMS.get(upgradeItem).unitCosts());
 				invertedCosts.forEach((cost, ingredients) -> {
 					registry.addRecipe(new EmiSmithingUpgradeRecipe(itemData.item(), ingredients, upgradeItem, cost));
+					registry.addRecipe(new EmiCraftingUpgradeRecipe(itemData.item(), ingredients, upgradeItem, cost));
 				});
 			});
 			itemData.sacrificePaths().forEach((upgradeItem, sacrificeData) -> {
