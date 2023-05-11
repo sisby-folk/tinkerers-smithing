@@ -69,22 +69,26 @@ public class EmiAnvilDeworkRecipe implements EmiRecipe {
 		widgets.addTexture(EmiTexture.PLUS, 27, 3);
 		widgets.addTexture(EmiTexture.EMPTY_ARROW, 75, 1);
 		widgets.addGeneratedSlot(r -> getTool(r, false), uniq, 0, 0).appendTooltip(ingredient -> new OrderedTextTooltipComponent(Text.literal("Repair Cost: " + ingredient.getEmiStacks().get(0).getItemStack().getRepairCost()).setStyle(Style.EMPTY.withColor(Formatting.GRAY)).asOrderedText()));
-		widgets.addSlot(EmiIngredient.of(TinkerersSmithing.DEWORK_INGREDIENTS), 49, 0);
+		widgets.addGeneratedSlot(this::getRepairStack, uniq, 49, 0);
 		widgets.addGeneratedSlot(r -> getTool(r, true), uniq, 107, 0).appendTooltip(ingredient -> new OrderedTextTooltipComponent(Text.literal("Repair Cost: " + ingredient.getEmiStacks().get(0).getItemStack().getRepairCost()).setStyle(Style.EMPTY.withColor(Formatting.GRAY)).asOrderedText())).recipeContext(this);
 	}
 
-	private int getWork(Random r, int modifyUses) {
-		//return (int) Math.pow(2, r.nextInt(5) + 1 + modifyUses) - 1;
-		return 15 - (modifyUses * 8); // moves too fast.
+	private int getStackCount(Random r) {
+		return r.nextInt(1, 6);
 	}
 
 	private EmiIngredient getTool(Random r, boolean applied) {
 		ItemStack stack = tool.getDefaultStack();
-		int work = getWork(r, applied ? -1 : 0);
+		int stackCount = getStackCount(r);
+		int work = (int) Math.pow(2, 5 - (applied ? stackCount : 0)) - 1;
 		if (work <= 0) {
 			return EmiStack.of(tool);
 		}
 		stack.setRepairCost(work);
 		return EmiStack.of(stack);
+	}
+
+	private EmiIngredient getRepairStack(Random r) {
+		return EmiIngredient.of(TinkerersSmithing.DEWORK_INGREDIENTS).copy().setAmount(getStackCount(r));
 	}
 }

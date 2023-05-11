@@ -113,6 +113,7 @@ public abstract class SmithingMaterialLoader extends MultiJsonDataLoader {
 				material.sacrificesVia = null;
 			}
 		});
+		TinkerersSmithing.LOGGER.info("[Tinkerer's Smithing] Reloaded a set of materials");
 	}
 
 	public abstract Ingredient getDefaultRepairIngredient(Item item);

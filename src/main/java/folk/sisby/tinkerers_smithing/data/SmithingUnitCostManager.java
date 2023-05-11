@@ -43,6 +43,7 @@ public class SmithingUnitCostManager extends JsonDataLoader implements Identifia
 				TinkerersSmithing.LOGGER.warn("[Tinkerer's Smithing] Failed to override cost for invalid item {}", id);
 			});
 		});
+		TinkerersSmithing.LOGGER.info("[Tinkerer's Smithing] Reloaded unit cost overrides");
 	}
 
 	@Override

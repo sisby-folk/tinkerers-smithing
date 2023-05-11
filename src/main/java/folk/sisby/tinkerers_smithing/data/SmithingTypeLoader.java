@@ -79,5 +79,6 @@ public class SmithingTypeLoader extends MultiJsonDataLoader implements Identifia
 			}
 		}
 		TinkerersSmithing.getLoaderInstance().SMITHING_TYPES.putAll(tags);
+		TinkerersSmithing.LOGGER.info("[Tinkerer's Smithing] Reloaded smithing types");
 	}
 }
