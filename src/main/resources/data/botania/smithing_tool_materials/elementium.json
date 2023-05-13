@@ -5,6 +5,12 @@
   "addItem": [
     "botania:elementium_shears"
   ],
+  "upgradesFrom": [
+    "minecraft:gold"
+  ],
+  "upgradesTo": [
+    "botania:terrasteel"
+  ],
   "fabric:load_conditions": [
     {
       "condition": "fabric:all_mods_loaded",

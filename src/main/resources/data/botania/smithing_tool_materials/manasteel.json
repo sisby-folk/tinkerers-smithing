@@ -5,6 +5,14 @@
   "addItem": [
     "botania:manasteel_shears"
   ],
+  "upgradesFrom": [
+    "minecraft:stone",
+    "minecraft:iron"
+  ],
+  "upgradesTo": [
+    "botania:elementium",
+    "botania:terrasteel"
+  ],
   "fabric:load_conditions": [
     {
       "condition": "fabric:all_mods_loaded",

@@ -2,6 +2,12 @@
   "inheritFromItem": [
     "botania:manaweave_helmet"
   ],
+  "upgradesFrom": [
+    "minecraft:leather"
+  ],
+  "upgradesTo": [
+    "botania:elementium"
+  ],
   "fabric:load_conditions": [
     {
       "condition": "fabric:all_mods_loaded",
