@@ -34,8 +34,6 @@ repositories {
 	maven { url "https://maven.terraformersmc.com/" }
 }
 
-// All the dependencies are declared at gradle/libs.version.toml and referenced with "libs.<id>"
-// See https://docs.gradle.org/current/userguide/platforms.html for information on how version catalogs work.
 dependencies {
 	// // Base // //
 	minecraft libs.mc
@@ -70,10 +68,6 @@ tasks.withType(JavaCompile).configureEach {
 
 java {
 	withSourcesJar()
-
-	// If this mod is going to be a library, then it should also generate Javadocs in order to aid with development.
-	// Uncomment this line to generate them.
-	// withJavadocJar()
 }
 
 jar {
@@ -82,7 +76,6 @@ jar {
 	}
 }
 
-// Configure the maven publication
 publishing {
 	publications {
 		mavenJava(MavenPublication) {
@@ -90,7 +83,6 @@ publishing {
 		}
 	}
 
-	// See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
 	repositories {
 
 	}
