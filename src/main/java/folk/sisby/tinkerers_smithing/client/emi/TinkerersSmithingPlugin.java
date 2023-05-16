@@ -34,11 +34,14 @@ public class TinkerersSmithingPlugin implements EmiPlugin {
 				});
 			}
 			itemData.upgradePaths().forEach(upgradeItem -> {
-				Map<Integer, List<Ingredient>> invertedCosts = invertCosts(TinkerersSmithingClient.SERVER_SMITHING_ITEMS.get(upgradeItem).unitCosts());
-				invertedCosts.forEach((cost, ingredients) -> {
-					registry.addRecipe(new EmiSmithingUpgradeRecipe(itemData.item(), ingredients, upgradeItem, cost));
-					registry.addRecipe(new EmiCraftingUpgradeRecipe(itemData.item(), ingredients, upgradeItem, cost));
-				});
+				TinkerersSmithingItemData upgradeData = TinkerersSmithingClient.SERVER_SMITHING_ITEMS.get(upgradeItem);
+				if (upgradeData != null) {
+					Map<Integer, List<Ingredient>> invertedCosts = invertCosts(upgradeData.unitCosts());
+					invertedCosts.forEach((cost, ingredients) -> {
+						registry.addRecipe(new EmiSmithingUpgradeRecipe(itemData.item(), ingredients, upgradeItem, cost));
+						registry.addRecipe(new EmiCraftingUpgradeRecipe(itemData.item(), ingredients, upgradeItem, cost));
+					});
+				}
 			});
 			itemData.sacrificePaths().forEach((upgradeItem, sacrificeData) -> {
 				int resultCost = sacrificeData.getLeft();
