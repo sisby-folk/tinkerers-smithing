@@ -1,9 +1,11 @@
 package folk.sisby.tinkerers_smithing.mixin;
 
 import folk.sisby.tinkerers_smithing.TinkerersSmithing;
+import folk.sisby.tinkerers_smithing.TinkerersSmithingItem;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.screen.*;
@@ -31,6 +33,14 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 	@Redirect(method = "updateResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/AnvilScreenHandler;getNextCost(I)I"))
 	private int noLevelsNoWork(int i) {
 		return this.levelCost.get() == 0 ? i : AnvilScreenHandler.getNextCost(i);
+	}
+
+	@Redirect(method = "updateResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/Item;canRepair(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemStack;)Z"))
+	private boolean overrideRepairMaterials(Item instance, ItemStack stack, ItemStack ingredient) {
+		if (instance instanceof TinkerersSmithingItem tsi && !tsi.tinkerersSmithing$getUnitCosts().isEmpty()) {
+			return tsi.tinkerersSmithing$getUnitCost(ingredient) > 0;
+		}
+		return instance.canRepair(stack, ingredient);
 	}
 
 	@ModifyVariable(method = "updateResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;setDamage(I)V", ordinal = 0), ordinal = 0)

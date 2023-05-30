@@ -1,5 +1,6 @@
 package folk.sisby.tinkerers_smithing.mixin;
 
+import folk.sisby.tinkerers_smithing.TinkerersSmithing;
 import folk.sisby.tinkerers_smithing.TinkerersSmithingItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -51,8 +52,10 @@ public class ItemMixin implements TinkerersSmithingItem {
 
 	@Inject(method = "canRepair", at = @At(value = "RETURN"), cancellable = true)
 	private void overrideAnvilRepairIngredients(ItemStack stack, ItemStack ingredient, CallbackInfoReturnable<Boolean> cir) {
-		if (tinkerersSmithing$getUnitCost(ingredient) > 0) {
-			cir.setReturnValue(true);
+		TinkerersSmithing.LOGGER.info("OVERRIDE CHECK");
+		if (!tinkerersSmithing$getUnitCosts().isEmpty()) {
+			TinkerersSmithing.LOGGER.info("OVERRIDE {}", tinkerersSmithing$getUnitCost(ingredient) > 0);
+			cir.setReturnValue(tinkerersSmithing$getUnitCost(ingredient) > 0);
 			cir.cancel();
 		}
 	}
