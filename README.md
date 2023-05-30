@@ -33,6 +33,9 @@ The more limited datapack version is also available for NBT Crafting [2.2.3](htt
 *This recipe no longer charges 2 levels for repairing, and is now order-agnostic - choosing the lower cost.*<br/>
 ![javaw_OIZieX7Glu](https://github.com/sisby-folk/tinkerers-smithing/assets/55819817/da8a9f26-3d5d-42ca-a850-9c6a32714230)
 
+**Equipment Usage**<br/>
+*Equipment with enchantments or a custom name **can't break**, they just stop working.*
+
 ### New
 
 **Anvil De-Working**<br/>
