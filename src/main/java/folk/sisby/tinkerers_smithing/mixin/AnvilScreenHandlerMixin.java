@@ -7,7 +7,6 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.screen.*;
-import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -19,38 +18,45 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Map;
-import java.util.Objects;
 
 @Mixin(AnvilScreenHandler.class)
 public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 	@Shadow private int repairItemUsage;
 	@Final @Shadow private Property levelCost;
-	@Shadow private String newItemName;
 
 	public AnvilScreenHandlerMixin(@Nullable ScreenHandlerType<?> type, int syncId, PlayerInventory playerInventory, ScreenHandlerContext context) {
 		super(type, syncId, playerInventory, context);
 	}
 
 	@Redirect(method = "updateResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/AnvilScreenHandler;getNextCost(I)I"))
-	private int repairNoWork(int i) {
-		return this.repairItemUsage > 0 ? i : AnvilScreenHandler.getNextCost(i);
+	private int noLevelsNoWork(int i) {
+		return this.levelCost.get() == 0 ? i : AnvilScreenHandler.getNextCost(i);
 	}
 
-	@Inject(method = "updateResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/AnvilScreenHandler;sendContentUpdates()V"))
-	private void repairNoLevels(CallbackInfo ci) {
-		if (this.repairItemUsage > 0) {
-			this.levelCost.set((StringUtils.isBlank(this.newItemName) && !this.input.getStack(0).hasCustomName()) || Objects.equals(this.input.getStack(0).getName().getString(), this.newItemName) ? 0 : 1);
-		}
+	@ModifyVariable(method = "updateResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;setDamage(I)V", ordinal = 0), ordinal = 0)
+	private int unitRepairNoLevels(int original) {
+		return original - 1;
+	}
+
+	@ModifyVariable(method = "updateResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;setDamage(I)V", ordinal = 1), ordinal = 0)
+	private int combineRepairNoLevels(int original) {
+		this.repairItemUsage = -1;
+		return original - 2;
 	}
 
 	@Redirect(method = "canTakeOutput", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/Property;get()I", ordinal = 1))
-	private int allowTakingFreeOutput(Property instance) {
-		return this.repairItemUsage > 0 ? 1 : instance.get();
+	private int allowTakingFreeRepairs(Property instance) {
+		return instance.get() == 0 && this.repairItemUsage != 0 ? 1 : instance.get();
 	}
 
-	@ModifyVariable(method = "updateResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/Property;set(I)V", ordinal = 5), ordinal = 0)
-	private int allowGeneratingFreeOutput(int setCost) {
-		return setCost == 0 && this.repairItemUsage > 0 ? 1 : setCost;
+	@ModifyVariable(method = "updateResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/Property;set(I)V", ordinal = 5, shift = At.Shift.AFTER), ordinal = 0)
+	private int allowFreeRepairs(int original) {
+		if (original == 0 && this.repairItemUsage != 0) {
+			this.levelCost.set(0); // Remove RepairCost cost
+			return 1;
+		} else {
+			return original;
+		}
 	}
 
 	@Inject(method = "updateResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z", ordinal = 1), cancellable = true)
@@ -69,12 +75,6 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 			this.sendContentUpdates();
 			ci.cancel();
 		}
-	}
-
-	@ModifyVariable(method = "updateResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;setDamage(I)V", ordinal = 1), ordinal = 0)
-	private int noCombineRepairCost(int original) {
-		this.repairItemUsage = 1;
-		return original - 2;
 	}
 
 	private int getSRCost(Map<Enchantment, Integer> base, Map<Enchantment, Integer> ingredient) {

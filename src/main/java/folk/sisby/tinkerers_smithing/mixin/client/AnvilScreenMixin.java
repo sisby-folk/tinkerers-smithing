@@ -22,9 +22,10 @@ public class AnvilScreenMixin extends ForgingScreen<AnvilScreenHandler> {
 	@Inject(method = "drawForeground", at = @At(value = "TAIL"))
 	private void drawRepairCost(MatrixStack matrices, int mouseX, int mouseY, CallbackInfo ci) {
 		ItemStack base = handler.getSlot(0).getStack();
+		ItemStack ingredient = handler.getSlot(1).getStack();
 		ItemStack result = handler.getSlot(2).getStack();
 		if (!base.isEmpty() && !result.isEmpty() && this.handler.getLevelCost() == 0) {
-			Text text = Text.translatable("container.repair.work", result.getRepairCost() - base.getRepairCost());
+			Text text = Text.translatable("container.repair.work", result.getRepairCost() - Math.max(base.getRepairCost(), ingredient.getRepairCost()));
 			int k = this.backgroundWidth - 8 - this.textRenderer.getWidth(text) - 2;
 			fill(matrices, k - 2, 67, this.backgroundWidth - 8, 79, 1325400064);
 			this.textRenderer.drawWithShadow(matrices, text, (float) k, 69.0F, 8453920);
