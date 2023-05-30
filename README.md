@@ -60,6 +60,7 @@ Upgrade straight to 'gilded' tiers (netherite) by sacrificing an existing item o
 ### Repairing
 - Shapeless repair from 0 to full costs the same as a fresh craft. 1 unit repairs 1/3 of a pickaxe.
 - Anvil repair keeps anvil balancing - One unit repairs 25% no matter what.
+- [Default Datapack] Netherite is repaired using diamonds instead of netherite ingots.
 
 ### Upgrading
 - Shapeless upgrades cost the same units as the fresh tool. Great for going wood -> stone -> iron.
