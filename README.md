@@ -11,7 +11,7 @@ Works well with <a href="https://modrinth.com/mod/emi">EMI</a> and <a href="http
 
 ---
 
-As of 2.0, the mod has been completely rewritten. It adds six recipe types to rebalance equipment.
+As of 2.0, the mod has been completely rewritten. It adds and tweaks recipe types to rebalance equipment.
 
 All of them are data-driven, and preserve enchantments and names.
 
@@ -23,9 +23,17 @@ The more limited datapack version is also available for NBT Crafting [2.2.3](htt
 
 ## Recipe Types
 
+### Tweaked
+
 **Anvil Unit Repair**<br/>
-*As seen in vanilla, TSmithing removes the XP and prior work cost.*<br/>
+*This recipe no longer has an experience or work cost.*<br/>
 ![javaw_OIZieX7Glu](https://github.com/sisby-folk/tinkerers-smithing/assets/55819817/da8a9f26-3d5d-42ca-a850-9c6a32714230)
+
+**Anvil Combine Recipe**<br/>
+*This recipe no longer charges 2 levels for repairing, and is now order-agnostic - choosing the lower cost.*<br/>
+![javaw_OIZieX7Glu](https://github.com/sisby-folk/tinkerers-smithing/assets/55819817/da8a9f26-3d5d-42ca-a850-9c6a32714230)
+
+### New
 
 **Anvil De-Working**<br/>
 *Take worked equipment and add netherite scrap to regress repair cost by one stage.*<br/>
