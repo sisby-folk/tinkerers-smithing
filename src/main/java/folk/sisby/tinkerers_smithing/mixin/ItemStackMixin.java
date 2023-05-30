@@ -38,6 +38,8 @@ public abstract class ItemStackMixin {
 	@Shadow public abstract boolean isDamageable();
 	@Shadow public abstract int getDamage();
 	@Shadow public abstract int getMaxDamage();
+	@Shadow public abstract boolean hasCustomName();
+	@Shadow public abstract boolean hasEnchantments();
 
 	@Inject(method = "getMiningSpeedMultiplier", at = @At(value = "HEAD"), cancellable = true)
 	private void brokenNoMiningSpeed(BlockState state, CallbackInfoReturnable<Float> cir) {
@@ -47,19 +49,28 @@ public abstract class ItemStackMixin {
 		}
 	}
 
-	@Inject(method = "use", at = @At(value = "HEAD"))
+	@Inject(method = "use", at = @At(value = "HEAD"), cancellable = true)
 	private void brokenDontUse(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> cir) {
-		if (this.isDamageable() && this.getDamage() == this.getMaxDamage()) cir.cancel();
+		if (this.isDamageable() && this.getDamage() == this.getMaxDamage()) {
+			cir.setReturnValue(TypedActionResult.fail((ItemStack) (Object) this));
+			cir.cancel();
+		}
 	}
 
-	@Inject(method = "useOnBlock", at = @At(value = "HEAD"))
+	@Inject(method = "useOnBlock", at = @At(value = "HEAD"), cancellable = true)
 	private void brokenDontUseOnBlock(ItemUsageContext context, CallbackInfoReturnable<ActionResult> cir) {
-		if (this.isDamageable() && this.getDamage() == this.getMaxDamage()) cir.cancel();
+		if (this.isDamageable() && this.getDamage() == this.getMaxDamage()) {
+			cir.setReturnValue(ActionResult.FAIL);
+			cir.cancel();
+		}
 	}
 
-	@Inject(method = "useOnEntity", at = @At(value = "HEAD"))
+	@Inject(method = "useOnEntity", at = @At(value = "HEAD"), cancellable = true)
 	private void brokenDontUseOnEntity(PlayerEntity user, LivingEntity entity, Hand hand, CallbackInfoReturnable<ActionResult> cir) {
-		if (this.isDamageable() && this.getDamage() == this.getMaxDamage()) cir.cancel();
+		if (this.isDamageable() && this.getDamage() == this.getMaxDamage()) {
+			cir.setReturnValue(ActionResult.FAIL);
+			cir.cancel();
+		}
 	}
 
 	@Inject(method = "isSuitableFor", at = @At(value = "HEAD"), cancellable = true)
@@ -80,16 +91,19 @@ public abstract class ItemStackMixin {
 
 	@Inject(method = "damage(ILnet/minecraft/entity/LivingEntity;Ljava/util/function/Consumer;)V", at = @At(value = "HEAD"), cancellable = true)
 	private <T extends LivingEntity> void brokenNoDamage(int amount, T entity, Consumer<T> breakCallback, CallbackInfo ci) {
-		if (this.isDamageable() && this.getDamage() == this.getMaxDamage()) ci.cancel();
+		if ((this.hasCustomName() || this.hasEnchantments()) && this.isDamageable() && this.getDamage() == this.getMaxDamage()) ci.cancel();
 	}
 
 	@Redirect(method = "damage(ILnet/minecraft/entity/LivingEntity;Ljava/util/function/Consumer;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;decrement(I)V"))
-	private void brokenDontDecrement(ItemStack instance, int amount) {
+	private void dontBreakDecrementKeepers(ItemStack instance, int amount) {
+		if (!instance.hasCustomName() && !instance.hasEnchantments()) {
+			instance.decrement(1);
+		}
 	}
 
 	@ModifyArg(method = "damage(ILnet/minecraft/entity/LivingEntity;Ljava/util/function/Consumer;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;setDamage(I)V"))
-	private int brokenDontReset(int damage) {
-		return this.getMaxDamage();
+	private int dontBreakResetKeepers(int damage) {
+		return this.hasCustomName() || this.hasEnchantments() ? this.getMaxDamage() : damage;
 	}
 
 	@Inject(method = "getTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/item/TooltipContext;isAdvanced()Z", ordinal = 2), locals = LocalCapture.CAPTURE_FAILSOFT)
