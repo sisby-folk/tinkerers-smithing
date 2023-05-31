@@ -43,7 +43,7 @@ public class SmithingUpgradeRecipe extends SmithingRecipe implements Recipe<Inve
 				if (usedAndCost != null) {
 					ItemStack resultStack = upgradeItem.getDefaultStack();
 					resultStack.setNbt(base.getOrCreateNbt().copy());
-					resultStack.setDamage((int) Math.floor(upgradeItem.getMaxDamage() * ((usedAndCost.getRight() - usedAndCost.getLeft()) / 4.0)));
+					resultStack.setDamage(Math.min(upgradeItem.getMaxDamage() - 1, (int) Math.floor(upgradeItem.getMaxDamage() * ((usedAndCost.getRight() - usedAndCost.getLeft()) / 4.0))));
 					return resultStack;
 				}
 			}
