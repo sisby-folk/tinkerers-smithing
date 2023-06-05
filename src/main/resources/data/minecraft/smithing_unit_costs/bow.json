@@ -1,9 +1,0 @@
-{
-  "replace": true,
-  "values": [
-    {
-      "cost": 3,
-      "item": "minecraft:string"
-    }
-  ]
-}

@@ -3,7 +3,8 @@
     "minecraft:iron_pickaxe"
   ],
   "addItem": [
-    "minecraft:shears"
+    "minecraft:shears",
+    "minecraft:flint_and_steel"
   ],
   "upgradesTo": [
     "minecraft:diamond"

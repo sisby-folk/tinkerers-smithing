@@ -1,0 +1,12 @@
+{
+  "repairMaterials": [
+    {
+      "item": "minecraft:string"
+    }
+  ],
+  "addItem": [
+    "minecraft:bow",
+    "minecraft:crossbow",
+    "minecraft:fishing_rod"
+  ]
+}

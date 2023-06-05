@@ -1,0 +1,25 @@
+{
+  "repairMaterials": [
+    {
+      "item": "botania:mana_string"
+    }
+  ],
+  "addItem": [
+    "botania:spell_cloth",
+    "botania:livingwood_bow"
+  ],
+  "upgradesFrom": [
+    "minecraft:string"
+  ],
+  "upgradesTo": [
+    "botania:dragonstone"
+  ],
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "botania"
+      ]
+    }
+  ]
+}

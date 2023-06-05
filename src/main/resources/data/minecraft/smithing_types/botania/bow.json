@@ -1,10 +1,8 @@
 {
-  "replace": true,
+  "replace": false,
   "values": [
-    {
-      "cost": 3,
-      "item": "botania:mana_string"
-    }
+    "botania:livingwood_bow",
+    "botania:crystal_bow"
   ],
   "fabric:load_conditions": [
     {

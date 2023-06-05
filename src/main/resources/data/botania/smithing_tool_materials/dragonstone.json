@@ -1,10 +1,11 @@
 {
-  "replace": true,
-  "values": [
+  "repairMaterials": [
     {
-      "cost": 2,
       "item": "botania:dragonstone"
     }
+  ],
+  "addItem": [
+    "botania:crystal_bow"
   ],
   "fabric:load_conditions": [
     {
