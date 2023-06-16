@@ -34,7 +34,7 @@ The more limited datapack version is also available for NBT Crafting [2.2.3](htt
 ![javaw_OIZieX7Glu](https://cdn.modrinth.com/data/RhVpNN5O/images/26c2a3262a30257f91d7a0578556907b351a4482.png)
 
 **Equipment Usage**<br/>
-*Equipment with a custom name or enchantments can be repaired after breaking.*
+*Equipment with a custom name or enchantments can be repaired after breaking.*<br/>
 ![javaw_Xrd04RqYtZ](https://cdn.modrinth.com/data/RhVpNN5O/images/e246eec964cc5cd203329ae8c7a41a56524a6ddd.png)
 
 ### New
