@@ -4,7 +4,6 @@ import folk.sisby.tinkerers_smithing.TinkerersSmithing;
 import folk.sisby.tinkerers_smithing.TinkerersSmithingItem;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.CraftingRecipe;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.SpecialCraftingRecipe;
 import net.minecraft.recipe.book.CraftingRecipeCategory;
@@ -15,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ShapelessRepairRecipe extends SpecialCraftingRecipe implements CraftingRecipe {
+public class ShapelessRepairRecipe extends SpecialCraftingRecipe {
 	public ShapelessRepairRecipe(Identifier identifier, CraftingRecipeCategory craftingRecipeCategory) {
 		super(identifier, craftingRecipeCategory);
 	}
@@ -54,6 +53,7 @@ public class ShapelessRepairRecipe extends SpecialCraftingRecipe implements Craf
 		return outList;
 	}
 
+	@Override
 	public boolean matches(CraftingInventory craftingInventory, World world) {
 		ItemStack equipmentStack = getSingleEquipmentStack(craftingInventory);
 		if (equipmentStack != null && !equipmentStack.hasEnchantments()) {
@@ -68,6 +68,7 @@ public class ShapelessRepairRecipe extends SpecialCraftingRecipe implements Craf
 		return false;
 	}
 
+	@Override
 	public ItemStack craft(CraftingInventory craftingInventory) {
 		ItemStack equipmentStack = getSingleEquipmentStack(craftingInventory);
 		if (equipmentStack != null && !equipmentStack.hasEnchantments()) {

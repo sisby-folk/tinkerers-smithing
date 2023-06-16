@@ -27,14 +27,15 @@ The more limited datapack version is also available for NBT Crafting [2.2.3](htt
 
 **Anvil Unit Repair**<br/>
 *This recipe no longer has an experience or work cost.*<br/>
-![javaw_OIZieX7Glu](https://github.com/sisby-folk/tinkerers-smithing/assets/55819817/da8a9f26-3d5d-42ca-a850-9c6a32714230)
+![javaw_OIZieX7Glu](https://cdn.modrinth.com/data/RhVpNN5O/images/26c2a3262a30257f91d7a0578556907b351a4482.png)
 
-**Anvil Combine Recipe**<br/>
+**Anvil Combining**<br/>
 *This recipe no longer charges 2 levels for repairing, and is now order-agnostic - choosing the lower cost.*<br/>
-![javaw_OIZieX7Glu](https://github.com/sisby-folk/tinkerers-smithing/assets/55819817/da8a9f26-3d5d-42ca-a850-9c6a32714230)
+![javaw_OIZieX7Glu](https://cdn.modrinth.com/data/RhVpNN5O/images/6058878b1d90157db0fb69109763cefb84ac9264.png)
 
-**Equipment Usage**<br/>
-*Equipment with enchantments or a custom name **can't break**, they just stop working.*
+**Equipment Breakage**<br/>
+*Broken equipment with a custom name or enchantments doesn't disappear, and can be repaired / combined.*<br/>
+![javaw_Xrd04RqYtZ](https://cdn.modrinth.com/data/RhVpNN5O/images/e246eec964cc5cd203329ae8c7a41a56524a6ddd.png)
 
 ### New
 
