@@ -31,10 +31,11 @@ The more limited datapack version is also available for NBT Crafting [2.2.3](htt
 
 **Anvil Combine Recipe**<br/>
 *This recipe no longer charges 2 levels for repairing, and is now order-agnostic - choosing the lower cost.*<br/>
-![javaw_OIZieX7Glu](https://github.com/sisby-folk/tinkerers-smithing/assets/55819817/da8a9f26-3d5d-42ca-a850-9c6a32714230)
+![javaw_OIZieX7Glu](https://cdn.modrinth.com/data/RhVpNN5O/images/26c2a3262a30257f91d7a0578556907b351a4482.png)
 
 **Equipment Usage**<br/>
-*Equipment with enchantments or a custom name **can't break**, they just stop working.*
+*Equipment with a custom name or enchantments can be repaired after breaking.*
+![javaw_Xrd04RqYtZ](https://cdn.modrinth.com/data/RhVpNN5O/images/e246eec964cc5cd203329ae8c7a41a56524a6ddd.png)
 
 ### New
 
