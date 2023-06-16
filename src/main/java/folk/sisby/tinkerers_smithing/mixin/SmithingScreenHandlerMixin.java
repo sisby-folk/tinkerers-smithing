@@ -13,31 +13,31 @@ import net.minecraft.util.Pair;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(SmithingScreenHandler.class)
 public abstract class SmithingScreenHandlerMixin extends ForgingScreenHandler {
 	@Shadow @Nullable private SmithingRecipe currentRecipe;
-
-	@Shadow
-	protected abstract void decrementStack(int slot);
+	@Unique private int ingredientsUsed = 0;
 
 	public SmithingScreenHandlerMixin(@Nullable ScreenHandlerType<?> type, int syncId, PlayerInventory playerInventory, ScreenHandlerContext context) {
 		super(type, syncId, playerInventory, context);
 	}
 
-	@Redirect(method = "onTakeOutput", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/SmithingScreenHandler;decrementStack(I)V"))
-	public void specialDecrement(SmithingScreenHandler instance, int slot, PlayerEntity player, ItemStack resultStack) {
-		if (slot == 2 && this.currentRecipe instanceof SmithingUpgradeRecipe sur) {
-			ItemStack ingredientStack =  this.ingredientInventory.getStack(2);
-			Pair<Integer, Integer> stacksAndCost = sur.getUsedRepairStacksAndCost(resultStack.getItem(), ingredientStack);
-			if (stacksAndCost != null) {
-				ingredientStack.decrement(stacksAndCost.getLeft());
-				this.ingredientInventory.setStack(2, ingredientStack);
-				return;
-			}
+	@Inject(method = "updateResult", at = @At(value = "TAIL"))
+	public void cacheIngredientsUsed(CallbackInfo ci) {
+		Pair<Integer, Integer> stacksAndCost = null;
+		if (this.currentRecipe instanceof SmithingUpgradeRecipe sur) {
+			stacksAndCost = sur.getUsedRepairStacksAndCost(this.output.getStack(1).getItem(), this.input.getStack(2));
 		}
-		this.decrementStack(slot);
+		ingredientsUsed = stacksAndCost == null ? 1 : stacksAndCost.getLeft();
+	}
+
+	@Inject(method = "onTakeOutput", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/SmithingScreenHandler;decrementStack(I)V", ordinal = 0))
+	public void specialDecrementIngredient(PlayerEntity player, ItemStack stack, CallbackInfo ci) {
+		this.input.getStack(2).decrement(ingredientsUsed - 1);
 	}
 }

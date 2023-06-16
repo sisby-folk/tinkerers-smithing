@@ -5,7 +5,10 @@ import folk.sisby.tinkerers_smithing.TinkerersSmithingItem;
 import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.*;
+import net.minecraft.recipe.CraftingCategory;
+import net.minecraft.recipe.Ingredient;
+import net.minecraft.recipe.RecipeSerializer;
+import net.minecraft.recipe.SpecialCraftingRecipe;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
@@ -14,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class ShapelessUpgradeRecipe extends SpecialCraftingRecipe implements CraftingRecipe {
+public class ShapelessUpgradeRecipe extends SpecialCraftingRecipe {
 	public ShapelessUpgradeRecipe(Identifier identifier, CraftingCategory craftingCategory) {
 		super(identifier, craftingCategory);
 	}

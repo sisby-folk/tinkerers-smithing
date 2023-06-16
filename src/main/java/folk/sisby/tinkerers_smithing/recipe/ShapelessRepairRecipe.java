@@ -5,7 +5,6 @@ import folk.sisby.tinkerers_smithing.TinkerersSmithingItem;
 import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.CraftingCategory;
-import net.minecraft.recipe.CraftingRecipe;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.SpecialCraftingRecipe;
 import net.minecraft.registry.DynamicRegistryManager;
@@ -16,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ShapelessRepairRecipe extends SpecialCraftingRecipe implements CraftingRecipe {
+public class ShapelessRepairRecipe extends SpecialCraftingRecipe {
 	public ShapelessRepairRecipe(Identifier identifier, CraftingCategory craftingCategory) {
 		super(identifier, craftingCategory);
 	}
