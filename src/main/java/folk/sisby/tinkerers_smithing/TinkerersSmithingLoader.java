@@ -5,6 +5,7 @@ import net.minecraft.item.*;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeManager;
+import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.Registries;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Identifier;
@@ -127,7 +128,7 @@ public class TinkerersSmithingLoader {
 				for (Identifier recipeId : recipeIds) {
 					Recipe<?> recipe = recipeManager.get(recipeId).orElse(null);
 					if (recipe != null) {
-						if (recipe.getOutput().isOf(item)) {
+						if (recipe.getResult(DynamicRegistryManager.fromRegistryOfRegistries(Registries.REGISTRY)).isOf(item)) {
 							for (Ingredient repairIngredient : repairIngredients) {
 								int unitCost = Math.toIntExact(recipe.getIngredients().stream()
 									.filter(ingredient -> Arrays.stream(ingredient.getMatchingStacks()).allMatch(repairIngredient))

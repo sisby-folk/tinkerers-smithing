@@ -5,11 +5,8 @@ import folk.sisby.tinkerers_smithing.TinkerersSmithingItem;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.CraftingRecipe;
-import net.minecraft.recipe.Ingredient;
-import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.recipe.SpecialCraftingRecipe;
-import net.minecraft.recipe.book.CraftingRecipeCategory;
+import net.minecraft.recipe.*;
+import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
@@ -18,8 +15,8 @@ import java.util.List;
 import java.util.Map;
 
 public class ShapelessUpgradeRecipe extends SpecialCraftingRecipe implements CraftingRecipe {
-	public ShapelessUpgradeRecipe(Identifier identifier, CraftingRecipeCategory craftingRecipeCategory) {
-		super(identifier, craftingRecipeCategory);
+	public ShapelessUpgradeRecipe(Identifier identifier, CraftingCategory craftingCategory) {
+		super(identifier, craftingCategory);
 	}
 
 	public List<ItemStack> getInventoryStacks(CraftingInventory craftingInventory) {
@@ -70,11 +67,13 @@ public class ShapelessUpgradeRecipe extends SpecialCraftingRecipe implements Cra
 		return null;
 	}
 
+	@Override
 	public boolean matches(CraftingInventory craftingInventory, World world) {
 		return getValidOutput(craftingInventory) != null;
 	}
 
-	public ItemStack craft(CraftingInventory craftingInventory) {
+	@Override
+	public ItemStack craft(CraftingInventory craftingInventory, DynamicRegistryManager registryManager) {
 		ItemStack result = getValidOutput(craftingInventory);
 		return result != null ? result : ItemStack.EMPTY;
 	}

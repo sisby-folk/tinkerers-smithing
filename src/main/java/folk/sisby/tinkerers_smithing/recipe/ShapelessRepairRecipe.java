@@ -4,10 +4,11 @@ import folk.sisby.tinkerers_smithing.TinkerersSmithing;
 import folk.sisby.tinkerers_smithing.TinkerersSmithingItem;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.recipe.CraftingCategory;
 import net.minecraft.recipe.CraftingRecipe;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.SpecialCraftingRecipe;
-import net.minecraft.recipe.book.CraftingRecipeCategory;
+import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -16,8 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ShapelessRepairRecipe extends SpecialCraftingRecipe implements CraftingRecipe {
-	public ShapelessRepairRecipe(Identifier identifier, CraftingRecipeCategory craftingRecipeCategory) {
-		super(identifier, craftingRecipeCategory);
+	public ShapelessRepairRecipe(Identifier identifier, CraftingCategory craftingCategory) {
+		super(identifier, craftingCategory);
 	}
 
 	public static @Nullable ItemStack getSingleEquipmentStack(CraftingInventory craftingInventory) {
@@ -54,6 +55,7 @@ public class ShapelessRepairRecipe extends SpecialCraftingRecipe implements Craf
 		return outList;
 	}
 
+	@Override
 	public boolean matches(CraftingInventory craftingInventory, World world) {
 		ItemStack equipmentStack = getSingleEquipmentStack(craftingInventory);
 		if (equipmentStack != null && !equipmentStack.hasEnchantments()) {
@@ -68,7 +70,8 @@ public class ShapelessRepairRecipe extends SpecialCraftingRecipe implements Craf
 		return false;
 	}
 
-	public ItemStack craft(CraftingInventory craftingInventory) {
+	@Override
+	public ItemStack craft(CraftingInventory craftingInventory, DynamicRegistryManager registryManager) {
 		ItemStack equipmentStack = getSingleEquipmentStack(craftingInventory);
 		if (equipmentStack != null && !equipmentStack.hasEnchantments()) {
 			List<ItemStack> repairMaterials = getRepairMaterials(craftingInventory, equipmentStack);

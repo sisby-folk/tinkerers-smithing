@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(AnvilScreen.class)
-public class AnvilScreenMixin extends ForgingScreen<AnvilScreenHandler> {
+public abstract class AnvilScreenMixin extends ForgingScreen<AnvilScreenHandler> {
 	public AnvilScreenMixin(AnvilScreenHandler handler, PlayerInventory playerInventory, Text title, Identifier texture) {
 		super(handler, playerInventory, title, texture);
 	}
