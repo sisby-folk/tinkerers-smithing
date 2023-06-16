@@ -29,12 +29,12 @@ public abstract class SmithingScreenHandlerMixin extends ForgingScreenHandler {
 
 	@Redirect(method = "onTakeOutput", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/SmithingScreenHandler;decrementStack(I)V"))
 	public void specialDecrement(SmithingScreenHandler instance, int slot, PlayerEntity player, ItemStack resultStack) {
-		if (slot == 1 && this.currentRecipe instanceof SmithingUpgradeRecipe sur) {
-			ItemStack ingredientStack =  this.input.getStack(1);
+		if (slot == 2 && this.currentRecipe instanceof SmithingUpgradeRecipe sur) {
+			ItemStack ingredientStack =  this.ingredientInventory.getStack(2);
 			Pair<Integer, Integer> stacksAndCost = sur.getUsedRepairStacksAndCost(resultStack.getItem(), ingredientStack);
 			if (stacksAndCost != null) {
 				ingredientStack.decrement(stacksAndCost.getLeft());
-				this.input.setStack(1, ingredientStack);
+				this.ingredientInventory.setStack(2, ingredientStack);
 				return;
 			}
 		}

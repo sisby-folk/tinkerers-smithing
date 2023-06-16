@@ -13,9 +13,9 @@ import net.minecraft.world.World;
 
 import java.util.Map;
 
-public class SmithingUpgradeRecipe extends LegacySmithingRecipe {
+public class SmithingUpgradeRecipe extends TransformSmithingRecipe {
 	public SmithingUpgradeRecipe(Identifier identifier) {
-		super(identifier, Ingredient.EMPTY, Ingredient.EMPTY, ItemStack.EMPTY);
+		super(identifier, Ingredient.EMPTY, Ingredient.EMPTY, Ingredient.EMPTY, ItemStack.EMPTY);
 	}
 
 	public Pair<Integer, Integer> getUsedRepairStacksAndCost(Item result, ItemStack ingredient) {
@@ -32,8 +32,8 @@ public class SmithingUpgradeRecipe extends LegacySmithingRecipe {
 	}
 
 	public ItemStack getValidOutput(Inventory inventory) {
-		ItemStack base = inventory.getStack(0);
-		ItemStack ingredient = inventory.getStack(1);
+		ItemStack base = inventory.getStack(1);
+		ItemStack ingredient = inventory.getStack(2);
 
 		if (!base.isEmpty() && !ingredient.isEmpty() && base.getItem() instanceof TinkerersSmithingItem tsi) {
 			for (Item upgradeItem : tsi.tinkerersSmithing$getUpgradePaths()) {
@@ -53,6 +53,21 @@ public class SmithingUpgradeRecipe extends LegacySmithingRecipe {
 	@Override
 	public boolean matches(Inventory craftingInventory, World world) {
 		return getValidOutput(craftingInventory) != null;
+	}
+
+	@Override
+	public boolean matchesTemplateIngredient(ItemStack stack) {
+		return false;
+	}
+
+	@Override
+	public boolean matchesAdditionIngredient(ItemStack stack) {
+		return true;
+	}
+
+	@Override
+	public boolean matchesBaseIngredient(ItemStack stack) {
+		return true;
 	}
 
 	@Override

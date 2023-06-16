@@ -2,7 +2,7 @@ package folk.sisby.tinkerers_smithing.recipe;
 
 import folk.sisby.tinkerers_smithing.TinkerersSmithing;
 import folk.sisby.tinkerers_smithing.TinkerersSmithingItem;
-import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.*;
@@ -19,7 +19,7 @@ public class ShapelessUpgradeRecipe extends SpecialCraftingRecipe implements Cra
 		super(identifier, craftingCategory);
 	}
 
-	public List<ItemStack> getInventoryStacks(CraftingInventory craftingInventory) {
+	public List<ItemStack> getInventoryStacks(RecipeInputInventory craftingInventory) {
 		List<ItemStack> outList = new ArrayList<>();
 		for(int i = 0; i < craftingInventory.size(); ++i) {
 			ItemStack itemStack = craftingInventory.getStack(i);
@@ -30,7 +30,7 @@ public class ShapelessUpgradeRecipe extends SpecialCraftingRecipe implements Cra
 		return outList;
 	}
 
-	public ItemStack getValidOutput(CraftingInventory craftingInventory) {
+	public ItemStack getValidOutput(RecipeInputInventory craftingInventory) {
 		ItemStack equipmentStack = null;
 
 		List<ItemStack> gridItems = getInventoryStacks(craftingInventory);
@@ -68,12 +68,12 @@ public class ShapelessUpgradeRecipe extends SpecialCraftingRecipe implements Cra
 	}
 
 	@Override
-	public boolean matches(CraftingInventory craftingInventory, World world) {
+	public boolean matches(RecipeInputInventory craftingInventory, World world) {
 		return getValidOutput(craftingInventory) != null;
 	}
 
 	@Override
-	public ItemStack craft(CraftingInventory craftingInventory, DynamicRegistryManager registryManager) {
+	public ItemStack craft(RecipeInputInventory craftingInventory, DynamicRegistryManager registryManager) {
 		ItemStack result = getValidOutput(craftingInventory);
 		return result != null ? result : ItemStack.EMPTY;
 	}

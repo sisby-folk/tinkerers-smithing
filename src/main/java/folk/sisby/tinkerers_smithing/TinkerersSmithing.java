@@ -59,9 +59,9 @@ public class TinkerersSmithing implements ModInitializer {
 
 	@Override
 	public void onInitialize(ModContainer mod) {
-		ResourceLoaderEvents.START_DATA_PACK_RELOAD.register((server, oldResourceManager) -> TinkerersSmithing.resetLoader());
+		ResourceLoaderEvents.START_DATA_PACK_RELOAD.register((context) -> TinkerersSmithing.resetLoader());
 		ServerLifecycleEvents.READY.register(TinkerersSmithing::generateSmithingData);
-		ResourceLoaderEvents.END_DATA_PACK_RELOAD.register((server, resourceManager, throwable) -> TinkerersSmithing.generateSmithingData(server));
+		ResourceLoaderEvents.END_DATA_PACK_RELOAD.register((context) -> TinkerersSmithing.generateSmithingData(context.server()));
 		ResourceLoader.get(ResourceType.SERVER_DATA).registerReloader(SmithingToolMaterialLoader.INSTANCE);
 		ResourceLoader.get(ResourceType.SERVER_DATA).registerReloader(SmithingArmorMaterialLoader.INSTANCE);
 		ResourceLoader.get(ResourceType.SERVER_DATA).registerReloader(SmithingUnitCostManager.INSTANCE);

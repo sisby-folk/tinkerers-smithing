@@ -22,12 +22,12 @@ if (System.getenv("GITHUB_TOKEN")) {
 
 archivesBaseName = project.archives_base_name
 
-def mc_major = '1.19'
-def mc = mc_major + '.4'
+def mc_major = '1.20'
+def mc = mc_major + ''
 def default_branch = '1.19'
 
 def origVersion = project.version
-project.version = project.version + "+" + mc
+project.version = project.version + "+" + mc_major
 group = project.maven_group
 
 repositories {

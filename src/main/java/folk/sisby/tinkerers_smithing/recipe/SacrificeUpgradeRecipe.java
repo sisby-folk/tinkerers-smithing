@@ -6,8 +6,8 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Ingredient;
-import net.minecraft.recipe.LegacySmithingRecipe;
 import net.minecraft.recipe.RecipeSerializer;
+import net.minecraft.recipe.TransformSmithingRecipe;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
@@ -15,14 +15,14 @@ import net.minecraft.world.World;
 
 import java.util.Map;
 
-public class SacrificeUpgradeRecipe extends LegacySmithingRecipe {
+public class SacrificeUpgradeRecipe extends TransformSmithingRecipe {
 	public SacrificeUpgradeRecipe(Identifier identifier) {
-		super(identifier, Ingredient.EMPTY, Ingredient.EMPTY, ItemStack.EMPTY);
+		super(identifier, Ingredient.EMPTY, Ingredient.EMPTY, Ingredient.EMPTY, ItemStack.EMPTY);
 	}
 
 	public ItemStack getValidOutput(Inventory inventory) {
-		ItemStack base = inventory.getStack(0);
-		ItemStack ingredient = inventory.getStack(1);
+		ItemStack base = inventory.getStack(1);
+		ItemStack ingredient = inventory.getStack(2);
 
 		if (!base.isEmpty() && !ingredient.isEmpty() && base.isDamageable() && ingredient.isDamageable() && base.getItem() instanceof TinkerersSmithingItem tsi) {
 			for (Map.Entry<Item, Pair<Integer, Map<Item, Integer>>> sacrificePaths : tsi.tinkerersSmithing$getSacrificePaths().entrySet()) {
@@ -53,6 +53,21 @@ public class SacrificeUpgradeRecipe extends LegacySmithingRecipe {
 	@Override
 	public boolean matches(Inventory craftingInventory, World world) {
 		return getValidOutput(craftingInventory) != null;
+	}
+
+	@Override
+	public boolean matchesTemplateIngredient(ItemStack stack) {
+		return false;
+	}
+
+	@Override
+	public boolean matchesAdditionIngredient(ItemStack stack) {
+		return true;
+	}
+
+	@Override
+	public boolean matchesBaseIngredient(ItemStack stack) {
+		return true;
 	}
 
 	@Override

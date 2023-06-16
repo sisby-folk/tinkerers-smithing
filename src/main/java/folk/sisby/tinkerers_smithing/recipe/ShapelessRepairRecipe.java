@@ -2,7 +2,7 @@ package folk.sisby.tinkerers_smithing.recipe;
 
 import folk.sisby.tinkerers_smithing.TinkerersSmithing;
 import folk.sisby.tinkerers_smithing.TinkerersSmithingItem;
-import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.CraftingCategory;
 import net.minecraft.recipe.CraftingRecipe;
@@ -21,7 +21,7 @@ public class ShapelessRepairRecipe extends SpecialCraftingRecipe implements Craf
 		super(identifier, craftingCategory);
 	}
 
-	public static @Nullable ItemStack getSingleEquipmentStack(CraftingInventory craftingInventory) {
+	public static @Nullable ItemStack getSingleEquipmentStack(RecipeInputInventory craftingInventory) {
 		ItemStack equipmentStack = null;
 
 		for(int i = 0; i < craftingInventory.size(); ++i) {
@@ -37,7 +37,7 @@ public class ShapelessRepairRecipe extends SpecialCraftingRecipe implements Craf
 		return equipmentStack;
 	}
 
-	public static List<ItemStack> getRepairMaterials(CraftingInventory craftingInventory, ItemStack equipment) {
+	public static List<ItemStack> getRepairMaterials(RecipeInputInventory craftingInventory, ItemStack equipment) {
 		List<ItemStack> outList = new ArrayList<>();
 
 		if (equipment.getItem() instanceof TinkerersSmithingItem tsi) {
@@ -56,7 +56,7 @@ public class ShapelessRepairRecipe extends SpecialCraftingRecipe implements Craf
 	}
 
 	@Override
-	public boolean matches(CraftingInventory craftingInventory, World world) {
+	public boolean matches(RecipeInputInventory craftingInventory, World world) {
 		ItemStack equipmentStack = getSingleEquipmentStack(craftingInventory);
 		if (equipmentStack != null && !equipmentStack.hasEnchantments()) {
 			List<ItemStack> repairMaterials = getRepairMaterials(craftingInventory, equipmentStack);
@@ -71,7 +71,7 @@ public class ShapelessRepairRecipe extends SpecialCraftingRecipe implements Craf
 	}
 
 	@Override
-	public ItemStack craft(CraftingInventory craftingInventory, DynamicRegistryManager registryManager) {
+	public ItemStack craft(RecipeInputInventory craftingInventory, DynamicRegistryManager registryManager) {
 		ItemStack equipmentStack = getSingleEquipmentStack(craftingInventory);
 		if (equipmentStack != null && !equipmentStack.hasEnchantments()) {
 			List<ItemStack> repairMaterials = getRepairMaterials(craftingInventory, equipmentStack);
