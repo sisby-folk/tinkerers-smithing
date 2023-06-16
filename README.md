@@ -29,7 +29,7 @@ The more limited datapack version is also available for NBT Crafting [2.2.3](htt
 *This recipe no longer has an experience or work cost.*<br/>
 ![javaw_OIZieX7Glu](https://cdn.modrinth.com/data/RhVpNN5O/images/26c2a3262a30257f91d7a0578556907b351a4482.png)
 
-**Anvil Combine Recipe**<br/>
+**Anvil Combining**<br/>
 *This recipe no longer charges 2 levels for repairing, and is now order-agnostic - choosing the lower cost.*<br/>
 ![javaw_OIZieX7Glu](https://cdn.modrinth.com/data/RhVpNN5O/images/6058878b1d90157db0fb69109763cefb84ac9264.png)
 
