@@ -33,8 +33,8 @@ The more limited datapack version is also available for NBT Crafting [2.2.3](htt
 *This recipe no longer charges 2 levels for repairing, and is now order-agnostic - choosing the lower cost.*<br/>
 ![javaw_OIZieX7Glu](https://cdn.modrinth.com/data/RhVpNN5O/images/6058878b1d90157db0fb69109763cefb84ac9264.png)
 
-**Equipment Usage**<br/>
-*Equipment with a custom name or enchantments can be repaired after breaking.*<br/>
+**Equipment Breakage**<br/>
+*Broken equipment with a custom name or enchantments doesn't disappear, and can be repaired / combined.*<br/>
 ![javaw_Xrd04RqYtZ](https://cdn.modrinth.com/data/RhVpNN5O/images/e246eec964cc5cd203329ae8c7a41a56524a6ddd.png)
 
 ### New
