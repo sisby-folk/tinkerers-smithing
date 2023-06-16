@@ -17,8 +17,8 @@ import java.util.List;
 import java.util.Map;
 
 public class ShapelessUpgradeRecipe extends SpecialCraftingRecipe {
-	public ShapelessUpgradeRecipe(Identifier identifier, CraftingRecipeCategory craftingRecipeCategory) {
-		super(identifier, craftingRecipeCategory);
+	public ShapelessUpgradeRecipe(Identifier identifier, CraftingRecipeCategory craftingCategory) {
+		super(identifier, craftingCategory);
 	}
 
 	public List<ItemStack> getInventoryStacks(CraftingInventory craftingInventory) {

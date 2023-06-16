@@ -15,8 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ShapelessRepairRecipe extends SpecialCraftingRecipe {
-	public ShapelessRepairRecipe(Identifier identifier, CraftingRecipeCategory craftingRecipeCategory) {
-		super(identifier, craftingRecipeCategory);
+	public ShapelessRepairRecipe(Identifier identifier, CraftingRecipeCategory craftingCategory) {
+		super(identifier, craftingCategory);
 	}
 
 	public static @Nullable ItemStack getSingleEquipmentStack(CraftingInventory craftingInventory) {
