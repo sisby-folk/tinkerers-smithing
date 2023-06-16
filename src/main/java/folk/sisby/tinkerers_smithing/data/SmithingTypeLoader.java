@@ -8,13 +8,13 @@ import com.mojang.serialization.JsonOps;
 import folk.sisby.tinkerers_smithing.TinkerersSmithing;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.tag.TagFile;
+import net.minecraft.registry.tag.TagGroupLoader;
 import net.minecraft.resource.ResourceManager;
-import net.minecraft.tag.TagFile;
-import net.minecraft.tag.TagGroupLoader;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
 import net.minecraft.util.profiler.Profiler;
-import net.minecraft.util.registry.Registry;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.quiltmc.qsl.resource.loader.api.reloader.IdentifiableResourceReloader;
@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 public class SmithingTypeLoader extends MultiJsonDataLoader implements IdentifiableResourceReloader {
 	public static final SmithingTypeLoader INSTANCE = new SmithingTypeLoader(new Gson());
 	public static final Identifier ID = new Identifier(TinkerersSmithing.ID, "smithing_type_loader");
-	public static final TagGroupLoader<Item> ITEM_TAG_LOADER = new TagGroupLoader<>(Registry.ITEM::getOrEmpty, "tags/items");
+	public static final TagGroupLoader<Item> ITEM_TAG_LOADER = new TagGroupLoader<>(Registries.ITEM::getOrEmpty, "tags/items");
 	public static final String AVOIDANCE_PREFIX = "tinkerers_smithing_types/";
 
 	public SmithingTypeLoader(Gson gson) {
@@ -68,7 +68,7 @@ public class SmithingTypeLoader extends MultiJsonDataLoader implements Identifia
 		// Strip collision avoiding ID
 		tags = tags.entrySet().stream().collect(Collectors.toMap(e -> new Identifier(e.getKey().getNamespace(), StringUtils.removeStart(e.getKey().getPath(), AVOIDANCE_PREFIX)), Map.Entry::getValue));
 		// Manually jam in stuff by equipment slot, false positives should wash out by having no material.
-		for (Item item : Registry.ITEM) {
+		for (Item item : Registries.ITEM) {
 			if (item instanceof ArmorItem ai) {
 				switch (ai.getSlotType()) {
 					case FEET -> addToTag(tags, "boots", item);

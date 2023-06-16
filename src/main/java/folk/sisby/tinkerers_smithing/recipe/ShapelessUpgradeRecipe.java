@@ -9,6 +9,7 @@ import net.minecraft.recipe.CraftingRecipe;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.SpecialCraftingRecipe;
+import net.minecraft.recipe.book.CraftingRecipeCategory;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
@@ -17,8 +18,8 @@ import java.util.List;
 import java.util.Map;
 
 public class ShapelessUpgradeRecipe extends SpecialCraftingRecipe implements CraftingRecipe {
-	public ShapelessUpgradeRecipe(Identifier identifier) {
-		super(identifier);
+	public ShapelessUpgradeRecipe(Identifier identifier, CraftingRecipeCategory craftingRecipeCategory) {
+		super(identifier, craftingRecipeCategory);
 	}
 
 	public List<ItemStack> getInventoryStacks(CraftingInventory craftingInventory) {

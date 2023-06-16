@@ -7,11 +7,11 @@ import folk.sisby.tinkerers_smithing.TinkerersSmithing;
 import folk.sisby.tinkerers_smithing.TinkerersSmithingMaterial;
 import net.minecraft.item.Item;
 import net.minecraft.recipe.Ingredient;
+import net.minecraft.registry.Registries;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
 import net.minecraft.util.profiler.Profiler;
-import net.minecraft.util.registry.Registry;
 
 import java.util.*;
 
@@ -32,7 +32,7 @@ public abstract class SmithingMaterialLoader extends MultiJsonDataLoader {
 	}
 
 	public static Item getOrWarnItem(Identifier id, Identifier resourceId) {
-		Item item = Registry.ITEM.getOrEmpty(id).orElse(null);
+		Item item = Registries.ITEM.getOrEmpty(id).orElse(null);
 		if (item == null) {
 			TinkerersSmithing.LOGGER.warn("[Tinkerer's Smithing] Couldn't load item {} from {} as it wasn't registered!", id, resourceId);
 		}
@@ -67,7 +67,7 @@ public abstract class SmithingMaterialLoader extends MultiJsonDataLoader {
 						Item inheritItem = getOrWarnItem(inheritItemId, id);
 						if (inheritItem != null) {
 							repairMaterials.add(getDefaultRepairIngredient(inheritItem));
-							Registry.ITEM.forEach(matchingItem -> {
+							Registries.ITEM.forEach(matchingItem -> {
 								if (matchingMaterials(inheritItem, matchingItem)) items.add(matchingItem);
 							});
 						}

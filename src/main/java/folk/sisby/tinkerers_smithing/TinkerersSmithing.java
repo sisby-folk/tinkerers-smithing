@@ -4,18 +4,17 @@ import folk.sisby.tinkerers_smithing.data.SmithingArmorMaterialLoader;
 import folk.sisby.tinkerers_smithing.data.SmithingToolMaterialLoader;
 import folk.sisby.tinkerers_smithing.data.SmithingTypeLoader;
 import folk.sisby.tinkerers_smithing.data.SmithingUnitCostManager;
-import folk.sisby.tinkerers_smithing.recipe.SacrificeUpgradeRecipe;
-import folk.sisby.tinkerers_smithing.recipe.ShapelessRepairRecipe;
-import folk.sisby.tinkerers_smithing.recipe.ShapelessUpgradeRecipe;
-import folk.sisby.tinkerers_smithing.recipe.SmithingUpgradeRecipe;
+import folk.sisby.tinkerers_smithing.recipe.*;
 import net.minecraft.item.Item;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.SpecialRecipeSerializer;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import org.jetbrains.annotations.Nullable;
 import org.quiltmc.loader.api.ModContainer;
 import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
@@ -29,11 +28,11 @@ public class TinkerersSmithing implements ModInitializer {
 	public static final String ID = "tinkerers_smithing";
 	public static final Logger LOGGER = LoggerFactory.getLogger(ID);
 
-	public static final TagKey<Item> DEWORK_INGREDIENTS = TagKey.of(Registry.ITEM_KEY, new Identifier(ID, "dework_ingredients"));
-	public static final SpecialRecipeSerializer<ShapelessRepairRecipe> SHAPELESS_REPAIR_SERIALIZER = Registry.register(Registry.RECIPE_SERIALIZER, new Identifier(ID, "crafting_special_shapeless_repair"), new SpecialRecipeSerializer<>(ShapelessRepairRecipe::new));
-	public static final SpecialRecipeSerializer<ShapelessUpgradeRecipe> SHAPELESS_UPGRADE_SERIALIZER = Registry.register(Registry.RECIPE_SERIALIZER, new Identifier(ID, "crafting_special_shapeless_upgrade"), new SpecialRecipeSerializer<>(ShapelessUpgradeRecipe::new));
-	public static final SpecialRecipeSerializer<SmithingUpgradeRecipe> SMITHING_UPGRADE_SERIALIZER = Registry.register(Registry.RECIPE_SERIALIZER, new Identifier(ID, "crafting_special_smithing_upgrade"), new SpecialRecipeSerializer<>(SmithingUpgradeRecipe::new));
-	public static final SpecialRecipeSerializer<SacrificeUpgradeRecipe> SACRIFICE_UPGRADE_SERIALIZER = Registry.register(Registry.RECIPE_SERIALIZER, new Identifier(ID, "crafting_special_sacrifice_upgrade"), new SpecialRecipeSerializer<>(SacrificeUpgradeRecipe::new));
+	public static final TagKey<Item> DEWORK_INGREDIENTS = TagKey.of(RegistryKeys.ITEM, new Identifier(ID, "dework_ingredients"));
+	public static final SpecialRecipeSerializer<ShapelessRepairRecipe> SHAPELESS_REPAIR_SERIALIZER = Registry.register(Registries.RECIPE_SERIALIZER, new Identifier(ID, "crafting_special_shapeless_repair"), new SpecialRecipeSerializer<>(ShapelessRepairRecipe::new));
+	public static final SpecialRecipeSerializer<ShapelessUpgradeRecipe> SHAPELESS_UPGRADE_SERIALIZER = Registry.register(Registries.RECIPE_SERIALIZER, new Identifier(ID, "crafting_special_shapeless_upgrade"), new SpecialRecipeSerializer<>(ShapelessUpgradeRecipe::new));
+	public static final GenericSpecialRecipeSerializer<SmithingUpgradeRecipe> SMITHING_UPGRADE_SERIALIZER = Registry.register(Registries.RECIPE_SERIALIZER, new Identifier(ID, "crafting_special_smithing_upgrade"), new GenericSpecialRecipeSerializer<>(SmithingUpgradeRecipe::new));
+	public static final GenericSpecialRecipeSerializer<SacrificeUpgradeRecipe> SACRIFICE_UPGRADE_SERIALIZER = Registry.register(Registries.RECIPE_SERIALIZER, new Identifier(ID, "crafting_special_sacrifice_upgrade"), new GenericSpecialRecipeSerializer<>(SacrificeUpgradeRecipe::new));
 
 	// Discarded and picked up each reload. Probably shouldn't be accessed outside of reload time.
 	private static TinkerersSmithingLoader LOADER_INSTANCE = null;

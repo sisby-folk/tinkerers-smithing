@@ -4,11 +4,11 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import folk.sisby.tinkerers_smithing.TinkerersSmithing;
 import net.minecraft.recipe.Ingredient;
+import net.minecraft.registry.Registries;
 import net.minecraft.resource.JsonDataLoader;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.profiler.Profiler;
-import net.minecraft.util.registry.Registry;
 import org.jetbrains.annotations.NotNull;
 import org.quiltmc.qsl.resource.loader.api.reloader.IdentifiableResourceReloader;
 
@@ -30,7 +30,7 @@ public class SmithingUnitCostManager extends JsonDataLoader implements Identifia
 	@Override
 	protected void apply(Map<Identifier, JsonElement> prepared, ResourceManager manager, Profiler profiler) {
 		prepared.forEach((id, json) -> {
-			Registry.ITEM.getOrEmpty(id).ifPresentOrElse(item -> {
+			Registries.ITEM.getOrEmpty(id).ifPresentOrElse(item -> {
 				boolean replace = json.getAsJsonObject().get(KEY_REPLACE).getAsBoolean();
 				Map<Ingredient, Integer> costs = new HashMap<>();
 				json.getAsJsonObject().get(KEY_VALUES).getAsJsonArray().forEach(jsonValue -> {

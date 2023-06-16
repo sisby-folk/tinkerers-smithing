@@ -5,10 +5,10 @@ import net.minecraft.item.*;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeManager;
+import net.minecraft.registry.Registries;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
-import net.minecraft.util.registry.Registry;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -48,7 +48,7 @@ public class TinkerersSmithingLoader {
 
 		if (outList.isEmpty()) {
 			if (item instanceof ArmorItem || item instanceof ToolItem) {
-				defaultConsumer.accept(Registry.ITEM.getId(item));
+				defaultConsumer.accept(Registries.ITEM.getId(item));
 			}
 			if (item.isDamageable() && item instanceof ArmorItem ai) {
 				ArmorMaterial material = ai.getMaterial();
@@ -110,7 +110,7 @@ public class TinkerersSmithingLoader {
 	public Map<Ingredient, Integer> getUnitCosts(Item item, RecipeManager recipeManager) {
 		Map<Ingredient, Integer> outMap = new HashMap<>();
 
-		Identifier itemId = Registry.ITEM.getId(item);
+		Identifier itemId = Registries.ITEM.getId(item);
 
 		SmithingUnitCostManager.UnitCostOverride override = COST_OVERRIDES.get(item);
 		List<Ingredient> repairIngredients = getMaterialRepairIngredients(WARN_DEFAULT_MATERIAL::add, item);
@@ -229,14 +229,14 @@ public class TinkerersSmithingLoader {
 
 	public void generateItemSmithingData(@NotNull MinecraftServer server) {
 		TinkerersSmithing.LOGGER.info("[Tinkerer's Smithing] Data Initializing.");
-		for (Item item : Registry.ITEM) {
+		for (Item item : Registries.ITEM) {
 			if (item instanceof TinkerersSmithingItem tsi) {
 				Map<Ingredient, Integer> unitCosts = tsi.tinkerersSmithing$getUnitCosts();
 				unitCosts.clear();
 				unitCosts.putAll(getUnitCosts(item, server.getRecipeManager()));
 			}
 		}
-		for (Item item : Registry.ITEM) {
+		for (Item item : Registries.ITEM) {
 			if (item instanceof TinkerersSmithingItem tsi) {
 				Set<Item> upgradePaths = tsi.tinkerersSmithing$getUpgradePaths();
 				upgradePaths.clear();

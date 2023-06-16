@@ -7,6 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.CraftingRecipe;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.SpecialCraftingRecipe;
+import net.minecraft.recipe.book.CraftingRecipeCategory;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -15,8 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ShapelessRepairRecipe extends SpecialCraftingRecipe implements CraftingRecipe {
-	public ShapelessRepairRecipe(Identifier identifier) {
-		super(identifier);
+	public ShapelessRepairRecipe(Identifier identifier, CraftingRecipeCategory craftingRecipeCategory) {
+		super(identifier, craftingRecipeCategory);
 	}
 
 	public static @Nullable ItemStack getSingleEquipmentStack(CraftingInventory craftingInventory) {

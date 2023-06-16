@@ -2,10 +2,10 @@ package folk.sisby.tinkerers_smithing;
 
 import net.minecraft.item.Item;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.registry.Registries;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import org.quiltmc.qsl.networking.api.PacketByteBufs;
 import org.quiltmc.qsl.networking.api.PacketSender;
 import org.quiltmc.qsl.networking.api.ServerPlayConnectionEvents;
@@ -20,7 +20,7 @@ public class TinkerersSmithingNetworking implements ServerPlayConnectionEvents.J
 	public static PacketByteBuf createSmithingReloadBuf() {
 		PacketByteBuf buf = PacketByteBufs.create();
 		Map<Item, TinkerersSmithingItemData> outMap = new HashMap<>();
-		for (Item item : Registry.ITEM) {
+		for (Item item : Registries.ITEM) {
 			if (item instanceof TinkerersSmithingItem tsi && (!tsi.tinkerersSmithing$getUnitCosts().isEmpty() || !tsi.tinkerersSmithing$getUpgradePaths().isEmpty() || !tsi.tinkerersSmithing$getSacrificePaths().isEmpty())) {
 				outMap.put(item, new TinkerersSmithingItemData(item, tsi.tinkerersSmithing$getUnitCosts(), tsi.tinkerersSmithing$getUpgradePaths(), tsi.tinkerersSmithing$getSacrificePaths()));
 			}
