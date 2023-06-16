@@ -6,7 +6,6 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Ingredient;
-import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.SmithingRecipe;
 import net.minecraft.util.Identifier;
@@ -15,7 +14,7 @@ import net.minecraft.world.World;
 
 import java.util.Map;
 
-public class SmithingUpgradeRecipe extends SmithingRecipe implements Recipe<Inventory> {
+public class SmithingUpgradeRecipe extends SmithingRecipe {
 	public SmithingUpgradeRecipe(Identifier identifier) {
 		super(identifier, Ingredient.EMPTY, Ingredient.EMPTY, ItemStack.EMPTY);
 	}
@@ -52,10 +51,12 @@ public class SmithingUpgradeRecipe extends SmithingRecipe implements Recipe<Inve
 		return null;
 	}
 
+	@Override
 	public boolean matches(Inventory craftingInventory, World world) {
 		return getValidOutput(craftingInventory) != null;
 	}
 
+	@Override
 	public ItemStack craft(Inventory craftingInventory) {
 		ItemStack result = getValidOutput(craftingInventory);
 		return result != null ? result : ItemStack.EMPTY;
