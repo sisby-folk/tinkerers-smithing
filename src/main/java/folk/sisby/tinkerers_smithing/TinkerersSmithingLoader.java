@@ -263,7 +263,7 @@ public class TinkerersSmithingLoader {
 			Set<ArmorMaterial> armorMats = new HashSet<>(WARN_DEFAULT_MATERIAL_ARMOR.values());
 			TinkerersSmithing.LOGGER.warn("[Tinkerer's Smithing] Found {} unregistered armor materials with {} armor items: [{}] items: [{}]", armorMats.size(), WARN_DEFAULT_MATERIAL_ARMOR.size(), armorMats.stream().map(Object::toString).collect(Collectors.joining(", ")), WARN_DEFAULT_MATERIAL_ARMOR.entrySet().stream()
 				.collect(Collectors.groupingBy(Map.Entry::getValue, Collectors.mapping(Map.Entry::getKey, Collectors.toList()))).entrySet().stream() // Invert Map
-				.map(e -> "%s[%s]".formatted(e.getKey().toString(), e.getValue().stream().map(Identifier::toString).collect(Collectors.joining(", ")))).collect(Collectors.joining(", "))); // Stringify
+				.map(e -> "%s[%s]".formatted(e.getKey().getName(), e.getValue().stream().map(Identifier::toString).collect(Collectors.joining(", ")))).collect(Collectors.joining(", "))); // Stringify
 		}
 		if (!WARN_DEFAULT_MATERIAL_TOOL.isEmpty()) {
 			Set<ToolMaterial> toolMats = new HashSet<>(WARN_DEFAULT_MATERIAL_TOOL.values());
