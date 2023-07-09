@@ -62,16 +62,18 @@ public abstract class SmithingMaterialLoader extends MultiJsonDataLoader {
 			for (Pair<JsonElement, String> entry : jsons) {
 				JsonObject baseObject = entry.getLeft().getAsJsonObject();
 				if (baseObject.has(KEY_INHERIT_FROM_ITEM)) {
-					Identifier inheritItemId = Identifier.tryParse(baseObject.get(KEY_INHERIT_FROM_ITEM).getAsString());
-					if (inheritItemId != null) {
-						Item inheritItem = getOrWarnItem(inheritItemId, id);
-						if (inheritItem != null) {
-							repairMaterials.add(getDefaultRepairIngredient(inheritItem));
-							Registries.ITEM.forEach(matchingItem -> {
-								if (matchingMaterials(inheritItem, matchingItem)) items.add(matchingItem);
-							});
+					baseObject.get(KEY_INHERIT_FROM_ITEM).getAsJsonArray().forEach(inheritElement -> {
+						Identifier inheritItemId = Identifier.tryParse(inheritElement.getAsString());
+						if (inheritItemId != null) {
+							Item inheritItem = getOrWarnItem(inheritItemId, id);
+							if (inheritItem != null) {
+								repairMaterials.add(getDefaultRepairIngredient(inheritItem));
+								Registries.ITEM.forEach(matchingItem -> {
+									if (matchingMaterials(inheritItem, matchingItem)) items.add(matchingItem);
+								});
+							}
 						}
-					}
+					});
 				}
 				if (baseObject.has(KEY_REPAIR_MATERIALS)) {
 					baseObject.get(KEY_REPAIR_MATERIALS).getAsJsonArray().forEach(jsonIngredient -> repairMaterials.add(Ingredient.fromJson(jsonIngredient)));
@@ -83,9 +85,7 @@ public abstract class SmithingMaterialLoader extends MultiJsonDataLoader {
 					baseObject.get(KEY_REMOVE_ITEM).getAsJsonArray().forEach(jsonItemId -> removeOrWarnItem(items, new Identifier(jsonItemId.getAsString()), id));
 				}
 				if (baseObject.has(KEY_UPGRADES_FROM)) {
-					baseObject.get(KEY_UPGRADES_FROM).getAsJsonArray().forEach(jsonMaterialId -> {
-						upgradeFromMap.computeIfAbsent(new Identifier(jsonMaterialId.getAsString()), k -> new ArrayList<>()).add(id);
-					});
+					baseObject.get(KEY_UPGRADES_FROM).getAsJsonArray().forEach(jsonMaterialId -> upgradeFromMap.computeIfAbsent(new Identifier(jsonMaterialId.getAsString()), k -> new ArrayList<>()).add(id));
 				}
 				if (baseObject.has(KEY_UPGRADES_TO)) {
 					baseObject.get(KEY_UPGRADES_TO).getAsJsonArray().forEach(jsonMaterialId -> upgradesTo.add(new Identifier(jsonMaterialId.getAsString())));
