@@ -12,7 +12,7 @@ import net.minecraft.util.registry.Registry;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 public class TinkerersSmithingLoader {
@@ -22,7 +22,8 @@ public class TinkerersSmithingLoader {
 	public final Map<Item, SmithingUnitCostManager.UnitCostOverride> COST_OVERRIDES = new HashMap<>();
 	public final List<Identifier> WARN_NO_RECIPE = new ArrayList<>();
 	public final List<Identifier> WARN_NO_MATERIALS = new ArrayList<>();
-	public final List<Identifier> WARN_DEFAULT_MATERIAL = new ArrayList<>();
+	public final Map<Identifier, ArmorMaterial> WARN_DEFAULT_MATERIAL_ARMOR = new HashMap<>();
+	public final Map<Identifier, ToolMaterial> WARN_DEFAULT_MATERIAL_TOOL = new HashMap<>();
 	public int INFO_ADDED_COSTS = 0;
 	public int INFO_ADDED_COST_ITEMS = 0;
 	public int INFO_ADDED_UPGRADES = 0;
@@ -37,7 +38,7 @@ public class TinkerersSmithingLoader {
 		return outList;
 	}
 
-	public List<Ingredient> getMaterialRepairIngredients(Consumer<Identifier> defaultConsumer, Item item) {
+	public List<Ingredient> getMaterialRepairIngredients(BiConsumer<Identifier, ArmorMaterial> armorDefaults, BiConsumer<Identifier, ToolMaterial> toolDefaults, Item item) {
 		List<Ingredient> outList = new ArrayList<>();
 
 		getAllMaterials().forEach(material -> {
@@ -47,8 +48,11 @@ public class TinkerersSmithingLoader {
 		});
 
 		if (outList.isEmpty()) {
-			if (item instanceof ArmorItem || item instanceof ToolItem) {
-				defaultConsumer.accept(Registry.ITEM.getId(item));
+			if (item instanceof ArmorItem ai && ai.getMaterial() != null) {
+				armorDefaults.accept(Registry.ITEM.getId(item), ai.getMaterial());
+			}
+			if (item instanceof ToolItem ti && ti.getMaterial() != null) {
+				toolDefaults.accept(Registry.ITEM.getId(item), ti.getMaterial());
 			}
 			if (item.isDamageable() && item instanceof ArmorItem ai) {
 				ArmorMaterial material = ai.getMaterial();
@@ -113,7 +117,7 @@ public class TinkerersSmithingLoader {
 		Identifier itemId = Registry.ITEM.getId(item);
 
 		SmithingUnitCostManager.UnitCostOverride override = COST_OVERRIDES.get(item);
-		List<Ingredient> repairIngredients = getMaterialRepairIngredients(WARN_DEFAULT_MATERIAL::add, item);
+		List<Ingredient> repairIngredients = getMaterialRepairIngredients(WARN_DEFAULT_MATERIAL_ARMOR::put, WARN_DEFAULT_MATERIAL_TOOL::put, item);
 
 		if ((override == null || !override.replace()) && repairIngredients.isEmpty() && item.isDamageable()) {
 			WARN_NO_MATERIALS.add(itemId);
@@ -146,7 +150,10 @@ public class TinkerersSmithingLoader {
 		}
 		if (override != null) {
 			outMap.putAll(override.costs());
-			if (override.replace()) WARN_DEFAULT_MATERIAL.remove(itemId);
+			if (override.replace()) {
+				WARN_DEFAULT_MATERIAL_TOOL.remove(itemId);
+				WARN_DEFAULT_MATERIAL_ARMOR.remove(itemId);
+			}
 		}
 
 		if (!outMap.isEmpty()) {
@@ -252,8 +259,18 @@ public class TinkerersSmithingLoader {
 		TinkerersSmithing.LOGGER.info("[Tinkerer's Smithing] Applied {} Unit Costs to {} items", INFO_ADDED_COSTS, INFO_ADDED_COST_ITEMS);
 		TinkerersSmithing.LOGGER.info("[Tinkerer's Smithing] Applied {} Upgrade Paths to {} items", INFO_ADDED_UPGRADES, INFO_ADDED_UPGRADE_ITEMS);
 		TinkerersSmithing.LOGGER.info("[Tinkerer's Smithing] Applied {} Sacrifice Paths to {} items", INFO_ADDED_SACRIFICES, INFO_ADDED_SACRIFICE_ITEMS);
-		if (!WARN_DEFAULT_MATERIAL.isEmpty())
-			TinkerersSmithing.LOGGER.warn("[Tinkerer's Smithing] Found {} equipment items without registered repair materials: [{}]", WARN_DEFAULT_MATERIAL.size(), WARN_DEFAULT_MATERIAL.stream().map(Identifier::toString).collect(Collectors.joining(", ")));
+		if (!WARN_DEFAULT_MATERIAL_ARMOR.isEmpty()) {
+			Set<ArmorMaterial> armorMats = new HashSet<>(WARN_DEFAULT_MATERIAL_ARMOR.values());
+			TinkerersSmithing.LOGGER.warn("[Tinkerer's Smithing] Found {} unregistered armor materials with {} armor items: [{}] items: [{}]", armorMats.size(), WARN_DEFAULT_MATERIAL_ARMOR.size(), armorMats.stream().map(Object::toString).collect(Collectors.joining(", ")), WARN_DEFAULT_MATERIAL_ARMOR.entrySet().stream()
+				.collect(Collectors.groupingBy(Map.Entry::getValue, Collectors.mapping(Map.Entry::getKey, Collectors.toList()))).entrySet().stream() // Invert Map
+				.map(e -> "%s[%s]".formatted(e.getKey().toString(), e.getValue().stream().map(Identifier::toString).collect(Collectors.joining(", ")))).collect(Collectors.joining(", "))); // Stringify
+		}
+		if (!WARN_DEFAULT_MATERIAL_TOOL.isEmpty()) {
+			Set<ToolMaterial> toolMats = new HashSet<>(WARN_DEFAULT_MATERIAL_TOOL.values());
+			TinkerersSmithing.LOGGER.warn("[Tinkerer's Smithing] Found {} unregistered tool materials with {} tool items: [{}] - items: [{}]", toolMats.size(), WARN_DEFAULT_MATERIAL_TOOL.size(), toolMats.stream().map(Object::toString).collect(Collectors.joining(", ")), WARN_DEFAULT_MATERIAL_TOOL.entrySet().stream()
+				.collect(Collectors.groupingBy(Map.Entry::getValue, Collectors.mapping(Map.Entry::getKey, Collectors.toList()))).entrySet().stream() // Invert Map
+				.map(e -> "%s[%s]".formatted(e.getKey().toString(), e.getValue().stream().map(Identifier::toString).collect(Collectors.joining(", ")))).collect(Collectors.joining(", "))); // Stringify
+		}
 		if (!WARN_NO_RECIPE.isEmpty())
 			TinkerersSmithing.LOGGER.warn("[Tinkerer's Smithing] Found {} equipment items without unit cost recipes: [{}]", WARN_NO_RECIPE.size(), WARN_NO_RECIPE.stream().map(Identifier::toString).collect(Collectors.joining(", ")));
 		if (!WARN_NO_MATERIALS.isEmpty())
