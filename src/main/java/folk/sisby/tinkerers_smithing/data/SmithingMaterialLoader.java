@@ -67,7 +67,10 @@ public abstract class SmithingMaterialLoader extends MultiJsonDataLoader {
 						if (inheritItemId != null) {
 							Item inheritItem = getOrWarnItem(inheritItemId, id);
 							if (inheritItem != null) {
-								repairMaterials.add(getDefaultRepairIngredient(inheritItem));
+								Ingredient repairIngredient = getDefaultRepairIngredient(inheritItem);
+								if (repairIngredient != null) {
+									repairMaterials.add(repairIngredient);
+								}
 								Registries.ITEM.forEach(matchingItem -> {
 									if (matchingMaterials(inheritItem, matchingItem)) items.add(matchingItem);
 								});
