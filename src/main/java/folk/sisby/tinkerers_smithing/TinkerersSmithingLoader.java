@@ -41,20 +41,23 @@ public class TinkerersSmithingLoader {
 
 	public List<Ingredient> getMaterialRepairIngredients(BiConsumer<Identifier, ArmorMaterial> armorDefaults, BiConsumer<Identifier, ToolMaterial> toolDefaults, Item item) {
 		List<Ingredient> outList = new ArrayList<>();
+		boolean noneMatch = true;
 
-		getAllMaterials().forEach(material -> {
+		for (TinkerersSmithingMaterial material : getAllMaterials()) {
 			if (material.items.contains(item)) {
+				noneMatch = false;
 				outList.addAll(material.repairMaterials);
 			}
-		});
+		}
+
+		if (noneMatch && item instanceof ArmorItem ai && ai.getMaterial() != null) {
+			armorDefaults.accept(Registries.ITEM.getId(item), ai.getMaterial());
+		}
+		if (noneMatch && item instanceof ToolItem ti && ti.getMaterial() != null) {
+			toolDefaults.accept(Registries.ITEM.getId(item), ti.getMaterial());
+		}
 
 		if (outList.isEmpty()) {
-			if (item instanceof ArmorItem ai && ai.getMaterial() != null) {
-				armorDefaults.accept(Registries.ITEM.getId(item), ai.getMaterial());
-			}
-			if (item instanceof ToolItem ti && ti.getMaterial() != null) {
-				toolDefaults.accept(Registries.ITEM.getId(item), ti.getMaterial());
-			}
 			if (item.isDamageable() && item instanceof ArmorItem ai) {
 				ArmorMaterial material = ai.getMaterial();
 				if (material != null) {
@@ -276,5 +279,6 @@ public class TinkerersSmithingLoader {
 			TinkerersSmithing.LOGGER.warn("[Tinkerer's Smithing] Found {} equipment items without unit cost recipes: [{}]", WARN_NO_RECIPE.size(), WARN_NO_RECIPE.stream().map(Identifier::toString).collect(Collectors.joining(", ")));
 		if (!WARN_NO_MATERIALS.isEmpty())
 			TinkerersSmithing.LOGGER.warn("[Tinkerer's Smithing] Found {} damageable items without repair materials: [{}]", WARN_NO_MATERIALS.size(), WARN_NO_MATERIALS.stream().map(Identifier::toString).collect(Collectors.joining(", ")));
+		TinkerersSmithing.LOGGER.info("[Tinkerer's Smithing] Data Initialized!");
 	}
 }
