@@ -3,8 +3,8 @@ package folk.sisby.tinkerers_smithing.client.emi.recipe;
 import dev.emi.emi.api.recipe.EmiPatternCraftingRecipe;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
-import dev.emi.emi.api.widget.GeneratedSlotWidget;
 import dev.emi.emi.api.widget.SlotWidget;
+import folk.sisby.tinkerers_smithing.client.emi.IterativeSlotWidget;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Ingredient;
@@ -27,37 +27,37 @@ public class EmiCraftingRepairRecipe extends EmiPatternCraftingRecipe {
 	@Override
 	public SlotWidget getInputWidget(int slot, int x, int y) {
 		if (slot == 0) {
-			return new GeneratedSlotWidget(r -> getTool(r, false), unique, x, y);
+			return new IterativeSlotWidget((r, i) -> getTool(r, i,false), unique, x, y);
 		} else if (slot <= cost) {
-			return new GeneratedSlotWidget(r -> {
-				int d = r.nextInt(tool.getMaxDamage());
-				int stackCount = getStackCount(r, d);
-				return slot <= stackCount ? repairMaterial : EmiStack.EMPTY;
-			}, unique, x, y);
+			return new IterativeSlotWidget((r, i) -> slot <= getStackCount(i) ? repairMaterial : EmiStack.EMPTY, unique, x, y);
 		}
 		return new SlotWidget(EmiStack.EMPTY, x, y);
 	}
 
 	@Override
 	public SlotWidget getOutputWidget(int x, int y) {
-		return new GeneratedSlotWidget(r -> getTool(r, true), unique, x, y);
+		return new IterativeSlotWidget((r, i) -> getTool(r, i,true), unique, x, y);
 	}
 
-	private int getStackCount(Random r, int damage) {
-		return r.nextInt(1, (damage * cost) / tool.getMaxDamage() + 2);
+	private int getStackCount(long i) {
+		return Math.floorMod(i, cost) + 1;
 	}
 
-	private EmiStack getTool(Random r, boolean result) {
+	private int getStackDamage(Random r, int units) {
+		return r.nextInt(((int) Math.ceil((tool.getMaxDamage() * (units - 1)) / (double) cost)), tool.getMaxDamage());
+	}
+
+	private EmiStack getTool(Random r, long i, boolean result) {
 		ItemStack stack = tool.getDefaultStack();
-		int d = r.nextInt(tool.getMaxDamage());
-		int stackCount = getStackCount(r, d);
+		int units = getStackCount(i);
+		int damage = getStackDamage(r, units);
 		if (result) {
-			d = Math.max(0, d - ((int) Math.ceil((tool.getMaxDamage() * (stackCount)) / (double) cost)));
+			damage = Math.max(0, damage - ((int) Math.ceil((tool.getMaxDamage() * (units)) / (double) cost)));
 		}
-		if (d == 0) {
+		if (damage == 0) {
 			return EmiStack.of(tool);
 		}
-		stack.setDamage(d);
+		stack.setDamage(damage);
 		return EmiStack.of(stack);
 	}
 }
