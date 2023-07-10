@@ -1,6 +1,5 @@
 package folk.sisby.tinkerers_smithing.client.emi.recipe;
 
-import dev.emi.emi.EmiUtil;
 import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.recipe.VanillaEmiRecipeCategories;
@@ -8,6 +7,7 @@ import dev.emi.emi.api.render.EmiTexture;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
+import folk.sisby.tinkerers_smithing.client.emi.IterativeSlotWidget;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Ingredient;
@@ -15,14 +15,12 @@ import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.Random;
 
 public class EmiSmithingUpgradeRecipe implements EmiRecipe {
 	private final Item tool;
 	private final EmiIngredient upgradeMaterial;
 	private final Item resultTool;
 	private final int cost;
-	private final int uniq = EmiUtil.RANDOM.nextInt();
 
 	public EmiSmithingUpgradeRecipe(Item tool, List<Ingredient> ingredients, Item resultTool, int cost) {
 		this.tool = tool;
@@ -71,18 +69,18 @@ public class EmiSmithingUpgradeRecipe implements EmiRecipe {
 		widgets.addTexture(EmiTexture.PLUS, 27, 3);
 		widgets.addTexture(EmiTexture.EMPTY_ARROW, 75, 1);
 		widgets.addSlot(EmiStack.of(tool), 0, 0);
-		widgets.addGeneratedSlot(this::getRepairStack, uniq, 49, 0);
-		widgets.addGeneratedSlot(this::getTool, uniq, 107, 0).recipeContext(this);
+		widgets.add(new IterativeSlotWidget(this::getRepairStack, 49, 0));
+		widgets.add(new IterativeSlotWidget(this::getTool, 107, 0).recipeContext(this));
 	}
 
-	private int getStackCount(Random r) {
+	private int getStackCount(long i) {
 		int minStack = Math.max(cost - 4, 1);
-		return r.nextInt(minStack, cost + 1);
+		return Math.floorMod(i, cost + 1 - minStack) + minStack;
 	}
 
-	private EmiStack getTool(Random r) {
+	private EmiStack getTool(long i) {
 		ItemStack stack = resultTool.getDefaultStack();
-		int stackCount = getStackCount(r);
+		int stackCount = getStackCount(i);
 		if (stackCount == cost) {
 			return EmiStack.of(resultTool);
 		}
@@ -90,7 +88,7 @@ public class EmiSmithingUpgradeRecipe implements EmiRecipe {
 		return EmiStack.of(stack);
 	}
 
-	private EmiIngredient getRepairStack(Random r) {
-		return upgradeMaterial.copy().setAmount(getStackCount(r));
+	private EmiIngredient getRepairStack(long i) {
+		return upgradeMaterial.copy().setAmount(getStackCount(i));
 	}
 }
