@@ -8,6 +8,7 @@ import dev.emi.emi.api.render.EmiTexture;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
+import folk.sisby.tinkerers_smithing.client.emi.IterativeSlotWidget;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Ingredient;
@@ -66,9 +67,9 @@ public class EmiAnvilRepairRecipe implements EmiRecipe {
 	public void addWidgets(WidgetHolder widgets) {
 		widgets.addTexture(EmiTexture.PLUS, 27, 3);
 		widgets.addTexture(EmiTexture.EMPTY_ARROW, 75, 1);
-		widgets.addGeneratedSlot(r -> getTool(r, false), uniq, 0, 0);
+		widgets.add(new IterativeSlotWidget((r) -> getTool(r, false), uniq, 0, 0));
 		widgets.addSlot(repairMaterial, 49, 0);
-		widgets.addGeneratedSlot(r -> getTool(r, true), uniq, 107, 0).recipeContext(this);
+		widgets.add(new IterativeSlotWidget((r) -> getTool(r, true), uniq, 107, 0).recipeContext(this));
 	}
 
 	private EmiStack getTool(Random r, boolean repaired) {

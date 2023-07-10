@@ -3,8 +3,8 @@ package folk.sisby.tinkerers_smithing.client.emi.recipe;
 import dev.emi.emi.api.recipe.EmiPatternCraftingRecipe;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
-import dev.emi.emi.api.widget.GeneratedSlotWidget;
 import dev.emi.emi.api.widget.SlotWidget;
+import folk.sisby.tinkerers_smithing.client.emi.IterativeSlotWidget;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Ingredient;
@@ -29,7 +29,7 @@ public class EmiCraftingUpgradeRecipe extends EmiPatternCraftingRecipe {
 	@Override
 	public SlotWidget getInputWidget(int slot, int x, int y) {
 		if (slot == 0) {
-			return new GeneratedSlotWidget(r -> EmiStack.of(getTool(r, false)), unique, x, y);
+			return new IterativeSlotWidget((r) -> EmiStack.of(getTool(r, false)), unique, x, y);
 		} else if (slot <= cost) {
 			return new SlotWidget(upgradeMaterial, x, y);
 		}
@@ -38,7 +38,7 @@ public class EmiCraftingUpgradeRecipe extends EmiPatternCraftingRecipe {
 
 	@Override
 	public SlotWidget getOutputWidget(int x, int y) {
-		return new GeneratedSlotWidget(r -> EmiStack.of(getTool(r, true)), unique, x, y);
+		return new IterativeSlotWidget((r) -> EmiStack.of(getTool(r, true)), unique, x, y);
 	}
 
 	private ItemStack getTool(Random r, boolean result) {

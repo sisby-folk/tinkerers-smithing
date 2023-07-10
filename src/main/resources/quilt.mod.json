@@ -16,7 +16,7 @@
 				"issues": "https://github.com/sisby-folk/tinkerers-smithing/issues",
 				"sources": "https://github.com/sisby-folk/tinkerers-smithing"
 			},
-			"icon": "assets/tinkerers-smithing/icon.png"
+			"icon": "assets/tinkerers_smithing/icon.png"
 		},
 		"entrypoints": {
 			"init": [
