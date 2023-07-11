@@ -31,13 +31,13 @@ public abstract class SmithingScreenHandlerMixin extends ForgingScreenHandler {
 	public void cacheIngredientsUsed(CallbackInfo ci) {
 		Pair<Integer, Integer> stacksAndCost = null;
 		if (this.currentRecipe instanceof SmithingUpgradeRecipe sur) {
-			stacksAndCost = sur.getUsedRepairStacksAndCost(this.ingredientInventory.getStack(1).getItem(), this.ingredientInventory.getStack(2));
+			stacksAndCost = sur.getUsedRepairStacksAndCost(this.getSlot(SmithingScreenHandler.RESULT_SLOT).getStack().getItem(), this.getSlot(SmithingScreenHandler.ADDITIONAL_SLOT).getStack());
 		}
 		ingredientsUsed = stacksAndCost == null ? 1 : stacksAndCost.getLeft();
 	}
 
 	@Inject(method = "onTakeOutput", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/SmithingScreenHandler;decrementStack(I)V", ordinal = 0))
 	public void specialDecrementIngredient(PlayerEntity player, ItemStack stack, CallbackInfo ci) {
-		this.ingredientInventory.getStack(2).decrement(ingredientsUsed - 1);
+		this.getSlot(SmithingScreenHandler.ADDITIONAL_SLOT).getStack().decrement(ingredientsUsed - 1);
 	}
 }
