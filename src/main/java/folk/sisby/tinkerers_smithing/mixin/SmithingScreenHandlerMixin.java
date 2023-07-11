@@ -4,11 +4,11 @@ import folk.sisby.tinkerers_smithing.recipe.SmithingUpgradeRecipe;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.SmithingRecipe;
+import net.minecraft.recipe.LegacySmithingRecipe;
 import net.minecraft.screen.ForgingScreenHandler;
+import net.minecraft.screen.LegacySmithingScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.ScreenHandlerType;
-import net.minecraft.screen.SmithingScreenHandler;
 import net.minecraft.util.Pair;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -18,9 +18,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(SmithingScreenHandler.class)
+@Mixin(LegacySmithingScreenHandler.class)
 public abstract class SmithingScreenHandlerMixin extends ForgingScreenHandler {
-	@Shadow @Nullable private SmithingRecipe currentRecipe;
+	@Shadow @Nullable private LegacySmithingRecipe field_41920;
 	@Unique private int ingredientsUsed = 0;
 
 	public SmithingScreenHandlerMixin(@Nullable ScreenHandlerType<?> type, int syncId, PlayerInventory playerInventory, ScreenHandlerContext context) {
@@ -30,13 +30,13 @@ public abstract class SmithingScreenHandlerMixin extends ForgingScreenHandler {
 	@Inject(method = "updateResult", at = @At(value = "TAIL"))
 	public void cacheIngredientsUsed(CallbackInfo ci) {
 		Pair<Integer, Integer> stacksAndCost = null;
-		if (this.currentRecipe instanceof SmithingUpgradeRecipe sur) {
+		if (this.field_41920 instanceof SmithingUpgradeRecipe sur) {
 			stacksAndCost = sur.getUsedRepairStacksAndCost(this.output.getStack(0).getItem(), this.input.getStack(1));
 		}
 		ingredientsUsed = stacksAndCost == null ? 1 : stacksAndCost.getLeft();
 	}
 
-	@Inject(method = "onTakeOutput", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/SmithingScreenHandler;decrementStack(I)V", ordinal = 0))
+	@Inject(method = "onTakeOutput", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/LegacySmithingScreenHandler;method_48383(I)V", ordinal = 0))
 	public void specialDecrementIngredient(PlayerEntity player, ItemStack stack, CallbackInfo ci) {
 		this.input.getStack(1).decrement(ingredientsUsed - 1);
 	}
