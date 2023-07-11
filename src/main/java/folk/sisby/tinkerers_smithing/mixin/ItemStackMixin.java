@@ -3,7 +3,6 @@ package folk.sisby.tinkerers_smithing.mixin;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttribute;
@@ -100,8 +99,8 @@ public abstract class ItemStackMixin {
 		return this.hasCustomName() || this.hasEnchantments() ? this.getMaxDamage() : damage;
 	}
 
-	@ModifyVariable(method = "getTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/item/TooltipContext;shouldShowAdvancedDetails()Z", ordinal = 2), ordinal = 0)
-	public List<Text> brokenShowTooltip(List<Text> list, PlayerEntity player, TooltipContext context) {
+	@ModifyVariable(method = "getTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/item/TooltipContext;isAdvanced()Z", ordinal = 2), ordinal = 0)
+	public List<Text> brokenShowTooltip(List<Text> list) {
 		if (this.isDamageable() && this.getDamage() == this.getMaxDamage()) {
 			list.add(Text.translatable("item.tinkerers_smithing.broken").setStyle(Style.EMPTY.withColor(Formatting.DARK_RED)));
 		}
