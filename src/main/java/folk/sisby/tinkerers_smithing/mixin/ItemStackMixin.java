@@ -99,7 +99,7 @@ public abstract class ItemStackMixin {
 		return this.hasCustomName() || this.hasEnchantments() ? this.getMaxDamage() : damage;
 	}
 
-	@ModifyVariable(method = "getTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/item/TooltipContext;isAdvanced()Z", ordinal = 2), ordinal = 0)
+	@ModifyVariable(method = "getTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/item/TooltipContext;shouldShowAdvancedDetails()Z", ordinal = 2), ordinal = 0)
 	public List<Text> brokenShowTooltip(List<Text> list) {
 		if (this.isDamageable() && this.getDamage() == this.getMaxDamage()) {
 			list.add(Text.translatable("item.tinkerers_smithing.broken").setStyle(Style.EMPTY.withColor(Formatting.DARK_RED)));
