@@ -16,7 +16,7 @@ public class InGameHudMixin {
 	@Shadow private ItemStack currentStack;
 
 	@ModifyVariable(method = "renderHeldItemTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;getWidth(Lnet/minecraft/text/StringVisitable;)I", shift = At.Shift.BEFORE), ordinal = 0)
-	private MutableText combineRepairNoLevels(MutableText text) {
+	private MutableText showBrokenHeldItemTooltip(MutableText text) {
 		if (this.currentStack.isDamageable() && this.currentStack.getDamage() == this.currentStack.getMaxDamage()) {
 			return Text.translatable("item.tinkerers_smithing.broken").setStyle(Style.EMPTY.withColor(Formatting.DARK_RED)).append(Text.literal(" ")).append(text);
 		}
