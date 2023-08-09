@@ -20,7 +20,8 @@ Out of the box, TSmithing makes **every damageable vanilla item repairable** and
 
 As a result of these changes, it's easier to enchant and name your tools much earlier - keeping them in good condition with repairs and small improvements.
 
-As of 2.3.0, Tinkerer's Smithing **can be loaded on fabric**, and possibly Connector/FFAPI **on forge**. The old, worse, NBT Crafting [2.2.3](https://download-directory.github.io/?url=https://github.com/sisby-folk/tinkerers-smithing/tree/nbtc2/src/main/resources) datapack is also available - see the [old readme](https://github.com/sisby-folk/tinkerers-smithing/blob/nbtc2-experiments/README.md) for a rough idea of what's in there.
+As of 2.3.0, Tinkerer's Smithing **can be loaded on fabric**, and possibly Connector/FFAPI **on forge**.<br/>
+If particularly desired, version 1.0.1 is a repackaged NBT Crafting 2 datapack ([datapack direct download](https://download-directory.github.io/?url=https://github.com/sisby-folk/tinkerers-smithing/tree/nbtc2/src/main/resources)) - see the [old readme](https://github.com/sisby-folk/tinkerers-smithing/blob/nbtc2-experiments/README.md) for a rough idea of what's in there.
 
 ## Recipe Types
 
