@@ -1,20 +1,20 @@
 package folk.sisby.tinkerers_smithing;
 
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.PacketSender;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.item.Item;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.registry.Registries;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.util.Identifier;
-import org.quiltmc.qsl.networking.api.PacketByteBufs;
-import org.quiltmc.qsl.networking.api.PacketSender;
-import org.quiltmc.qsl.networking.api.ServerPlayConnectionEvents;
-import org.quiltmc.qsl.networking.api.ServerPlayNetworking;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class TinkerersSmithingNetworking implements ServerPlayConnectionEvents.Join {
+@SuppressWarnings("deprecation")
+public class TinkerersSmithingNetworking {
 	public static final Identifier S2C_SMITHING_RELOAD = new Identifier(TinkerersSmithing.ID, "s2c_smithing_reload");
 
 	public static PacketByteBuf createSmithingReloadBuf() {
@@ -38,8 +38,8 @@ public class TinkerersSmithingNetworking implements ServerPlayConnectionEvents.J
 		});
 	}
 
-	@Override
-	public void onPlayReady(ServerPlayNetworkHandler handler, PacketSender sender, MinecraftServer server) {
+	@SuppressWarnings("unused")
+	public static void onPlayReady(ServerPlayNetworkHandler handler, PacketSender sender, MinecraftServer server) {
 		if (ServerPlayNetworking.canSend(handler, S2C_SMITHING_RELOAD) && TinkerersSmithing.SMITHING_RELOAD_BUF != null) {
 			ServerPlayNetworking.send(handler.getPlayer(), S2C_SMITHING_RELOAD, TinkerersSmithing.SMITHING_RELOAD_BUF);
 		}

@@ -3,17 +3,18 @@ package folk.sisby.tinkerers_smithing.data;
 import com.google.gson.Gson;
 import folk.sisby.tinkerers_smithing.TinkerersSmithing;
 import folk.sisby.tinkerers_smithing.TinkerersSmithingMaterial;
+import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ArmorMaterial;
 import net.minecraft.item.Item;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
-import org.quiltmc.qsl.resource.loader.api.reloader.IdentifiableResourceReloader;
 
 import java.util.Map;
 
-public class SmithingArmorMaterialLoader extends SmithingMaterialLoader implements IdentifiableResourceReloader {
+@SuppressWarnings("deprecation")
+public class SmithingArmorMaterialLoader extends SmithingMaterialLoader implements IdentifiableResourceReloadListener {
 	public static final SmithingArmorMaterialLoader INSTANCE = new SmithingArmorMaterialLoader(new Gson());
 	public static final Identifier ID = new Identifier(TinkerersSmithing.ID, "smithing_armor_material_loader");
 
@@ -46,7 +47,7 @@ public class SmithingArmorMaterialLoader extends SmithingMaterialLoader implemen
 	}
 
 	@Override
-	public @NotNull Identifier getQuiltId() {
+	public @NotNull Identifier getFabricId() {
 		return ID;
 	}
 }

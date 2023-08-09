@@ -6,6 +6,7 @@ import com.google.gson.JsonElement;
 import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.JsonOps;
 import folk.sisby.tinkerers_smithing.TinkerersSmithing;
+import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
@@ -17,12 +18,12 @@ import net.minecraft.util.Pair;
 import net.minecraft.util.profiler.Profiler;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
-import org.quiltmc.qsl.resource.loader.api.reloader.IdentifiableResourceReloader;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class SmithingTypeLoader extends MultiJsonDataLoader implements IdentifiableResourceReloader {
+@SuppressWarnings("deprecation")
+public class SmithingTypeLoader extends MultiJsonDataLoader implements IdentifiableResourceReloadListener {
 	public static final SmithingTypeLoader INSTANCE = new SmithingTypeLoader(new Gson());
 	public static final Identifier ID = new Identifier(TinkerersSmithing.ID, "smithing_type_loader");
 	public static final TagGroupLoader<Item> ITEM_TAG_LOADER = new TagGroupLoader<>(Registries.ITEM::getOrEmpty, "tags/items");
@@ -33,7 +34,7 @@ public class SmithingTypeLoader extends MultiJsonDataLoader implements Identifia
 	}
 
 	@Override
-	public @NotNull Identifier getQuiltId() {
+	public @NotNull Identifier getFabricId() {
 		return ID;
 	}
 
@@ -46,6 +47,7 @@ public class SmithingTypeLoader extends MultiJsonDataLoader implements Identifia
 
 	@Override
 	protected void apply(Map<Identifier, Collection<Pair<JsonElement, String>>> prepared, ResourceManager manager, Profiler profiler) {
+		TinkerersSmithing.LOGGER.info("[Tinkerer's Smithing] Loading Types!");
 		Map<Identifier, List<TagGroupLoader.EntryWithSource>> typeTags = new HashMap<>();
 		prepared.forEach((id, jsons) -> {
 			Identifier collisionAvoidingID = new Identifier(id.getNamespace(), AVOIDANCE_PREFIX + id.getPath());

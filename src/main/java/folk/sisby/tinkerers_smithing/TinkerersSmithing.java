@@ -5,6 +5,10 @@ import folk.sisby.tinkerers_smithing.data.SmithingToolMaterialLoader;
 import folk.sisby.tinkerers_smithing.data.SmithingTypeLoader;
 import folk.sisby.tinkerers_smithing.data.SmithingUnitCostManager;
 import folk.sisby.tinkerers_smithing.recipe.*;
+import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.minecraft.item.Item;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.SpecialRecipeSerializer;
@@ -16,14 +20,10 @@ import net.minecraft.resource.ResourceType;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
-import org.quiltmc.loader.api.ModContainer;
-import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
-import org.quiltmc.qsl.lifecycle.api.event.ServerLifecycleEvents;
-import org.quiltmc.qsl.resource.loader.api.ResourceLoader;
-import org.quiltmc.qsl.resource.loader.api.ResourceLoaderEvents;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@SuppressWarnings("deprecation")
 public class TinkerersSmithing implements ModInitializer {
 	public static final String ID = "tinkerers_smithing";
 	public static final Logger LOGGER = LoggerFactory.getLogger(ID);
@@ -35,7 +35,7 @@ public class TinkerersSmithing implements ModInitializer {
 	public static final GenericSpecialRecipeSerializer<SacrificeUpgradeRecipe> SACRIFICE_UPGRADE_SERIALIZER = Registry.register(Registries.RECIPE_SERIALIZER, new Identifier(ID, "crafting_special_sacrifice_upgrade"), new GenericSpecialRecipeSerializer<>(SacrificeUpgradeRecipe::new));
 
 	// Discarded and picked up each reload. Probably shouldn't be accessed outside of reload time.
-	private static TinkerersSmithingLoader LOADER_INSTANCE = null;
+	private static TinkerersSmithingLoader LOADER_INSTANCE = new TinkerersSmithingLoader();
 
 	public static TinkerersSmithingLoader getLoaderInstance() {
 		return LOADER_INSTANCE;
@@ -45,6 +45,7 @@ public class TinkerersSmithing implements ModInitializer {
 
 	private static void generateSmithingData(MinecraftServer server) {
 		if (server != null) {
+			TinkerersSmithing.LOGGER.info("[Tinkerer's Smithing] Generating Smithing Data!");
 			getLoaderInstance().generateItemSmithingData(server);
 			LOADER_INSTANCE = null;
 			SMITHING_RELOAD_BUF = TinkerersSmithingNetworking.createSmithingReloadBuf();
@@ -53,19 +54,21 @@ public class TinkerersSmithing implements ModInitializer {
 	}
 
 	private static void resetLoader() {
+		TinkerersSmithing.LOGGER.info("[Tinkerer's Smithing] Resetting Loader!");
 		SMITHING_RELOAD_BUF = null;
 		LOADER_INSTANCE = new TinkerersSmithingLoader();
 	}
 
 	@Override
-	public void onInitialize(ModContainer mod) {
-		ResourceLoaderEvents.START_DATA_PACK_RELOAD.register((server, oldResourceManager) -> TinkerersSmithing.resetLoader());
-		ServerLifecycleEvents.READY.register(TinkerersSmithing::generateSmithingData);
-		ResourceLoaderEvents.END_DATA_PACK_RELOAD.register((server, resourceManager, throwable) -> TinkerersSmithing.generateSmithingData(server));
-		ResourceLoader.get(ResourceType.SERVER_DATA).registerReloader(SmithingToolMaterialLoader.INSTANCE);
-		ResourceLoader.get(ResourceType.SERVER_DATA).registerReloader(SmithingArmorMaterialLoader.INSTANCE);
-		ResourceLoader.get(ResourceType.SERVER_DATA).registerReloader(SmithingUnitCostManager.INSTANCE);
-		ResourceLoader.get(ResourceType.SERVER_DATA).registerReloader(SmithingTypeLoader.INSTANCE);
+	public void onInitialize() {
+		ServerPlayConnectionEvents.JOIN.register((TinkerersSmithingNetworking::onPlayReady));
+		ServerLifecycleEvents.START_DATA_PACK_RELOAD.register((server, oldResourceManager) -> TinkerersSmithing.resetLoader());
+		ServerLifecycleEvents.SERVER_STARTED.register(TinkerersSmithing::generateSmithingData);
+		ServerLifecycleEvents.END_DATA_PACK_RELOAD.register((server, resourceManager, throwable) -> TinkerersSmithing.generateSmithingData(server));
+		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(SmithingToolMaterialLoader.INSTANCE);
+		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(SmithingArmorMaterialLoader.INSTANCE);
+		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(SmithingUnitCostManager.INSTANCE);
+		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(SmithingTypeLoader.INSTANCE);
 
 		LOGGER.info("[Tinkerer's Smithing] Initialized.");
 	}
