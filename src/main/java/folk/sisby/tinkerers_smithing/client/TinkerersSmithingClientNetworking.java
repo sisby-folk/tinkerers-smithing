@@ -2,16 +2,17 @@ package folk.sisby.tinkerers_smithing.client;
 
 import folk.sisby.tinkerers_smithing.TinkerersSmithingItemData;
 import folk.sisby.tinkerers_smithing.TinkerersSmithingNetworking;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.PacketSender;
+import net.fabricmc.loader.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.network.PacketByteBuf;
-import org.quiltmc.loader.api.QuiltLoader;
-import org.quiltmc.qsl.networking.api.PacketSender;
-import org.quiltmc.qsl.networking.api.client.ClientPlayNetworking;
 
+@SuppressWarnings("deprecation")
 public class TinkerersSmithingClientNetworking {
 	public static void initializeReceivers() {
-		if (QuiltLoader.isModLoaded("emi")) {
+		if (FabricLoader.INSTANCE.isModLoaded("emi")) {
 			ClientPlayNetworking.registerGlobalReceiver(TinkerersSmithingNetworking.S2C_SMITHING_RELOAD, TinkerersSmithingClientNetworking::smithingReload);
 		}
 	}
