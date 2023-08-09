@@ -18,7 +18,7 @@ dependencyResolutionManagement {
 		libs {
 			def mc_major = '1.19'
 			def mc = mc_major + '.4'
-			def fapi = "0.76.0"
+			def fapi = "0.83.0"
 
 			// // Build Tools // //
 			version('loom', '1.2.+')
