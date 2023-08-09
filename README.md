@@ -1,3 +1,4 @@
+<!--suppress HtmlDeprecatedTag, XmlDeprecatedElement -->
 <center><img alt="tinkerer's smithing banner" src="https://cdn.modrinth.com/data/RhVpNN5O/images/7b163bbaaf4aadcbd210c91538f620566c0daff3.png" /></center><br/>
 
 <center>A sentimental and convenient rebalance of gear crafting, repair, enchanting, and upgrading.<br/>
@@ -11,7 +12,7 @@ Works well with <a href="https://modrinth.com/mod/emi">EMI</a> and <a href="http
 
 ---
 
-As of 2.0, the mod has been completely rewritten. It adds and tweaks recipe types to rebalance equipment.
+Tinkerer's Smithing adds and tweaks recipe types to rebalance equipment.
 
 All of them are data-driven, and preserve enchantments and names.
 
@@ -19,7 +20,7 @@ Out of the box, TSmithing makes **every damageable vanilla item repairable** and
 
 As a result of these changes, it's easier to enchant and name your tools much earlier - keeping them in good condition with repairs and small improvements.
 
-The more limited datapack version is also available for NBT Crafting [2.2.3](https://download-directory.github.io/?url=https://github.com/sisby-folk/tinkerers-smithing/tree/nbtc2/src/main/resources) - see the [old readme](https://github.com/sisby-folk/tinkerers-smithing/blob/nbtc2-experiments/README.md) for a rough idea of what's there.
+As of 2.3.0, Tinkerer's Smithing **can be loaded on fabric**, and possibly Connector/FFAPI **on forge**. The old, worse, NBT Crafting [2.2.3](https://download-directory.github.io/?url=https://github.com/sisby-folk/tinkerers-smithing/tree/nbtc2/src/main/resources) datapack is also available - see the [old readme](https://github.com/sisby-folk/tinkerers-smithing/blob/nbtc2-experiments/README.md) for a rough idea of what's in there.
 
 ## Recipe Types
 
