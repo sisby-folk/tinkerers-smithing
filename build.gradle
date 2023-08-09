@@ -1,3 +1,5 @@
+//file:noinspection GroovyAccessibility
+//file:noinspection GroovyAssignabilityCheck
 buildscript {
 	repositories {
 		gradlePluginPortal()
@@ -53,12 +55,13 @@ processResources {
 		"mc"             : libs.versions.mc.get(),
 		"ql"             : libs.versions.ql.get(),
 		"qsl"            : libs.versions.qsl.get(),
+		"fapi"           : libs.versions.fapi.get(),
 		"qfapi"          : libs.versions.qfapi.get(),
 		"emi"            : libs.versions.emi.get()
 	]
 
 	inputs.properties(map)
-	filesMatching('quilt.mod.json') { expand(map) }
+	filesMatching('*.mod.json') { expand(map) }
 }
 
 tasks.withType(JavaCompile).configureEach {

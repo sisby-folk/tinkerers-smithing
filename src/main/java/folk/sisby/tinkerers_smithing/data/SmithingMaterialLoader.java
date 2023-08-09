@@ -51,6 +51,7 @@ public abstract class SmithingMaterialLoader extends MultiJsonDataLoader {
 
 	@Override
 	protected void apply(Map<Identifier, Collection<Pair<JsonElement, String>>> prepared, ResourceManager manager, Profiler profiler) {
+		TinkerersSmithing.LOGGER.info("[Tinkerer's Smithing] Loading Materials!");
 		Map<Identifier, TinkerersSmithingMaterial> outputMap = this.getOutputMap();
 		Map<Identifier, List<Identifier>> upgradeFromMap = new HashMap<>();
 		prepared.forEach((id, jsons) -> {
