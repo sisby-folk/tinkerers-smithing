@@ -2,6 +2,7 @@
 <center><img alt="tinkerer's smithing banner" src="https://cdn.modrinth.com/data/RhVpNN5O/images/7b163bbaaf4aadcbd210c91538f620566c0daff3.png" /></center><br/>
 
 <center>A sentimental and convenient rebalance of gear crafting, repair, enchanting, and upgrading.<br/>
+Requires <a href="https://modrinth.com/mod/connector">Connector</a> and <a href="https://modrinth.com/mod/forgified-fabric-api">FFAPI</a> on forge.<br/>
 Works well with <a href="https://modrinth.com/mod/emi">EMI</a> and <a href="https://modrinth.com/mod/inspecio">Inspecio</a>.
 </center>
 
