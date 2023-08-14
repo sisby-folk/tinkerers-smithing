@@ -10,7 +10,9 @@ import java.util.Set;
 
 @SuppressWarnings("deprecation")
 public class ConnectorPlugin implements IMixinConfigPlugin {
-	public static final List<String> BANNED_MIXINS = List.of("ItemStackMixin", "InGameHudMixin");
+	public static final List<String> BANNED_MIXINS = List.of(
+		"folk.sisby.tinkerers_smithing.mixin.ItemStackMixin",
+		"folk.sisby.tinkerers_smithing.mixin.client.InGameHudMixin");
 
 	@Override
 	public void onLoad(String mixinPackage) {
