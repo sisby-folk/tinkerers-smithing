@@ -35,35 +35,20 @@ public class TinkerersSmithing implements ModInitializer {
 	public static final SpecialRecipeSerializer<SmithingUpgradeRecipe> SMITHING_UPGRADE_SERIALIZER = Registry.register(Registry.RECIPE_SERIALIZER, new Identifier(ID, "crafting_special_smithing_upgrade"), new SpecialRecipeSerializer<>(SmithingUpgradeRecipe::new));
 	public static final SpecialRecipeSerializer<SacrificeUpgradeRecipe> SACRIFICE_UPGRADE_SERIALIZER = Registry.register(Registry.RECIPE_SERIALIZER, new Identifier(ID, "crafting_special_sacrifice_upgrade"), new SpecialRecipeSerializer<>(SacrificeUpgradeRecipe::new));
 
-	// Discarded and picked up each reload. Probably shouldn't be accessed outside of reload time.
-	private static TinkerersSmithingLoader LOADER_INSTANCE = new TinkerersSmithingLoader();
-
-	public static TinkerersSmithingLoader getLoaderInstance() {
-		return LOADER_INSTANCE;
-	}
-
 	public static @Nullable PacketByteBuf SMITHING_RELOAD_BUF = null;
 
 	private static void generateSmithingData(MinecraftServer server) {
 		if (server != null) {
 			TinkerersSmithing.LOGGER.info("[Tinkerer's Smithing] Generating Smithing Data!");
-			getLoaderInstance().generateItemSmithingData(server);
-			LOADER_INSTANCE = null;
+			TinkerersSmithingLoader.INSTANCE.generateItemSmithingData(server);
 			SMITHING_RELOAD_BUF = TinkerersSmithingNetworking.createSmithingReloadBuf();
 			TinkerersSmithingNetworking.smithingReload(server, SMITHING_RELOAD_BUF);
 		}
 	}
 
-	private static void resetLoader() {
-		TinkerersSmithing.LOGGER.info("[Tinkerer's Smithing] Resetting Loader!");
-		SMITHING_RELOAD_BUF = null;
-		LOADER_INSTANCE = new TinkerersSmithingLoader();
-	}
-
 	@Override
 	public void onInitialize() {
 		ServerPlayConnectionEvents.JOIN.register((TinkerersSmithingNetworking::onPlayReady));
-		ServerLifecycleEvents.START_DATA_PACK_RELOAD.register((server, oldResourceManager) -> TinkerersSmithing.resetLoader());
 		ServerLifecycleEvents.SERVER_STARTED.register(TinkerersSmithing::generateSmithingData);
 		ServerLifecycleEvents.END_DATA_PACK_RELOAD.register((server, resourceManager, throwable) -> TinkerersSmithing.generateSmithingData(server));
 		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(SmithingToolMaterialLoader.INSTANCE);

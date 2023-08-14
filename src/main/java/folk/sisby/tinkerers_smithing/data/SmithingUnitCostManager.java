@@ -3,6 +3,7 @@ package folk.sisby.tinkerers_smithing.data;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import folk.sisby.tinkerers_smithing.TinkerersSmithing;
+import folk.sisby.tinkerers_smithing.TinkerersSmithingLoader;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.resource.JsonDataLoader;
@@ -31,6 +32,7 @@ public class SmithingUnitCostManager extends JsonDataLoader implements Identifia
 	@Override
 	protected void apply(Map<Identifier, JsonElement> prepared, ResourceManager manager, Profiler profiler) {
 		TinkerersSmithing.LOGGER.info("[Tinkerer's Smithing] Loading Unit Costs!");
+		TinkerersSmithingLoader.INSTANCE.COST_OVERRIDES.clear();
 		prepared.forEach((id, json) -> Registry.ITEM.getOrEmpty(id).ifPresentOrElse(item -> {
 			boolean replace = json.getAsJsonObject().get(KEY_REPLACE).getAsBoolean();
 			Map<Ingredient, Integer> costs = new HashMap<>();
@@ -39,7 +41,7 @@ public class SmithingUnitCostManager extends JsonDataLoader implements Identifia
 				int cost = jsonValue.getAsJsonObject().get(KEY_VALUE_COST).getAsInt();
 				costs.put(ingredient, cost);
 			});
-			TinkerersSmithing.getLoaderInstance().COST_OVERRIDES.put(item, new UnitCostOverride(replace, costs));
+			TinkerersSmithingLoader.INSTANCE.COST_OVERRIDES.put(item, new UnitCostOverride(replace, costs));
 		}, () -> TinkerersSmithing.LOGGER.warn("[Tinkerer's Smithing] Failed to override cost for invalid item {}", id)));
 		TinkerersSmithing.LOGGER.info("[Tinkerer's Smithing] Reloaded unit cost overrides");
 	}

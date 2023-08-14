@@ -6,6 +6,7 @@ import com.google.gson.JsonElement;
 import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.JsonOps;
 import folk.sisby.tinkerers_smithing.TinkerersSmithing;
+import folk.sisby.tinkerers_smithing.TinkerersSmithingLoader;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
@@ -48,6 +49,7 @@ public class SmithingTypeLoader extends MultiJsonDataLoader implements Identifia
 	@Override
 	protected void apply(Map<Identifier, Collection<Pair<JsonElement, String>>> prepared, ResourceManager manager, Profiler profiler) {
 		TinkerersSmithing.LOGGER.info("[Tinkerer's Smithing] Loading Types!");
+		TinkerersSmithingLoader.INSTANCE.SMITHING_TYPES.clear();
 		Map<Identifier, List<TagGroupLoader.EntryWithSource>> typeTags = new HashMap<>();
 		prepared.forEach((id, jsons) -> {
 			Identifier collisionAvoidingID = new Identifier(id.getNamespace(), AVOIDANCE_PREFIX + id.getPath());
@@ -80,7 +82,7 @@ public class SmithingTypeLoader extends MultiJsonDataLoader implements Identifia
 				}
 			}
 		}
-		TinkerersSmithing.getLoaderInstance().SMITHING_TYPES.putAll(tags);
+		TinkerersSmithingLoader.INSTANCE.SMITHING_TYPES.putAll(tags);
 		TinkerersSmithing.LOGGER.info("[Tinkerer's Smithing] Reloaded smithing types");
 	}
 }
