@@ -103,7 +103,6 @@ if (System.getenv("MODRINTH_TOKEN")) {
 		loaders = ['quilt', 'fabric']
 		detectLoaders = false
 		dependencies {
-			required.project "qsl"
 			optional.project "emi"
 			optional.project "yttr"
 		}
