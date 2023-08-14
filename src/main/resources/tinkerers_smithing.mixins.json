@@ -2,6 +2,7 @@
   "required": true,
   "minVersion": "0.8",
   "package": "folk.sisby.tinkerers_smithing.mixin",
+  "plugin": "folk.sisby.tinkerers_smithing.mixin.ConnectorPlugin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "AnvilScreenHandlerMixin",

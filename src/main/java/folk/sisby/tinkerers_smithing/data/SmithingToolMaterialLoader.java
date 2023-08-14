@@ -2,6 +2,7 @@ package folk.sisby.tinkerers_smithing.data;
 
 import com.google.gson.Gson;
 import folk.sisby.tinkerers_smithing.TinkerersSmithing;
+import folk.sisby.tinkerers_smithing.TinkerersSmithingLoader;
 import folk.sisby.tinkerers_smithing.TinkerersSmithingMaterial;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.minecraft.item.Item;
@@ -43,7 +44,7 @@ public class SmithingToolMaterialLoader extends SmithingMaterialLoader implement
 
 	@Override
 	public Map<Identifier, TinkerersSmithingMaterial> getOutputMap() {
-		return TinkerersSmithing.getLoaderInstance().TOOL_MATERIALS;
+		return TinkerersSmithingLoader.INSTANCE.TOOL_MATERIALS;
 	}
 
 	@Override
