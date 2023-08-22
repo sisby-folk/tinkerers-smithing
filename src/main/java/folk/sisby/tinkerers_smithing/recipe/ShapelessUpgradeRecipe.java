@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class ShapelessUpgradeRecipe extends SpecialCraftingRecipe {
+public class ShapelessUpgradeRecipe extends SpecialCraftingRecipe implements ServerRecipe {
 	public ShapelessUpgradeRecipe(Identifier identifier) {
 		super(identifier);
 	}
