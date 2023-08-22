@@ -15,7 +15,7 @@ import net.minecraft.world.World;
 
 import java.util.Map;
 
-public class SmithingUpgradeRecipe extends TransformSmithingRecipe {
+public class SmithingUpgradeRecipe extends TransformSmithingRecipe implements ServerRecipe {
 	public SmithingUpgradeRecipe(Identifier identifier) {
 		super(identifier, Ingredient.EMPTY, Ingredient.EMPTY, Ingredient.EMPTY, ItemStack.EMPTY);
 	}
