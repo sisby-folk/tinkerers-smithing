@@ -1,7 +1,7 @@
 package folk.sisby.tinkerers_smithing.mixin;
 
 import folk.sisby.tinkerers_smithing.recipe.ServerRecipe;
-import net.minecraft.network.packet.s2c.play.SynchronizeRecipesS2CPacket;
+import net.minecraft.network.packet.s2c.play.RecipeSynchronizationS2CPacket;
 import net.minecraft.recipe.Recipe;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.Collection;
 import java.util.List;
 
-@Mixin(SynchronizeRecipesS2CPacket.class)
+@Mixin(RecipeSynchronizationS2CPacket.class)
 public class SynchronizeRecipesS2CPacketMixin {
 	@Shadow @Final private List<Recipe<?>> recipes;
 
