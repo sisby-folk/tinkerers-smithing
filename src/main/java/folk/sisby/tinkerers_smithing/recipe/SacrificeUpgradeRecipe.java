@@ -14,7 +14,7 @@ import net.minecraft.world.World;
 
 import java.util.Map;
 
-public class SacrificeUpgradeRecipe extends SmithingRecipe {
+public class SacrificeUpgradeRecipe extends SmithingRecipe implements ServerRecipe {
 	public SacrificeUpgradeRecipe(Identifier identifier) {
 		super(identifier, Ingredient.EMPTY, Ingredient.EMPTY, ItemStack.EMPTY);
 	}

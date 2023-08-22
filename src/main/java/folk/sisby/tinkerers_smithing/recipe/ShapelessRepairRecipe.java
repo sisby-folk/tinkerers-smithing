@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ShapelessRepairRecipe extends SpecialCraftingRecipe {
+public class ShapelessRepairRecipe extends SpecialCraftingRecipe implements ServerRecipe {
 	public ShapelessRepairRecipe(Identifier identifier, CraftingRecipeCategory craftingCategory) {
 		super(identifier, craftingCategory);
 	}
