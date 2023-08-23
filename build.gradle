@@ -41,7 +41,6 @@ dependencies {
 	minecraft libs.mc
 	mappings variantOf(libs.qm) { classifier "intermediary-v2" }
 	modImplementation libs.ql
-	modImplementation libs.qsl
 	modImplementation libs.qfapi
 
 	// // Libraries // //
@@ -54,7 +53,6 @@ processResources {
 		"version"        : version.toString(),
 		"mc"             : libs.versions.mc.get(),
 		"ql"             : libs.versions.ql.get(),
-		"qsl"            : libs.versions.qsl.get(),
 		"fapi"           : libs.versions.fapi.get(),
 		"qfapi"          : libs.versions.qfapi.get(),
 		"emi"            : libs.versions.emi.get()
