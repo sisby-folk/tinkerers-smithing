@@ -113,6 +113,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 		return doSwapEnchantments(base, ingredient) ? ingredient : base;
 	}
 
+	@SuppressWarnings("InvalidInjectorMethodSignature")
 	@ModifyVariable(method = "updateResult", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/enchantment/EnchantmentHelper;get(Lnet/minecraft/item/ItemStack;)Ljava/util/Map;", ordinal = 1), ordinal = 1)
 	private Map<Enchantment, Integer> orderlessCombineSwapIngredientTable(Map<Enchantment, Integer> ingredient) {
 		Map<Enchantment, Integer> base = EnchantmentHelper.get(this.ingredientInventory.getStack(1));
