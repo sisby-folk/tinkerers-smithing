@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(EnchantmentHelper.class)
 public class EnchantmentHelperMixin {
 	@Inject(method = "getLevel", at = @At("HEAD"), cancellable = true)
-	static void brokenNoEnchantments(Enchantment enchantment, ItemStack stack, CallbackInfoReturnable<Integer> cir) {
+	private static void brokenNoEnchantments(Enchantment enchantment, ItemStack stack, CallbackInfoReturnable<Integer> cir) {
 		if (stack.isDamageable() && stack.getDamage() == stack.getMaxDamage()) {
 			cir.setReturnValue(0); // Breaks XP from grinding broken enchanted gear, but hopefully nothing else.
 			cir.cancel();

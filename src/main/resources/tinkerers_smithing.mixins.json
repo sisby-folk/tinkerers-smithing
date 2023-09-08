@@ -8,6 +8,7 @@
 		"AnvilScreenHandlerMixin",
 		"EnchantmentHelperMixin",
 		"ItemMixin",
+		"ItemPredicateMixin",
 		"ItemStackMixin",
 		"SmithingScreenHandlerMixin",
 		"SynchronizeRecipesS2CPacketMixin"
