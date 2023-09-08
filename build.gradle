@@ -102,7 +102,6 @@ if (System.getenv("MODRINTH_TOKEN")) {
 		detectLoaders = false
 		dependencies {
 			optional.project "emi"
-			optional.project "yttr"
 		}
 		changelog = "Changelog: https://github.com/sisby-folk/tinkerers-smithing/releases/tag/v" + origVersion
 		syncBodyFrom = rootProject.file("README.md").text
