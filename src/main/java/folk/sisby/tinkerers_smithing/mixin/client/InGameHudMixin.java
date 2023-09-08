@@ -1,5 +1,6 @@
 package folk.sisby.tinkerers_smithing.mixin.client;
 
+import folk.sisby.tinkerers_smithing.TinkerersSmithing;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.MutableText;
@@ -17,7 +18,7 @@ public class InGameHudMixin {
 
 	@ModifyVariable(method = "renderHeldItemTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;getWidth(Lnet/minecraft/text/StringVisitable;)I", shift = At.Shift.BEFORE), ordinal = 0)
 	private MutableText showBrokenHeldItemTooltip(MutableText text) {
-		if (this.currentStack.isDamageable() && this.currentStack.getDamage() == this.currentStack.getMaxDamage()) {
+		if (TinkerersSmithing.isBroken(currentStack)) {
 			return Text.translatable("item.tinkerers_smithing.broken").setStyle(Style.EMPTY.withColor(Formatting.DARK_RED)).append(Text.literal(" ")).append(text);
 		}
 		return text;
