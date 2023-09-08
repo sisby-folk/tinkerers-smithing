@@ -12,7 +12,9 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.minecraft.item.ElytraItem;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.SpecialRecipeSerializer;
 import net.minecraft.resource.ResourceType;
@@ -44,6 +46,14 @@ public class TinkerersSmithing implements ModInitializer {
 			SMITHING_RELOAD_BUF = TinkerersSmithingNetworking.createSmithingReloadBuf();
 			TinkerersSmithingNetworking.smithingReload(server, SMITHING_RELOAD_BUF);
 		}
+	}
+
+	public static boolean isBroken(ItemStack stack) {
+		return stack.isDamageable() && stack.getDamage() >= stack.getMaxDamage() - (stack.getItem() instanceof ElytraItem ? 1 : 0);
+	}
+
+	public static boolean isKeeper(ItemStack stack) {
+		return stack.hasCustomName() || stack.hasEnchantments() || stack.getItem() instanceof ElytraItem;
 	}
 
 	@Override
