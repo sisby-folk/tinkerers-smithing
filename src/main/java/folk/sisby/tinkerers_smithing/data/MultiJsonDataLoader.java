@@ -17,8 +17,8 @@ import net.minecraft.util.profiler.Profiler;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 
-import java.io.IOException;
-import java.io.Reader;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -39,16 +39,15 @@ public abstract class MultiJsonDataLoader extends SinglePreparationResourceReloa
 	protected Map<Identifier, Collection<Pair<JsonElement, String>>> prepare(ResourceManager manager, Profiler profiler) {
 		Map<Identifier, Collection<Pair<JsonElement, String>>> outMap = Maps.newHashMap();
 
-		for(Map.Entry<Identifier, Resource> entry : manager.findResources(this.dataType, id -> id.getPath().endsWith(".json")).entrySet()) {
-			Identifier fileId = entry.getKey();
+		for(Identifier fileId : manager.findResources(this.dataType, path -> path.endsWith(".json"))) {
 			// Remove .json, ignore path prefixes: minecraft:campanion/diamond = minecraft:diamond
 			Identifier id = new Identifier(fileId.getNamespace(), StringUtils.removeEndIgnoreCase(fileId.getPath().substring(fileId.getPath().lastIndexOf('/') + 1), FILE_SUFFIX));
-
 			try {
-				try (Reader reader = entry.getValue().openBufferedReader()) {
-					JsonElement jsonContents = JsonHelper.deserialize(this.gson, reader, JsonElement.class);
-					outMap.computeIfAbsent(id, k -> new ArrayList<>()).add(new Pair<>(jsonContents, entry.getValue().getSourceName()));
-				}
+				Resource resource = manager.getResource(fileId);
+				InputStream inputStream = resource.getInputStream();
+				Reader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+				JsonElement jsonContents = JsonHelper.deserialize(this.gson, reader, JsonElement.class);
+				outMap.computeIfAbsent(id, k -> new ArrayList<>()).add(new Pair<>(jsonContents, resource.getResourcePackName()));
 			} catch (IllegalArgumentException | IOException | JsonParseException e) {
 				LOGGER.error("Couldn't parse data file {} from {}", id, fileId, e);
 			}

@@ -3,15 +3,13 @@ package folk.sisby.tinkerers_smithing.data;
 import com.google.common.collect.ImmutableList;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-import com.mojang.serialization.Dynamic;
-import com.mojang.serialization.JsonOps;
 import folk.sisby.tinkerers_smithing.TinkerersSmithing;
 import folk.sisby.tinkerers_smithing.TinkerersSmithingLoader;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
 import net.minecraft.resource.ResourceManager;
-import net.minecraft.tag.TagFile;
+import net.minecraft.tag.Tag;
 import net.minecraft.tag.TagGroupLoader;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
@@ -50,39 +48,34 @@ public class SmithingTypeLoader extends MultiJsonDataLoader implements Identifia
 	protected void apply(Map<Identifier, Collection<Pair<JsonElement, String>>> prepared, ResourceManager manager, Profiler profiler) {
 		TinkerersSmithing.LOGGER.info("[Tinkerer's Smithing] Loading Types!");
 		TinkerersSmithingLoader.INSTANCE.SMITHING_TYPES.clear();
-		Map<Identifier, List<TagGroupLoader.EntryWithSource>> typeTags = new HashMap<>();
+		Map<Identifier, Tag.Builder> typeTags = new HashMap<>();
 		prepared.forEach((id, jsons) -> {
 			Identifier collisionAvoidingID = new Identifier(id.getNamespace(), AVOIDANCE_PREFIX + id.getPath());
-			jsons.forEach(jsonEntry -> {
-				List<TagGroupLoader.EntryWithSource> list = typeTags.computeIfAbsent(collisionAvoidingID, k -> new ArrayList<>());
-				TagFile tagFile = TagFile.CODEC.parse(new Dynamic<>(JsonOps.INSTANCE, jsonEntry.getLeft())).getOrThrow(false, TinkerersSmithing.LOGGER::error);
-				if (tagFile.replace()) {
-					list.clear();
-				}
-				tagFile.entries().forEach(entry -> list.add(new TagGroupLoader.EntryWithSource(entry, jsonEntry.getRight())));
-			});
+			jsons.forEach(jsonEntry -> typeTags.computeIfAbsent(collisionAvoidingID, x -> Tag.Builder.create()).read(jsonEntry.getLeft().getAsJsonObject(), jsonEntry.getRight()));
 		});
 
-		Map<Identifier, List<TagGroupLoader.EntryWithSource>> itemTags = ITEM_TAG_LOADER.loadTags(manager);
-		Map<Identifier, List<TagGroupLoader.EntryWithSource>> allTags = new HashMap<>();
+		Map<Identifier, Tag.Builder> itemTags = ITEM_TAG_LOADER.loadTags(manager);
+		Map<Identifier, Tag.Builder> allTags = new HashMap<>();
 		allTags.putAll(itemTags);
 		allTags.putAll(typeTags);
-		Map<Identifier, Collection<Item>> tags = ITEM_TAG_LOADER.build(allTags);
+		Map<Identifier, Tag<Item>> tags = ITEM_TAG_LOADER.buildGroup(allTags);
 		tags.entrySet().removeIf(e -> !typeTags.containsKey(e.getKey()));
 		// Strip collision avoiding ID
 		tags = tags.entrySet().stream().collect(Collectors.toMap(e -> new Identifier(e.getKey().getNamespace(), StringUtils.removeStart(e.getKey().getPath(), AVOIDANCE_PREFIX)), Map.Entry::getValue));
 		// Manually jam in stuff by equipment slot, false positives should wash out by having no material.
+
+		Map<Identifier, Collection<Item>> tagItems = tags.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().values()));
 		for (Item item : Registry.ITEM) {
 			if (item instanceof ArmorItem ai) {
 				switch (ai.getSlotType()) {
-					case FEET -> addToTag(tags, "boots", item);
-					case LEGS -> addToTag(tags, "leggings", item);
-					case CHEST -> addToTag(tags, "chestplate", item);
-					case HEAD -> addToTag(tags, "helmet", item);
+					case FEET -> addToTag(tagItems, "boots", item);
+					case LEGS -> addToTag(tagItems, "leggings", item);
+					case CHEST -> addToTag(tagItems, "chestplate", item);
+					case HEAD -> addToTag(tagItems, "helmet", item);
 				}
 			}
 		}
-		TinkerersSmithingLoader.INSTANCE.SMITHING_TYPES.putAll(tags);
+		TinkerersSmithingLoader.INSTANCE.SMITHING_TYPES.putAll(tagItems);
 		TinkerersSmithing.LOGGER.info("[Tinkerer's Smithing] Reloaded smithing types");
 	}
 }

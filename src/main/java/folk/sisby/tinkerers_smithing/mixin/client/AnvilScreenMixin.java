@@ -7,6 +7,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.AnvilScreenHandler;
 import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -25,7 +26,7 @@ public class AnvilScreenMixin extends ForgingScreen<AnvilScreenHandler> {
 		ItemStack ingredient = handler.getSlot(1).getStack();
 		ItemStack result = handler.getSlot(2).getStack();
 		if (!base.isEmpty() && !result.isEmpty() && this.handler.getLevelCost() == 0) {
-			Text text = Text.translatable("container.repair.work", result.getRepairCost() - Math.max(base.getRepairCost(), ingredient.getRepairCost()));
+			Text text = new TranslatableText("container.repair.work", result.getRepairCost() - Math.max(base.getRepairCost(), ingredient.getRepairCost()));
 			int k = this.backgroundWidth - 8 - this.textRenderer.getWidth(text) - 2;
 			fill(matrices, k - 2, 67, this.backgroundWidth - 8, 79, 1325400064);
 			this.textRenderer.drawWithShadow(matrices, text, (float) k, 69.0F, 8453920);

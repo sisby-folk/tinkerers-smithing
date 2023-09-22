@@ -12,8 +12,8 @@ import folk.sisby.tinkerers_smithing.client.emi.IterativeSlotWidget;
 import net.minecraft.client.gui.tooltip.OrderedTextTooltipComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.text.LiteralText;
 import net.minecraft.text.Style;
-import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
@@ -66,9 +66,9 @@ public class EmiAnvilDeworkRecipe implements EmiRecipe {
 	public void addWidgets(WidgetHolder widgets) {
 		widgets.addTexture(EmiTexture.PLUS, 27, 3);
 		widgets.addTexture(EmiTexture.EMPTY_ARROW, 75, 1);
-		widgets.add(new IterativeSlotWidget(i -> getTool(i, false),0, 0).appendTooltip(ingredient -> new OrderedTextTooltipComponent(Text.literal("Repair Cost: " + ingredient.getEmiStacks().get(0).getItemStack().getRepairCost()).setStyle(Style.EMPTY.withColor(Formatting.GRAY)).asOrderedText())));
+		widgets.add(new IterativeSlotWidget(i -> getTool(i, false),0, 0).appendTooltip(ingredient -> new OrderedTextTooltipComponent(new LiteralText("Repair Cost: " + ingredient.getEmiStacks().get(0).getItemStack().getRepairCost()).setStyle(Style.EMPTY.withColor(Formatting.GRAY)).asOrderedText())));
 		widgets.add(new IterativeSlotWidget(this::getRepairStack, 49, 0));
-		widgets.add(new IterativeSlotWidget(i -> getTool(i, true), 107, 0).appendTooltip(ingredient -> new OrderedTextTooltipComponent(Text.literal("Repair Cost: " + ingredient.getEmiStacks().get(0).getItemStack().getRepairCost()).setStyle(Style.EMPTY.withColor(Formatting.GRAY)).asOrderedText())).recipeContext(this));
+		widgets.add(new IterativeSlotWidget(i -> getTool(i, true), 107, 0).appendTooltip(ingredient -> new OrderedTextTooltipComponent(new LiteralText("Repair Cost: " + ingredient.getEmiStacks().get(0).getItemStack().getRepairCost()).setStyle(Style.EMPTY.withColor(Formatting.GRAY)).asOrderedText())).recipeContext(this));
 	}
 
 	private int getStackCount(long i) {
