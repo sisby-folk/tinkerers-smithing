@@ -1,46 +1,15 @@
 pluginManagement {
 	repositories {
-		maven {
-			name = 'Quilt'
-			url = 'https://maven.quiltmc.org/repository/release'
-		}
-		// Currently needed for Intermediary and other temporary dependencies
-		maven {
-			name = 'Fabric'
-			url = 'https://maven.fabricmc.net/'
-		}
+		maven { url 'https://maven.quiltmc.org/repository/release'}
+		maven { url 'https://maven.fabricmc.net/'}
 		gradlePluginPortal()
 	}
 }
 
 dependencyResolutionManagement {
 	versionCatalogs {
-		libs {
-			def mc_major = '1.19'
-			def mc = mc_major + '.2'
-			def fapi = "0.76.0"
-
-			// // Build Tools // //
-			version('loom', '1.2.+')
-
-			plugin('loom', 'org.quiltmc.loom').versionRef('loom')
-
-			// // Base // //
-			version('mc', mc)
-			version('ql', "0.19.0")
-			version('qm', "${mc}+build.22")
-			version('fapi', "${fapi}-${mc}")
-			version('qfapi', "4.0.0-beta.30+${fapi}-${mc}")
-
-			library('mc', 'mojang', 'minecraft').versionRef('mc')
-			library('ql', 'org.quiltmc', 'quilt-loader').versionRef('ql')
-			library('qm', 'org.quiltmc', 'quilt-mappings').versionRef('qm')
-			library('qfapi', 'org.quiltmc.quilted-fabric-api', 'quilted-fabric-api',).versionRef('qfapi')
-
-			// // Libraries // //
-			version('emi', "1.0.4+${mc}")
-
-			library('emi', 'dev.emi', 'emi-fabric').versionRef('emi')
+		create("libs") {
+			from(files("libs.versions.toml"))
 		}
 	}
 }
