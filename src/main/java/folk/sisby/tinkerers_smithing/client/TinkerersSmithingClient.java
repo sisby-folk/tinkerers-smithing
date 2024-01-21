@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import java.util.Map;
 
-@SuppressWarnings("deprecation")
 public class TinkerersSmithingClient implements ClientModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger("tinkerers_smithing_client");
 

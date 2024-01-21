@@ -26,7 +26,6 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@SuppressWarnings("deprecation")
 public class TinkerersSmithing implements ModInitializer {
 	public static final String ID = "tinkerers_smithing";
 	public static final Logger LOGGER = LoggerFactory.getLogger(ID);

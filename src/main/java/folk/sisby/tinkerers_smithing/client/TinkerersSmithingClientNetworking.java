@@ -4,15 +4,14 @@ import folk.sisby.tinkerers_smithing.TinkerersSmithingItemData;
 import folk.sisby.tinkerers_smithing.TinkerersSmithingNetworking;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
-import net.fabricmc.loader.FabricLoader;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.network.PacketByteBuf;
 
-@SuppressWarnings("deprecation")
 public class TinkerersSmithingClientNetworking {
 	public static void initializeReceivers() {
-		if (FabricLoader.INSTANCE.isModLoaded("emi")) {
+		if (FabricLoader.getInstance().isModLoaded("emi")) {
 			ClientPlayNetworking.registerGlobalReceiver(TinkerersSmithingNetworking.S2C_SMITHING_RELOAD, TinkerersSmithingClientNetworking::smithingReload);
 		}
 	}

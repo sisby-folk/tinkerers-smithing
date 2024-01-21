@@ -14,7 +14,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
-@SuppressWarnings("deprecation")
 public class SmithingArmorMaterialLoader extends SmithingMaterialLoader implements IdentifiableResourceReloadListener {
 	public static final SmithingArmorMaterialLoader INSTANCE = new SmithingArmorMaterialLoader(new Gson());
 	public static final Identifier ID = new Identifier(TinkerersSmithing.ID, "smithing_armor_material_loader");

@@ -45,9 +45,9 @@ public abstract class MultiJsonDataLoader extends SinglePreparationResourceReloa
 			Identifier id = new Identifier(fileId.getNamespace(), StringUtils.removeEndIgnoreCase(fileId.getPath().substring(fileId.getPath().lastIndexOf('/') + 1), FILE_SUFFIX));
 
 			try {
-				try (Reader reader = entry.getValue().openBufferedReader()) {
+				try (Reader reader = entry.getValue().getReader()) {
 					JsonElement jsonContents = JsonHelper.deserialize(this.gson, reader, JsonElement.class);
-					outMap.computeIfAbsent(id, k -> new ArrayList<>()).add(new Pair<>(jsonContents, entry.getValue().getSourceName()));
+					outMap.computeIfAbsent(id, k -> new ArrayList<>()).add(new Pair<>(jsonContents, entry.getValue().getResourcePackName()));
 				}
 			} catch (IllegalArgumentException | IOException | JsonParseException e) {
 				LOGGER.error("Couldn't parse data file {} from {}", id, fileId, e);

@@ -36,12 +36,12 @@
 				"versions": ">=${mc}"
 			},
 			{
-				"id": "quilt_loader",
-				"versions": ">=${ql}"
+				"id": "fabricloader",
+				"versions": ">=${fl}"
 			},
 			{
-				"id": "quilted_fabric_api",
-				"versions": ">=${qfapi}"
+				"id": "fabric-api",
+				"versions": ">=${fapi}"
 			},
 			{
 				"id": "emi",

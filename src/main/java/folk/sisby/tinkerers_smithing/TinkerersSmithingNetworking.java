@@ -13,7 +13,6 @@ import net.minecraft.util.registry.Registry;
 import java.util.HashMap;
 import java.util.Map;
 
-@SuppressWarnings("deprecation")
 public class TinkerersSmithingNetworking {
 	public static final Identifier S2C_SMITHING_RELOAD = new Identifier(TinkerersSmithing.ID, "s2c_smithing_reload");
 
