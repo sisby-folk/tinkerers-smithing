@@ -82,5 +82,6 @@
 			}
 		]
 	},
+	"access_widener": ["tinkerers_smithing.accesswidener"],
 	"mixin": "tinkerers_smithing.mixins.json"
 }

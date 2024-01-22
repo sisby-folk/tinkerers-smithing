@@ -1,12 +1,11 @@
 package folk.sisby.tinkerers_smithing.client.emi.recipe;
 
 import dev.emi.emi.api.recipe.EmiRecipe;
-import dev.emi.emi.api.recipe.EmiRecipeCategory;
-import dev.emi.emi.api.recipe.VanillaEmiRecipeCategories;
 import dev.emi.emi.api.render.EmiTexture;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
+import dev.emi.emi.recipe.EmiAnvilRecipe;
 import folk.sisby.tinkerers_smithing.TinkerersSmithing;
 import folk.sisby.tinkerers_smithing.client.emi.IterativeSlotWidget;
 import net.minecraft.client.gui.tooltip.OrderedTextTooltipComponent;
@@ -16,50 +15,10 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-
-public class EmiAnvilDeworkRecipe implements EmiRecipe {
-	private final Item tool;
-
-	public EmiAnvilDeworkRecipe(Item tool) {
-		this.tool = tool;
-	}
-
-	@Override
-	public EmiRecipeCategory getCategory() {
-		return VanillaEmiRecipeCategories.ANVIL_REPAIRING;
-	}
-
-	@Override
-	public @Nullable Identifier getId() {
-		return null;
-	}
-
-	@Override
-	public List<EmiIngredient> getInputs() {
-		return List.of(EmiStack.of(tool), EmiIngredient.of(TinkerersSmithing.DEWORK_INGREDIENTS));
-	}
-
-	@Override
-	public List<EmiStack> getOutputs() {
-		return List.of(EmiStack.of(tool));
-	}
-
-	@Override
-	public boolean supportsRecipeTree() {
-		return false;
-	}
-
-	@Override
-	public int getDisplayWidth() {
-		return 125;
-	}
-
-	@Override
-	public int getDisplayHeight() {
-		return 18;
+public class EmiAnvilDeworkRecipe extends EmiAnvilRecipe implements EmiRecipe {
+	public EmiAnvilDeworkRecipe(Item tool, Identifier id) {
+		super(EmiStack.of(tool), EmiIngredient.of(TinkerersSmithing.DEWORK_INGREDIENTS), id);
 	}
 
 	@Override
@@ -76,17 +35,17 @@ public class EmiAnvilDeworkRecipe implements EmiRecipe {
 	}
 
 	private EmiIngredient getTool(long i, boolean applied) {
-		ItemStack stack = tool.getDefaultStack();
+		ItemStack stack = getOutputs().get(0).getItemStack().copy();
 		int stackCount = getStackCount(i);
 		int work = (int) Math.pow(2, 5 - (applied ? stackCount : 0)) - 1;
 		if (work <= 0) {
-			return EmiStack.of(tool);
+			return EmiStack.of(stack);
 		}
 		stack.setRepairCost(work);
 		return EmiStack.of(stack);
 	}
 
 	private EmiIngredient getRepairStack(long i) {
-		return EmiIngredient.of(TinkerersSmithing.DEWORK_INGREDIENTS).copy().setAmount(getStackCount(i));
+		return getInputs().get(1).copy().setAmount(getStackCount(i));
 	}
 }

@@ -1,15 +1,17 @@
 package folk.sisby.tinkerers_smithing;
 
 import folk.sisby.tinkerers_smithing.data.SmithingUnitCostManager;
+import folk.sisby.tinkerers_smithing.recipe.SacrificeUpgradeRecipe;
+import folk.sisby.tinkerers_smithing.recipe.ShapelessRepairRecipe;
+import folk.sisby.tinkerers_smithing.recipe.ShapelessUpgradeRecipe;
+import folk.sisby.tinkerers_smithing.recipe.SmithingUpgradeRecipe;
 import net.minecraft.item.*;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.Recipe;
-import net.minecraft.recipe.RecipeManager;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
+import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.registry.Registry;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.function.BiConsumer;
@@ -23,8 +25,10 @@ public class TinkerersSmithingLoader {
 	public final Map<Identifier, TinkerersSmithingMaterial> ARMOR_MATERIALS = new HashMap<>();
 	public final Map<Item, SmithingUnitCostManager.UnitCostOverride> COST_OVERRIDES = new HashMap<>();
 
-	public void generateItemSmithingData(@NotNull MinecraftServer server) {
-		new LoaderRun().generateItemSmithingData(server);
+	public final Map<Identifier, Recipe<?>> RECIPES = new HashMap<>();
+
+	public void generateItemSmithingData(Map<Identifier, Recipe<?>> recipes) {
+		new LoaderRun().generateItemSmithingData(recipes);
 		SMITHING_TYPES.clear();
 		TOOL_MATERIALS.clear();
 		ARMOR_MATERIALS.clear();
@@ -126,7 +130,7 @@ public class TinkerersSmithingLoader {
 			return outSet;
 		}
 
-		public Map<Ingredient, Integer> getUnitCosts(Item item, RecipeManager recipeManager) {
+		public Map<Ingredient, Integer> getUnitCosts(Item item, Map<Identifier, Recipe<?>> recipes) {
 			Map<Ingredient, Integer> outMap = new HashMap<>();
 
 			Identifier itemId = Registry.ITEM.getId(item);
@@ -141,16 +145,15 @@ public class TinkerersSmithingLoader {
 			if ((override == null || !override.replace()) && !repairIngredients.isEmpty()) {
 
 				// Naively calculate unit cost by testing the recipe with the same ID as the item itself (ignoring path directories)
-				List<Identifier> recipeIds = recipeManager.keys().filter(id -> id.getNamespace().equals(itemId.getNamespace()) && itemId.getPath().equals(id.getPath().substring(id.getPath().lastIndexOf('/') + 1))).toList();
+				List<Identifier> recipeIds = recipes.keySet().stream().filter(id -> id.getNamespace().equals(itemId.getNamespace()) && itemId.getPath().equals(id.getPath().substring(id.getPath().lastIndexOf('/') + 1))).toList();
 				if (!recipeIds.isEmpty()) {
 					for (Identifier recipeId : recipeIds) {
-						Recipe<?> recipe = recipeManager.get(recipeId).orElse(null);
+						Recipe<?> recipe = recipes.get(recipeId);
 						if (recipe != null) {
 							if (recipe.getOutput().isOf(item)) {
 								for (Ingredient repairIngredient : repairIngredients) {
 									int unitCost = Math.toIntExact(recipe.getIngredients().stream()
-										.filter(ingredient -> Arrays.stream(ingredient.getMatchingStacks()).allMatch(repairIngredient))
-										.filter(ingredient -> Arrays.stream(repairIngredient.getMatchingStacks()).allMatch(ingredient))
+										.filter(ingredient -> repairIngredient.toJson().toString().equals(ingredient.toJson().toString()))
 										.count());
 									if (unitCost > 0) {
 										outMap.put(repairIngredient, unitCost);
@@ -179,7 +182,7 @@ public class TinkerersSmithingLoader {
 			return outMap;
 		}
 
-		public Map<Item, Pair<Integer, Map<Item, Integer>>> getSacrificePaths(Item item) { // This is gonna be ugly. This idea assumes a lot of 1:1ness in a system reworked to not do that.
+		public Map<Item, Pair<Integer, Map<Item, Integer>>> getSacrificePaths(Item item, Map<Item, Map<Ingredient, Integer>> unitCosts) { // This is gonna be ugly. This idea assumes a lot of 1:1ness in a system reworked to not do that.
 			Map<Item, Pair<Integer, Map<Item, Integer>>> outMap = new HashMap<>();
 
 			List<Collection<Item>> types = new ArrayList<>();
@@ -210,9 +213,7 @@ public class TinkerersSmithingLoader {
 									Map<Item, Integer> sacrifices = new HashMap<>();
 									int upgradeViaCost = 0;
 									for (Item viaItem : map.get(upgradeMaterial.sacrificesVia).items.stream().filter(viaItem -> types.stream().anyMatch(type -> type.contains(viaItem))).toList()) {
-										if (viaItem instanceof TinkerersSmithingItem vtsi && !vtsi.tinkerersSmithing$getUnitCosts().isEmpty()) {
-											upgradeViaCost = vtsi.tinkerersSmithing$getUnitCosts().values().stream().findFirst().orElse(0);
-										}
+										upgradeViaCost = unitCosts.get(viaItem).values().stream().findFirst().orElse(0);
 									}
 									if (upgradeViaCost > 0) {
 										for (Item sacrificeItem : sacrificeItems) {
@@ -222,9 +223,7 @@ public class TinkerersSmithingLoader {
 											});
 											int sacrificesViaCost = 0;
 											for (Item viaItem : sacrificesViaItems.stream().filter(viaItem -> sacrificeTypes.stream().anyMatch(type -> type.contains(viaItem))).toList()) {
-												if (viaItem instanceof TinkerersSmithingItem vtsi && !vtsi.tinkerersSmithing$getUnitCosts().isEmpty()) {
-													sacrificesViaCost = vtsi.tinkerersSmithing$getUnitCosts().values().stream().findFirst().orElse(0);
-												}
+												sacrificesViaCost = unitCosts.get(viaItem).values().stream().findFirst().orElse(0);
 											}
 											if (sacrificesViaCost > 0) {
 												sacrifices.put(sacrificeItem, sacrificesViaCost);
@@ -249,24 +248,53 @@ public class TinkerersSmithingLoader {
 			return outMap;
 		}
 
-		public void generateItemSmithingData(@NotNull MinecraftServer server) {
+		public void generateItemSmithingData(Map<Identifier, Recipe<?>> recipes) {
 			TinkerersSmithing.LOGGER.info("[Tinkerer's Smithing] Data Initializing.");
+			RECIPES.clear();
+			Map<Item, Map<Ingredient, Integer>> unitCosts = new HashMap<>();
 			for (Item item : Registry.ITEM) {
-				if (item instanceof TinkerersSmithingItem tsi) {
-					Map<Ingredient, Integer> unitCosts = tsi.tinkerersSmithing$getUnitCosts();
-					unitCosts.clear();
-					unitCosts.putAll(getUnitCosts(item, server.getRecipeManager()));
-				}
+                Map<Ingredient, Integer> unitCost = getUnitCosts(item, recipes);
+				unitCosts.put(item, unitCost);
+				unitCost.forEach((unit, count) -> {
+					Identifier baseId = Registry.ITEM.getId(item);
+					Identifier ingredientId = unit.entries[0] instanceof Ingredient.StackEntry se ? Registry.ITEM.getId(se.stack.getItem()) : (unit.entries[0] instanceof Ingredient.TagEntry te ? te.tag.id() : new Identifier("ERROR"));
+					Identifier id = new Identifier(TinkerersSmithing.ID, "repair/" + baseId.toString().replace(":", "_") + "_" + ingredientId.toString().replace(":", "_"));
+					DefaultedList<Ingredient> ingredients = DefaultedList.of();
+					ingredients.add(Ingredient.ofItems(item));
+					for (int i = 0; i < count; i++) {
+						ingredients.add(unit);
+					}
+					RECIPES.put(id, new ShapelessRepairRecipe(id, "", item.getDefaultStack(), ingredients));
+				});
 			}
 			for (Item item : Registry.ITEM) {
-				if (item instanceof TinkerersSmithingItem tsi) {
-					Set<Item> upgradePaths = tsi.tinkerersSmithing$getUpgradePaths();
-					upgradePaths.clear();
-					upgradePaths.addAll(getUpgradePaths(item));
-					Map<Item, Pair<Integer, Map<Item, Integer>>> sacrificePaths = tsi.tinkerersSmithing$getSacrificePaths();
-					sacrificePaths.clear();
-					sacrificePaths.putAll(getSacrificePaths(item));
+				Set<Item> upgradePaths = new HashSet<>(getUpgradePaths(item));
+				for (Item upgradeItem : upgradePaths) {
+					unitCosts.get(upgradeItem).forEach((addition, count) -> {
+						Identifier upgradeId = Registry.ITEM.getId(upgradeItem);
+						Identifier baseId = Registry.ITEM.getId(item);
+						Identifier id = new Identifier(TinkerersSmithing.ID, "smithing/" + upgradeId.toString().replace(":", "_") + "_" + baseId.toString().replace(":", "_"));
+						RECIPES.put(id, new SmithingUpgradeRecipe(id, Ingredient.ofItems(item), addition, count, upgradeItem.getDefaultStack()));
+						DefaultedList<Ingredient> ingredients = DefaultedList.of();
+						ingredients.add(Ingredient.ofItems(item));
+						for (int i = 0; i < count; i++) {
+							ingredients.add(addition);
+						}
+						id = new Identifier(TinkerersSmithing.ID, "shapeless/" + upgradeId.toString().replace(":", "_") + "_" + baseId.toString().replace(":", "_"));
+						RECIPES.put(id, new ShapelessUpgradeRecipe(id, "", upgradeItem.getDefaultStack(), ingredients));
+					});
 				}
+                Map<Item, Pair<Integer, Map<Item, Integer>>> sacrificePaths = getSacrificePaths(item, unitCosts);
+				sacrificePaths.forEach((resultItem, sacrificePath) -> {
+					int resultUnits = sacrificePath.getLeft();
+					sacrificePath.getRight().forEach((additionItem, additionUnits) -> {
+						Identifier upgradeId = Registry.ITEM.getId(resultItem);
+						Identifier additionId = Registry.ITEM.getId(additionItem);
+						Identifier baseId = Registry.ITEM.getId(item);
+						Identifier id = new Identifier(TinkerersSmithing.ID, "sacrifice/" + upgradeId.toString().replace(":", "_") + "_" + baseId.toString().replace(":", "_") + "_" + additionId.toString().replace(":", "_"));
+						RECIPES.put(id, new SacrificeUpgradeRecipe(id, Ingredient.ofItems(item), Ingredient.ofItems(additionItem), additionUnits, resultItem.getDefaultStack(), resultUnits));
+					});
+				});
 			}
 			TinkerersSmithing.LOGGER.info("[Tinkerer's Smithing] Registered {} Tool Materials with {} items: [{}]", TOOL_MATERIALS.size(), TOOL_MATERIALS.values().stream().map(m -> m.items.size()).reduce(Integer::sum).orElse(0), TOOL_MATERIALS.entrySet().stream().map(e -> e.getKey().toString() + "(" + e.getValue().items.size() + ")").collect(Collectors.joining(", ")));
 			TinkerersSmithing.LOGGER.info("[Tinkerer's Smithing] Registered {} Armor Materials with {} items: [{}].", ARMOR_MATERIALS.size(), ARMOR_MATERIALS.values().stream().map(m -> m.items.size()).reduce(Integer::sum).orElse(0), ARMOR_MATERIALS.entrySet().stream().map(e -> e.getKey().toString() + "(" + e.getValue().items.size() + ")").collect(Collectors.joining(", ")));

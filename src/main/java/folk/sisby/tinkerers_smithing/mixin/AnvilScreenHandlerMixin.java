@@ -1,18 +1,25 @@
 package folk.sisby.tinkerers_smithing.mixin;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import folk.sisby.tinkerers_smithing.TinkerersSmithing;
-import folk.sisby.tinkerers_smithing.TinkerersSmithingItem;
+import folk.sisby.tinkerers_smithing.recipe.ShapelessRepairRecipe;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.screen.*;
+import net.minecraft.recipe.CraftingRecipe;
+import net.minecraft.recipe.RecipeType;
+import net.minecraft.screen.AnvilScreenHandler;
+import net.minecraft.screen.ForgingScreenHandler;
+import net.minecraft.screen.Property;
+import net.minecraft.screen.ScreenHandlerContext;
+import net.minecraft.screen.ScreenHandlerType;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
@@ -35,12 +42,14 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 		return this.levelCost.get() == 0 ? i : AnvilScreenHandler.getNextCost(i);
 	}
 
-	@Redirect(method = "updateResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/Item;canRepair(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemStack;)Z"))
-	private boolean overrideRepairMaterials(Item instance, ItemStack stack, ItemStack ingredient) {
-		if (instance instanceof TinkerersSmithingItem tsi && !tsi.tinkerersSmithing$getUnitCosts().isEmpty()) {
-			return tsi.tinkerersSmithing$getUnitCost(ingredient) > 0;
+	@ModifyExpressionValue(method = "updateResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/Item;canRepair(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemStack;)Z"))
+	private boolean overrideRepairMaterials(boolean original) {
+		for (CraftingRecipe recipe : this.player.getWorld().getRecipeManager().listAllOfType(RecipeType.CRAFTING)) {
+			if (recipe instanceof ShapelessRepairRecipe srr && srr.getBaseIngredient().test(this.input.getStack(0)) && srr.getUnit().test(this.input.getStack(1))) {
+				return true;
+			}
 		}
-		return instance.canRepair(stack, ingredient);
+		return false;
 	}
 
 	@ModifyVariable(method = "updateResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;setDamage(I)V", ordinal = 0), ordinal = 0)
@@ -87,7 +96,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 		}
 	}
 
-	private int getSRCost(Map<Enchantment, Integer> base, Map<Enchantment, Integer> ingredient) {
+	@Unique private int getSRCost(Map<Enchantment, Integer> base, Map<Enchantment, Integer> ingredient) {
 		return ingredient.entrySet().stream().map(entry -> {
 			Enchantment enchantment = entry.getKey();
 			int level = entry.getValue();
@@ -103,7 +112,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 		}).reduce(0, Integer::sum);
 	}
 
-	private boolean doSwapEnchantments(Map<Enchantment, Integer> base, Map<Enchantment, Integer> ingredient) {
+	@Unique private boolean doSwapEnchantments(Map<Enchantment, Integer> base, Map<Enchantment, Integer> ingredient) {
 		return !(this.input.getStack(1).isOf(Items.ENCHANTED_BOOK)) && getSRCost(base, ingredient) > getSRCost(ingredient, base);
 	}
 

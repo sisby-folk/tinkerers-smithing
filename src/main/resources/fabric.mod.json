@@ -34,6 +34,7 @@
   "suggests": {
     "emi": ">=${emi}"
   },
+  "accessWidener": "tinkerers_smithing.accesswidener",
   "mixins": [
     "tinkerers_smithing.mixins.json"
   ]

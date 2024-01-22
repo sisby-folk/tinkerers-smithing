@@ -1,75 +1,50 @@
 package folk.sisby.tinkerers_smithing.recipe;
 
+import com.google.gson.JsonObject;
 import folk.sisby.tinkerers_smithing.TinkerersSmithing;
-import folk.sisby.tinkerers_smithing.TinkerersSmithingItem;
 import net.minecraft.inventory.Inventory;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.SmithingRecipe;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.Pair;
-import net.minecraft.world.World;
-
-import java.util.Map;
+import net.minecraft.util.JsonHelper;
+import org.jetbrains.annotations.Nullable;
 
 public class SmithingUpgradeRecipe extends SmithingRecipe implements ServerRecipe {
-	public SmithingUpgradeRecipe(Identifier identifier) {
-		super(identifier, Ingredient.EMPTY, Ingredient.EMPTY, ItemStack.EMPTY);
+	public final int additionCount;
+
+	public SmithingUpgradeRecipe(Identifier id, Ingredient base, Ingredient addition, int additionCount, ItemStack result) {
+		super(id, base, addition, result);
+		this.additionCount = additionCount;
 	}
 
-	public Pair<Integer, Integer> getUsedRepairStacksAndCost(Item result, ItemStack ingredient) {
-		if (result instanceof TinkerersSmithingItem tsi) {
-			for (Map.Entry<Ingredient, Integer> entry : tsi.tinkerersSmithing$getUnitCosts().entrySet()) {
-				Ingredient upgradeIngredient = entry.getKey();
-				Integer cost = entry.getValue();
-				if (upgradeIngredient.test(ingredient) && ingredient.getCount() >= cost - 4) {
-					return new Pair<>(Math.min(ingredient.getCount(), cost), cost);
-				}
-			}
-		}
-		return null;
+	@Override
+	public ItemStack craft(Inventory inventory) {
+		ItemStack output = super.craft(inventory);
+		int usedCount = Math.min(additionCount, inventory.getStack(1).getCount());
+		output.setDamage(Math.min(output.getMaxDamage() - 1, (int) Math.floor(output.getMaxDamage() * ((additionCount - usedCount) / 4.0))));
+		return output;
 	}
 
-	public ItemStack getValidOutput(Inventory inventory) {
-		ItemStack base = inventory.getStack(0);
-		ItemStack ingredient = inventory.getStack(1);
-
-		if (!base.isEmpty() && !ingredient.isEmpty() && base.getItem() instanceof TinkerersSmithingItem tsi) {
-			for (Item upgradeItem : tsi.tinkerersSmithing$getUpgradePaths()) {
-				Pair<Integer, Integer> usedAndCost = getUsedRepairStacksAndCost(upgradeItem, ingredient);
-				if (usedAndCost != null) {
-					ItemStack resultStack = upgradeItem.getDefaultStack();
-					resultStack.setNbt(base.getOrCreateNbt().copy());
-					resultStack.setDamage(Math.min(upgradeItem.getMaxDamage() - 1, (int) Math.floor(upgradeItem.getMaxDamage() * ((usedAndCost.getRight() - usedAndCost.getLeft()) / 4.0))));
-					return resultStack;
-				}
-			}
+	public static class Serializer implements RecipeSerializer<SmithingUpgradeRecipe> {
+		public SmithingUpgradeRecipe read(Identifier id, JsonObject json) {
+			SmithingRecipe recipe = RecipeSerializer.SMITHING.read(id, json);
+			int additionCount = JsonHelper.getInt(json, "additionCount");
+			return new SmithingUpgradeRecipe(id, recipe.base, recipe.addition, additionCount, recipe.getOutput());
 		}
 
-		return null;
-	}
+		public SmithingUpgradeRecipe read(Identifier id, PacketByteBuf buf) {
+			SmithingRecipe recipe = RecipeSerializer.SMITHING.read(id, buf);
+			int additionCount = buf.readVarInt();
+			return new SmithingUpgradeRecipe(id, recipe.base, recipe.addition, additionCount, recipe.getOutput());
+		}
 
-	@Override
-	public boolean matches(Inventory craftingInventory, World world) {
-		return getValidOutput(craftingInventory) != null;
-	}
-
-	@Override
-	public ItemStack craft(Inventory craftingInventory) {
-		ItemStack result = getValidOutput(craftingInventory);
-		return result != null ? result : ItemStack.EMPTY;
-	}
-
-	@Override
-	public boolean isIgnoredInRecipeBook() {
-		return true;
-	}
-
-	@Override
-	public boolean isEmpty() {
-		return true;
+		public void write(PacketByteBuf buf, SmithingUpgradeRecipe recipe) {
+			RecipeSerializer.SMITHING.write(buf, recipe);
+			buf.writeVarInt(recipe.additionCount);
+		}
 	}
 
 	@Override
@@ -78,7 +53,7 @@ public class SmithingUpgradeRecipe extends SmithingRecipe implements ServerRecip
 	}
 
 	@Override
-	public ItemStack getOutput() {
-		return ItemStack.EMPTY;
+	public @Nullable RecipeSerializer<?> getFallbackSerializer() {
+		return RecipeSerializer.SMITHING;
 	}
 }

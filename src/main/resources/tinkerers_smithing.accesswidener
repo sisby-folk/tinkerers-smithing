@@ -1,0 +1,10 @@
+accessWidener v2 named
+
+accessible field net/minecraft/recipe/SmithingRecipe base Lnet/minecraft/recipe/Ingredient;
+accessible field net/minecraft/recipe/SmithingRecipe addition Lnet/minecraft/recipe/Ingredient;
+accessible method net/minecraft/recipe/ShapelessRecipe$Serializer getIngredients (Lcom/google/gson/JsonArray;)Lnet/minecraft/util/collection/DefaultedList;
+accessible field net/minecraft/recipe/Ingredient entries [Lnet/minecraft/recipe/Ingredient$Entry;
+accessible class net/minecraft/recipe/Ingredient$StackEntry
+accessible field net/minecraft/recipe/Ingredient$StackEntry stack Lnet/minecraft/item/ItemStack;
+accessible class net/minecraft/recipe/Ingredient$TagEntry
+accessible field net/minecraft/recipe/Ingredient$TagEntry tag Lnet/minecraft/tag/TagKey;

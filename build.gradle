@@ -31,6 +31,7 @@ dependencies {
 
 	modCompileOnly libs.emi
 
+	modLocalRuntime libs.emi
 	// include libs.kaleidoConfig
 }
 
@@ -62,6 +63,10 @@ jar {
 	from("LICENSE.txt") {
 		rename { "${it}_${archivesBaseName}" }
 	}
+}
+
+loom {
+	accessWidenerPath = file("src/main/resources/tinkerers_smithing.accesswidener")
 }
 
 publishing {

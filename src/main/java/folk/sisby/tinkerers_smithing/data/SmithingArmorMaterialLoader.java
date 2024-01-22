@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
-public class SmithingArmorMaterialLoader extends SmithingMaterialLoader implements IdentifiableResourceReloadListener {
+public class SmithingArmorMaterialLoader extends SmithingMaterialLoader implements IdentifiableResourceReloadListener, RecipeDataDependency {
 	public static final SmithingArmorMaterialLoader INSTANCE = new SmithingArmorMaterialLoader(new Gson());
 	public static final Identifier ID = new Identifier(TinkerersSmithing.ID, "smithing_armor_material_loader");
 

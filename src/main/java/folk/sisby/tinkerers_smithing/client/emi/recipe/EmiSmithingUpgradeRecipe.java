@@ -1,74 +1,33 @@
 package folk.sisby.tinkerers_smithing.client.emi.recipe;
 
 import dev.emi.emi.api.recipe.EmiRecipe;
-import dev.emi.emi.api.recipe.EmiRecipeCategory;
-import dev.emi.emi.api.recipe.VanillaEmiRecipeCategories;
 import dev.emi.emi.api.render.EmiTexture;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
+import dev.emi.emi.recipe.EmiSmithingRecipe;
 import folk.sisby.tinkerers_smithing.client.emi.IterativeSlotWidget;
-import net.minecraft.item.Item;
+import folk.sisby.tinkerers_smithing.recipe.SmithingUpgradeRecipe;
 import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.Ingredient;
-import net.minecraft.util.Identifier;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-
-public class EmiSmithingUpgradeRecipe implements EmiRecipe {
-	private final Item tool;
-	private final EmiIngredient upgradeMaterial;
-	private final Item resultTool;
+public class EmiSmithingUpgradeRecipe extends EmiSmithingRecipe implements EmiRecipe {
 	private final int cost;
 
-	public EmiSmithingUpgradeRecipe(Item tool, List<Ingredient> ingredients, Item resultTool, int cost) {
-		this.tool = tool;
-		this.upgradeMaterial =  EmiIngredient.of(ingredients.stream().map(EmiIngredient::of).toList());
-		this.resultTool = resultTool;
-		this.cost = cost;
-	}
-
-	@Override
-	public EmiRecipeCategory getCategory() {
-		return VanillaEmiRecipeCategories.SMITHING;
-	}
-
-	@Override
-	public @Nullable Identifier getId() {
-		return null;
-	}
-
-	@Override
-	public List<EmiIngredient> getInputs() {
-		return List.of(EmiStack.of(tool), upgradeMaterial);
-	}
-
-	@Override
-	public List<EmiStack> getOutputs() {
-		return List.of(EmiStack.of(resultTool));
+	public EmiSmithingUpgradeRecipe(SmithingUpgradeRecipe recipe) {
+		super(recipe);
+		this.cost = recipe.additionCount;
 	}
 
 	@Override
 	public boolean supportsRecipeTree() {
-		return false;
-	}
-
-	@Override
-	public int getDisplayWidth() {
-		return 125;
-	}
-
-	@Override
-	public int getDisplayHeight() {
-		return 18;
+		return cost <= 5;
 	}
 
 	@Override
 	public void addWidgets(WidgetHolder widgets) {
 		widgets.addTexture(EmiTexture.PLUS, 27, 3);
 		widgets.addTexture(EmiTexture.EMPTY_ARROW, 75, 1);
-		widgets.addSlot(EmiStack.of(tool), 0, 0);
+		widgets.addSlot(getInputs().get(0), 0, 0);
 		widgets.add(new IterativeSlotWidget(this::getRepairStack, 49, 0));
 		widgets.add(new IterativeSlotWidget(this::getTool, 107, 0).recipeContext(this));
 	}
@@ -79,16 +38,16 @@ public class EmiSmithingUpgradeRecipe implements EmiRecipe {
 	}
 
 	private EmiStack getTool(long i) {
-		ItemStack stack = resultTool.getDefaultStack();
+		ItemStack stack = getOutputs().get(0).getItemStack();
 		int stackCount = getStackCount(i);
 		if (stackCount == cost) {
-			return EmiStack.of(resultTool);
+			return EmiStack.of(stack.getItem());
 		}
-		stack.setDamage((int) Math.floor(resultTool.getMaxDamage() * ((cost - stackCount) / 4.0)));
+		stack.setDamage((int) Math.floor(stack.getMaxDamage() * ((cost - stackCount) / 4.0)));
 		return EmiStack.of(stack);
 	}
 
 	private EmiIngredient getRepairStack(long i) {
-		return upgradeMaterial.copy().setAmount(getStackCount(i));
+		return getInputs().get(1).copy().setAmount(getStackCount(i));
 	}
 }

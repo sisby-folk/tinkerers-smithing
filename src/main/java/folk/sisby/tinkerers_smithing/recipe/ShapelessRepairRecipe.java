@@ -1,87 +1,71 @@
 package folk.sisby.tinkerers_smithing.recipe;
 
+import com.google.gson.JsonObject;
 import folk.sisby.tinkerers_smithing.TinkerersSmithing;
-import folk.sisby.tinkerers_smithing.TinkerersSmithingItem;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketByteBuf;
+import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.recipe.SpecialCraftingRecipe;
+import net.minecraft.recipe.ShapelessRecipe;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class ShapelessRepairRecipe extends SpecialCraftingRecipe implements ServerRecipe {
-	public ShapelessRepairRecipe(Identifier identifier) {
-		super(identifier);
+public class ShapelessRepairRecipe extends ShapelessRecipe implements ServerRecipe {
+	public ShapelessRepairRecipe(Identifier id, String group, ItemStack output, DefaultedList<Ingredient> input) {
+		super(id, group, output, input);
 	}
 
-	public static @Nullable ItemStack getSingleEquipmentStack(CraftingInventory craftingInventory) {
-		ItemStack equipmentStack = null;
-
-		for(int i = 0; i < craftingInventory.size(); ++i) {
-			ItemStack itemStack = craftingInventory.getStack(i);
-			if (itemStack.getItem() instanceof TinkerersSmithingItem tsi && !tsi.tinkerersSmithing$getUnitCosts().isEmpty()) {
-				if (equipmentStack == null) {
-					equipmentStack = itemStack;
-				} else {
-					return null; // can't have multiple
-				}
-			}
-		}
-		return equipmentStack;
+	public Ingredient getBaseIngredient() {
+		return getIngredients().get(0);
 	}
 
-	public static List<ItemStack> getRepairMaterials(CraftingInventory craftingInventory, ItemStack equipment) {
-		List<ItemStack> outList = new ArrayList<>();
+	public Ingredient getUnit() {
+		return getIngredients().get(1);
+	}
 
-		if (equipment.getItem() instanceof TinkerersSmithingItem tsi) {
-			for(int i = 0; i < craftingInventory.size(); ++i) {
-				ItemStack itemStack = craftingInventory.getStack(i);
-				if (!itemStack.isOf(equipment.getItem()) && !itemStack.isEmpty()) {
-					if (tsi.tinkerersSmithing$getUnitCost(itemStack) > 0 && (outList.isEmpty() || outList.get(0).getItem() == itemStack.getItem())) {
-						outList.add(itemStack);
-					} else {
-						return null;
-					}
-				}
-			}
-		}
-		return outList;
+	public int getUnitCost() {
+		return getIngredients().size() - 1;
 	}
 
 	@Override
-	public boolean matches(CraftingInventory craftingInventory, World world) {
-		ItemStack equipmentStack = getSingleEquipmentStack(craftingInventory);
-		if (equipmentStack != null && !equipmentStack.hasEnchantments()) {
-			List<ItemStack> repairMaterials = getRepairMaterials(craftingInventory, equipmentStack);
-			if (repairMaterials != null && !repairMaterials.isEmpty() && equipmentStack.isDamageable() && equipmentStack.getItem() instanceof TinkerersSmithingItem tsi) {
-				int unitCost = tsi.tinkerersSmithing$getUnitCost(repairMaterials.get(0));
-				if (unitCost != 0) {
-					return equipmentStack.getDamage() - ((int) Math.ceil((equipmentStack.getMaxDamage() * (repairMaterials.size() - 1)) / (double) unitCost)) > 0;
-				}
+	public boolean matches(CraftingInventory inventory, World world) {
+		ItemStack base = null;
+		int units = 0;
+		for(int i = 0; i < inventory.size(); ++i) {
+			ItemStack stack = inventory.getStack(i);
+			if (getBaseIngredient().test(stack)) {
+				if (base != null || stack.hasEnchantments()) return false;
+				base = stack;
+			} else if (getUnit().test(stack)) {
+				units++;
 			}
+		}
+		if (base != null && units > 0 && units <= getUnitCost()) {
+			return base.getDamage() - ((int) Math.ceil((base.getMaxDamage() * (units - 1)) / (double) getUnitCost())) > 0;
 		}
 		return false;
 	}
 
 	@Override
-	public ItemStack craft(CraftingInventory craftingInventory) {
-		ItemStack equipmentStack = getSingleEquipmentStack(craftingInventory);
-		if (equipmentStack != null && !equipmentStack.hasEnchantments()) {
-			List<ItemStack> repairMaterials = getRepairMaterials(craftingInventory, equipmentStack);
-			if (repairMaterials != null && !repairMaterials.isEmpty() && equipmentStack.isDamageable() && equipmentStack.getItem() instanceof TinkerersSmithingItem tsi) {
-				int unitCost = tsi.tinkerersSmithing$getUnitCost(repairMaterials.get(0));
-				if (unitCost != 0) {
-					ItemStack result = equipmentStack.copy();
-					result.setDamage(Math.max(0, equipmentStack.getDamage() - ((int) Math.ceil((equipmentStack.getMaxDamage() * (repairMaterials.size())) / (double) unitCost))));
-					return result;
-				}
+	public ItemStack craft(CraftingInventory inventory) {
+		ItemStack output = super.craft(inventory);
+		ItemStack base = null;
+		int units = 0;
+		for(int i = 0; i < inventory.size(); ++i) {
+			ItemStack stack = inventory.getStack(i);
+			if (getBaseIngredient().test(stack)) {
+				base = stack;
+			} else if (getUnit().test(stack)) {
+				units++;
 			}
 		}
-		return ItemStack.EMPTY;
+		if (base != null) {
+			output.setDamage(Math.max(0, base.getDamage() - ((int) Math.ceil((base.getMaxDamage() * units) / (double) getUnitCost()))));
+		}
+		return output;
 	}
 
 	@Override
@@ -89,8 +73,29 @@ public class ShapelessRepairRecipe extends SpecialCraftingRecipe implements Serv
 		return width * height >= 2;
 	}
 
+	public static class Serializer implements RecipeSerializer<ShapelessRepairRecipe> {
+		public ShapelessRepairRecipe read(Identifier id, JsonObject json) {
+			ShapelessRecipe recipe = RecipeSerializer.SHAPELESS.read(id, json);
+			return new ShapelessRepairRecipe(id, recipe.getGroup(), recipe.getOutput(), recipe.getIngredients());
+		}
+
+		public ShapelessRepairRecipe read(Identifier id, PacketByteBuf buf) {
+			ShapelessRecipe recipe = RecipeSerializer.SHAPELESS.read(id, buf);
+			return new ShapelessRepairRecipe(id, recipe.getGroup(), recipe.getOutput(), recipe.getIngredients());
+		}
+
+		public void write(PacketByteBuf buf, ShapelessRepairRecipe recipe) {
+			RecipeSerializer.SHAPELESS.write(buf, recipe);
+		}
+	}
+
 	@Override
 	public RecipeSerializer<?> getSerializer() {
 		return TinkerersSmithing.SHAPELESS_REPAIR_SERIALIZER;
+	}
+
+	@Override
+	public @Nullable RecipeSerializer<?> getFallbackSerializer() {
+		return RecipeSerializer.SHAPELESS;
 	}
 }
