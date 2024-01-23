@@ -8,14 +8,19 @@ import dev.emi.emi.api.widget.WidgetHolder;
 import dev.emi.emi.recipe.EmiSmithingRecipe;
 import folk.sisby.tinkerers_smithing.client.emi.IterativeSlotWidget;
 import folk.sisby.tinkerers_smithing.recipe.SmithingUpgradeRecipe;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 public class EmiSmithingUpgradeRecipe extends EmiSmithingRecipe implements EmiRecipe {
-	private final int additionCount;
+	public final Item baseItem;
+	public final int additionCount;
+	public final Item resultItem;
 
 	public EmiSmithingUpgradeRecipe(SmithingUpgradeRecipe recipe) {
 		super(recipe);
+		this.baseItem = recipe.baseItem;
 		this.additionCount = recipe.additionCount;
+		this.resultItem = recipe.resultItem;
 	}
 
 	@Override
@@ -27,7 +32,7 @@ public class EmiSmithingUpgradeRecipe extends EmiSmithingRecipe implements EmiRe
 	public void addWidgets(WidgetHolder widgets) {
 		widgets.addTexture(EmiTexture.PLUS, 27, 3);
 		widgets.addTexture(EmiTexture.EMPTY_ARROW, 75, 1);
-		widgets.addSlot(getInputs().get(0), 0, 0);
+		widgets.addSlot(EmiStack.of(baseItem), 0, 0);
 		widgets.add(new IterativeSlotWidget(this::getRepairStack, 49, 0));
 		widgets.add(new IterativeSlotWidget(this::getTool, 107, 0).recipeContext(this));
 	}
@@ -38,13 +43,13 @@ public class EmiSmithingUpgradeRecipe extends EmiSmithingRecipe implements EmiRe
 	}
 
 	private EmiStack getTool(long i) {
-		ItemStack stack = getOutputs().get(0).getItemStack();
+		ItemStack result = resultItem.getDefaultStack().copy();
 		int usedCount = getStackCount(i);
 		if (usedCount == additionCount) {
-			return EmiStack.of(stack.getItem());
+			return EmiStack.of(result.getItem());
 		}
-		stack.setDamage(SmithingUpgradeRecipe.resultDamage(stack.getItem(), additionCount, usedCount));
-		return EmiStack.of(stack);
+		result.setDamage(SmithingUpgradeRecipe.resultDamage(result.getItem(), additionCount, usedCount));
+		return EmiStack.of(result);
 	}
 
 	private EmiIngredient getRepairStack(long i) {

@@ -20,6 +20,11 @@ public class EmiAnvilDeworkRecipe extends EmiAnvilRecipe implements EmiRecipe {
 	}
 
 	@Override
+	public boolean hideCraftable() {
+		return true;
+	}
+
+	@Override
 	public void addWidgets(WidgetHolder widgets) {
 		widgets.addTexture(EmiTexture.PLUS, 27, 3);
 		widgets.addTexture(EmiTexture.EMPTY_ARROW, 75, 1);
