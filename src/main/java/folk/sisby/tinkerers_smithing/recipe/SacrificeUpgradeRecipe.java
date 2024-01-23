@@ -36,7 +36,7 @@ public class SacrificeUpgradeRecipe extends SmithingRecipe implements ServerReci
 		return stack;
 	}
 
-	private static int resultDamage(Item resultItem, int additionUnits, int resultUnits, int additionDamage, int additionMaxDamage) {
+	public static int resultDamage(Item resultItem, int additionUnits, int resultUnits, int additionDamage, int additionMaxDamage) {
 		return (int) Math.ceil(resultItem.getMaxDamage() - ((additionMaxDamage - additionDamage) * ((double) additionUnits * resultItem.getMaxDamage()) / ((double)additionMaxDamage * resultUnits)));
 	}
 

@@ -33,7 +33,7 @@ public class SmithingUpgradeRecipe extends SmithingRecipe implements ServerRecip
 		return stack;
 	}
 
-	private static int resultDamage(Item resultItem, int additionCount, int usedCount) {
+	public static int resultDamage(Item resultItem, int additionCount, int usedCount) {
 		return Math.min(resultItem.getMaxDamage() - 1, (int) Math.floor(resultItem.getMaxDamage() * ((additionCount - usedCount) / 4.0)));
 	}
 

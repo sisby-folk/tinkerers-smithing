@@ -11,16 +11,16 @@ import folk.sisby.tinkerers_smithing.recipe.SmithingUpgradeRecipe;
 import net.minecraft.item.ItemStack;
 
 public class EmiSmithingUpgradeRecipe extends EmiSmithingRecipe implements EmiRecipe {
-	private final int cost;
+	private final int additionCount;
 
 	public EmiSmithingUpgradeRecipe(SmithingUpgradeRecipe recipe) {
 		super(recipe);
-		this.cost = recipe.additionCount;
+		this.additionCount = recipe.additionCount;
 	}
 
 	@Override
 	public boolean supportsRecipeTree() {
-		return cost <= 5;
+		return additionCount <= 5;
 	}
 
 	@Override
@@ -33,17 +33,17 @@ public class EmiSmithingUpgradeRecipe extends EmiSmithingRecipe implements EmiRe
 	}
 
 	private int getStackCount(long i) {
-		int minStack = Math.max(cost - 4, 1);
-		return Math.floorMod(i, cost + 1 - minStack) + minStack;
+		int minStack = Math.max(additionCount - 4, 1);
+		return Math.floorMod(i, additionCount + 1 - minStack) + minStack;
 	}
 
 	private EmiStack getTool(long i) {
 		ItemStack stack = getOutputs().get(0).getItemStack();
-		int stackCount = getStackCount(i);
-		if (stackCount == cost) {
+		int usedCount = getStackCount(i);
+		if (usedCount == additionCount) {
 			return EmiStack.of(stack.getItem());
 		}
-		stack.setDamage((int) Math.floor(stack.getMaxDamage() * ((cost - stackCount) / 4.0)));
+		stack.setDamage(SmithingUpgradeRecipe.resultDamage(stack.getItem(), additionCount, usedCount));
 		return EmiStack.of(stack);
 	}
 

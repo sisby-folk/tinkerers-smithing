@@ -28,25 +28,24 @@ public class EmiSacrificeUpgradeRecipe extends EmiSmithingRecipe implements EmiR
 		widgets.addTexture(EmiTexture.PLUS, 27, 3);
 		widgets.addTexture(EmiTexture.EMPTY_ARROW, 75, 1);
 		widgets.addSlot(getInputs().get(0), 0, 0);
-		widgets.add(new IterativeSlotWidget(this::getSacrificeStack, uniq, 49, 0));
+		widgets.add(new IterativeSlotWidget(this::getAdditionStack, uniq, 49, 0));
 		widgets.add(new IterativeSlotWidget(this::getTool, uniq, 107, 0).recipeContext(this));
 	}
 
-	private EmiStack getSacrificeStack(Random r, long i) {
-		ItemStack sacrificeStack = getInputs().get(1).getEmiStacks().get(0).getItemStack();
-		int sacrificeDamage = r.nextInt(sacrificeStack.getMaxDamage());
+	private EmiStack getAdditionStack(Random r, long i) {
+		ItemStack additionStack = getInputs().get(1).getEmiStacks().get(0).getItemStack();
+		int sacrificeDamage = r.nextInt(additionStack.getMaxDamage());
 		if (sacrificeDamage > 0) {
-			sacrificeStack.setDamage(sacrificeDamage);
+			additionStack.setDamage(sacrificeDamage);
 		}
-		return EmiStack.of(sacrificeStack);
+		return EmiStack.of(additionStack);
 	}
 
 	private EmiStack getTool(Random r, long i) {
-		ItemStack sacrificeStack = getInputs().get(1).getEmiStacks().get(0).getItemStack();
-		int sacrificeDamage = r.nextInt(sacrificeStack.getMaxDamage());
+		ItemStack additionStack = getInputs().get(1).getEmiStacks().get(0).getItemStack();
+		int additionDamage = r.nextInt(additionStack.getMaxDamage());
 		ItemStack result = getOutputs().get(0).getItemStack();
-		int resultDamage = (int) Math.ceil(result.getMaxDamage() - ((sacrificeStack.getMaxDamage() - sacrificeDamage) * ((double) additionUnits * result.getMaxDamage()) / ((double)sacrificeStack.getMaxDamage() * this.resultUnits)));
-		result.setDamage(resultDamage);
+		result.setDamage(SacrificeUpgradeRecipe.resultDamage(result.getItem(), additionUnits, resultUnits, additionDamage, additionStack.getMaxDamage()));
         return EmiStack.of(result);
 	}
 }
