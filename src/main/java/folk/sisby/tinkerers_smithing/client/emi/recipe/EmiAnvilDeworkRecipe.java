@@ -6,10 +6,8 @@ import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
 import dev.emi.emi.recipe.EmiAnvilRecipe;
-import folk.sisby.tinkerers_smithing.TinkerersSmithing;
 import folk.sisby.tinkerers_smithing.client.emi.IterativeSlotWidget;
 import net.minecraft.client.gui.tooltip.OrderedTextTooltipComponent;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
@@ -17,8 +15,8 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
 public class EmiAnvilDeworkRecipe extends EmiAnvilRecipe implements EmiRecipe {
-	public EmiAnvilDeworkRecipe(Item tool, Identifier id) {
-		super(EmiStack.of(tool), EmiIngredient.of(TinkerersSmithing.DEWORK_INGREDIENTS), id);
+	public EmiAnvilDeworkRecipe(EmiStack tool, EmiIngredient resource, Identifier id) {
+		super(tool, resource, id);
 	}
 
 	@Override

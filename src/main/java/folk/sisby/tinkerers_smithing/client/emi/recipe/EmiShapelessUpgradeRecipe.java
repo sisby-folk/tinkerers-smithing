@@ -9,14 +9,20 @@ import dev.emi.emi.recipe.EmiShapelessRecipe;
 import folk.sisby.tinkerers_smithing.client.emi.IterativeSlotWidget;
 import folk.sisby.tinkerers_smithing.recipe.ShapelessUpgradeRecipe;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Identifier;
 
 import java.util.Random;
 
-public class EmiCraftingUpgradeRecipe extends EmiShapelessRecipe {
+public class EmiShapelessUpgradeRecipe extends EmiShapelessRecipe {
 	protected final int unique = EmiUtil.RANDOM.nextInt();
 
-	public EmiCraftingUpgradeRecipe(ShapelessUpgradeRecipe recipe) {
+	public EmiShapelessUpgradeRecipe(ShapelessUpgradeRecipe recipe) {
 		super(recipe);
+	}
+
+	@Override
+	public Identifier getId() {
+		return super.getId();
 	}
 
 	private int getCost() {

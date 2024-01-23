@@ -5,17 +5,30 @@ import folk.sisby.tinkerers_smithing.recipe.SacrificeUpgradeRecipe;
 import folk.sisby.tinkerers_smithing.recipe.ShapelessRepairRecipe;
 import folk.sisby.tinkerers_smithing.recipe.ShapelessUpgradeRecipe;
 import folk.sisby.tinkerers_smithing.recipe.SmithingUpgradeRecipe;
-import net.minecraft.item.*;
+import net.minecraft.item.ArmorItem;
+import net.minecraft.item.ArmorMaterial;
+import net.minecraft.item.Item;
+import net.minecraft.item.ToolItem;
+import net.minecraft.item.ToolMaterial;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
-import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.registry.Registry;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
+
+import static folk.sisby.tinkerers_smithing.TinkerersSmithing.ID;
+import static folk.sisby.tinkerers_smithing.TinkerersSmithing.LOGGER;
 
 public class TinkerersSmithingLoader {
 	public static final TinkerersSmithingLoader INSTANCE = new TinkerersSmithingLoader();
@@ -25,7 +38,7 @@ public class TinkerersSmithingLoader {
 	public final Map<Identifier, TinkerersSmithingMaterial> ARMOR_MATERIALS = new HashMap<>();
 	public final Map<Item, SmithingUnitCostManager.UnitCostOverride> COST_OVERRIDES = new HashMap<>();
 
-	public final Map<Identifier, Recipe<?>> RECIPES = new HashMap<>();
+	public final List<Recipe<?>> RECIPES = new ArrayList<>();
 
 	public void generateItemSmithingData(Map<Identifier, Recipe<?>> recipes) {
 		new LoaderRun().generateItemSmithingData(recipes);
@@ -249,77 +262,66 @@ public class TinkerersSmithingLoader {
 		}
 
 		public void generateItemSmithingData(Map<Identifier, Recipe<?>> recipes) {
-			TinkerersSmithing.LOGGER.info("[Tinkerer's Smithing] Data Initializing.");
+			LOGGER.info("[Tinkerer's Smithing] Data Initializing.");
 			RECIPES.clear();
 			Map<Item, Map<Ingredient, Integer>> unitCosts = new HashMap<>();
 			for (Item item : Registry.ITEM) {
                 Map<Ingredient, Integer> unitCost = getUnitCosts(item, recipes);
+				unitCost.forEach((unit, count) -> RECIPES.add(new ShapelessRepairRecipe(item, unit, count)));
 				unitCosts.put(item, unitCost);
-				unitCost.forEach((unit, count) -> {
-					Identifier baseId = Registry.ITEM.getId(item);
-					Identifier ingredientId = unit.entries[0] instanceof Ingredient.StackEntry se ? Registry.ITEM.getId(se.stack.getItem()) : (unit.entries[0] instanceof Ingredient.TagEntry te ? te.tag.id() : new Identifier("ERROR"));
-					Identifier id = new Identifier(TinkerersSmithing.ID, "repair/" + baseId.toString().replace(":", "_") + "_" + ingredientId.toString().replace(":", "_"));
-					DefaultedList<Ingredient> ingredients = DefaultedList.of();
-					ingredients.add(Ingredient.ofItems(item));
-					for (int i = 0; i < count; i++) {
-						ingredients.add(unit);
-					}
-					RECIPES.put(id, new ShapelessRepairRecipe(id, "", item.getDefaultStack(), ingredients));
-				});
 			}
-			for (Item item : Registry.ITEM) {
-				Set<Item> upgradePaths = new HashSet<>(getUpgradePaths(item));
-				for (Item upgradeItem : upgradePaths) {
-					unitCosts.get(upgradeItem).forEach((addition, count) -> {
-						Identifier upgradeId = Registry.ITEM.getId(upgradeItem);
-						Identifier baseId = Registry.ITEM.getId(item);
-						Identifier id = new Identifier(TinkerersSmithing.ID, "smithing/" + upgradeId.toString().replace(":", "_") + "_" + baseId.toString().replace(":", "_"));
-						RECIPES.put(id, new SmithingUpgradeRecipe(id, Ingredient.ofItems(item), addition, count, upgradeItem.getDefaultStack()));
-						DefaultedList<Ingredient> ingredients = DefaultedList.of();
-						ingredients.add(Ingredient.ofItems(item));
-						for (int i = 0; i < count; i++) {
-							ingredients.add(addition);
-						}
-						id = new Identifier(TinkerersSmithing.ID, "shapeless/" + upgradeId.toString().replace(":", "_") + "_" + baseId.toString().replace(":", "_"));
-						RECIPES.put(id, new ShapelessUpgradeRecipe(id, "", upgradeItem.getDefaultStack(), ingredients));
+			for (Item base : Registry.ITEM) {
+				for (Item result : getUpgradePaths(base)) {
+					unitCosts.get(result).forEach((addition, additionCount) -> {
+						RECIPES.add(new SmithingUpgradeRecipe(base, addition, additionCount, result));
+						RECIPES.add(new ShapelessUpgradeRecipe(base, addition, additionCount, result));
 					});
 				}
-                Map<Item, Pair<Integer, Map<Item, Integer>>> sacrificePaths = getSacrificePaths(item, unitCosts);
-				sacrificePaths.forEach((resultItem, sacrificePath) -> {
-					int resultUnits = sacrificePath.getLeft();
-					sacrificePath.getRight().forEach((additionItem, additionUnits) -> {
-						Identifier upgradeId = Registry.ITEM.getId(resultItem);
-						Identifier additionId = Registry.ITEM.getId(additionItem);
-						Identifier baseId = Registry.ITEM.getId(item);
-						Identifier id = new Identifier(TinkerersSmithing.ID, "sacrifice/" + upgradeId.toString().replace(":", "_") + "_" + baseId.toString().replace(":", "_") + "_" + additionId.toString().replace(":", "_"));
-						RECIPES.put(id, new SacrificeUpgradeRecipe(id, Ingredient.ofItems(item), Ingredient.ofItems(additionItem), additionUnits, resultItem.getDefaultStack(), resultUnits));
-					});
+				getSacrificePaths(base, unitCosts).forEach((result, sacrifice) -> {
+					sacrifice.getRight().forEach((addition, additionUnits) -> {
+                        RECIPES.add(new SacrificeUpgradeRecipe(base, addition, additionUnits, result, sacrifice.getLeft()));
+                    });
 				});
 			}
-			TinkerersSmithing.LOGGER.info("[Tinkerer's Smithing] Registered {} Tool Materials with {} items: [{}]", TOOL_MATERIALS.size(), TOOL_MATERIALS.values().stream().map(m -> m.items.size()).reduce(Integer::sum).orElse(0), TOOL_MATERIALS.entrySet().stream().map(e -> e.getKey().toString() + "(" + e.getValue().items.size() + ")").collect(Collectors.joining(", ")));
-			TinkerersSmithing.LOGGER.info("[Tinkerer's Smithing] Registered {} Armor Materials with {} items: [{}].", ARMOR_MATERIALS.size(), ARMOR_MATERIALS.values().stream().map(m -> m.items.size()).reduce(Integer::sum).orElse(0), ARMOR_MATERIALS.entrySet().stream().map(e -> e.getKey().toString() + "(" + e.getValue().items.size() + ")").collect(Collectors.joining(", ")));
-			TinkerersSmithing.LOGGER.info("[Tinkerer's Smithing] Registered {} Equipment Types with {} items: [{}]", SMITHING_TYPES.size(), SMITHING_TYPES.values().stream().map(Collection::size).reduce(Integer::sum).orElse(0), SMITHING_TYPES.entrySet().stream().map(e -> e.getKey().toString() + "(" + e.getValue().size() + ")").collect(Collectors.joining(", ")));
-			TinkerersSmithing.LOGGER.info("[Tinkerer's Smithing] Applied {} Unit Costs to {} items", INFO_ADDED_COSTS, INFO_ADDED_COST_ITEMS);
-			TinkerersSmithing.LOGGER.info("[Tinkerer's Smithing] Applied {} Upgrade Paths to {} items", INFO_ADDED_UPGRADES, INFO_ADDED_UPGRADE_ITEMS);
-			TinkerersSmithing.LOGGER.info("[Tinkerer's Smithing] Applied {} Sacrifice Paths to {} items", INFO_ADDED_SACRIFICES, INFO_ADDED_SACRIFICE_ITEMS);
+			LOGGER.info("[Tinkerer's Smithing] Registered {} Tool Materials with {} items: [{}]", TOOL_MATERIALS.size(), TOOL_MATERIALS.values().stream().map(m -> m.items.size()).reduce(Integer::sum).orElse(0), TOOL_MATERIALS.entrySet().stream().map(e -> e.getKey().toString() + "(" + e.getValue().items.size() + ")").collect(Collectors.joining(", ")));
+			LOGGER.info("[Tinkerer's Smithing] Registered {} Armor Materials with {} items: [{}].", ARMOR_MATERIALS.size(), ARMOR_MATERIALS.values().stream().map(m -> m.items.size()).reduce(Integer::sum).orElse(0), ARMOR_MATERIALS.entrySet().stream().map(e -> e.getKey().toString() + "(" + e.getValue().items.size() + ")").collect(Collectors.joining(", ")));
+			LOGGER.info("[Tinkerer's Smithing] Registered {} Equipment Types with {} items: [{}]", SMITHING_TYPES.size(), SMITHING_TYPES.values().stream().map(Collection::size).reduce(Integer::sum).orElse(0), SMITHING_TYPES.entrySet().stream().map(e -> e.getKey().toString() + "(" + e.getValue().size() + ")").collect(Collectors.joining(", ")));
+			LOGGER.info("[Tinkerer's Smithing] Applied {} Unit Costs to {} items", INFO_ADDED_COSTS, INFO_ADDED_COST_ITEMS);
+			LOGGER.info("[Tinkerer's Smithing] Applied {} Upgrade Paths to {} items", INFO_ADDED_UPGRADES, INFO_ADDED_UPGRADE_ITEMS);
+			LOGGER.info("[Tinkerer's Smithing] Applied {} Sacrifice Paths to {} items", INFO_ADDED_SACRIFICES, INFO_ADDED_SACRIFICE_ITEMS);
 			if (!WARN_DEFAULT_MATERIAL_ARMOR.isEmpty()) {
 				Set<ArmorMaterial> armorMats = new HashSet<>(WARN_DEFAULT_MATERIAL_ARMOR.values());
-				TinkerersSmithing.LOGGER.warn("[Tinkerer's Smithing] Found {} unregistered armor materials with {} armor items: [{}] items: [{}]", armorMats.size(), WARN_DEFAULT_MATERIAL_ARMOR.size(), armorMats.stream().map(Object::toString).collect(Collectors.joining(", ")), WARN_DEFAULT_MATERIAL_ARMOR.entrySet().stream()
+				LOGGER.warn("[Tinkerer's Smithing] Found {} unregistered armor materials with {} armor items: [{}] items: [{}]", armorMats.size(), WARN_DEFAULT_MATERIAL_ARMOR.size(), armorMats.stream().map(Object::toString).collect(Collectors.joining(", ")), WARN_DEFAULT_MATERIAL_ARMOR.entrySet().stream()
 					.collect(Collectors.groupingBy(Map.Entry::getValue, Collectors.mapping(Map.Entry::getKey, Collectors.toList()))).entrySet().stream() // Invert Map
 					.map(e -> "%s[%s]".formatted(e.getKey().getName(), e.getValue().stream().map(Identifier::toString).collect(Collectors.joining(", ")))).collect(Collectors.joining(", "))); // Stringify
 			}
 			if (!WARN_DEFAULT_MATERIAL_TOOL.isEmpty()) {
 				Set<ToolMaterial> toolMats = new HashSet<>(WARN_DEFAULT_MATERIAL_TOOL.values());
-				TinkerersSmithing.LOGGER.warn("[Tinkerer's Smithing] Found {} unregistered tool materials with {} tool items: [{}] - items: [{}]", toolMats.size(), WARN_DEFAULT_MATERIAL_TOOL.size(), toolMats.stream().map(Object::toString).collect(Collectors.joining(", ")), WARN_DEFAULT_MATERIAL_TOOL.entrySet().stream()
+				LOGGER.warn("[Tinkerer's Smithing] Found {} unregistered tool materials with {} tool items: [{}] - items: [{}]", toolMats.size(), WARN_DEFAULT_MATERIAL_TOOL.size(), toolMats.stream().map(Object::toString).collect(Collectors.joining(", ")), WARN_DEFAULT_MATERIAL_TOOL.entrySet().stream()
 					.collect(Collectors.groupingBy(Map.Entry::getValue, Collectors.mapping(Map.Entry::getKey, Collectors.toList()))).entrySet().stream() // Invert Map
 					.map(e -> "%s[%s]".formatted(e.getKey().toString(), e.getValue().stream().map(Identifier::toString).collect(Collectors.joining(", ")))).collect(Collectors.joining(", "))); // Stringify
 			}
 			if (!WARN_NO_RECIPE.isEmpty())
-				TinkerersSmithing.LOGGER.warn("[Tinkerer's Smithing] Found {} equipment items without unit cost recipes: [{}]", WARN_NO_RECIPE.size(), WARN_NO_RECIPE.stream().map(Identifier::toString).collect(Collectors.joining(", ")));
+				LOGGER.warn("[Tinkerer's Smithing] Found {} equipment items without unit cost recipes: [{}]", WARN_NO_RECIPE.size(), WARN_NO_RECIPE.stream().map(Identifier::toString).collect(Collectors.joining(", ")));
 			if (!WARN_NO_MATERIALS.isEmpty())
-				TinkerersSmithing.LOGGER.warn("[Tinkerer's Smithing] Found {} damageable items without repair materials: [{}]", WARN_NO_MATERIALS.size(), WARN_NO_MATERIALS.stream().map(Identifier::toString).collect(Collectors.joining(", ")));
-			TinkerersSmithing.LOGGER.info("[Tinkerer's Smithing] Data Initialized!");
+				LOGGER.warn("[Tinkerer's Smithing] Found {} damageable items without repair materials: [{}]", WARN_NO_MATERIALS.size(), WARN_NO_MATERIALS.stream().map(Identifier::toString).collect(Collectors.joining(", ")));
+			LOGGER.info("[Tinkerer's Smithing] Data Initialized!");
 		}
+	}
 
+	public static Identifier recipeId(String recipeType, String... names) {
+		return new Identifier(ID, recipeType + "/" + String.join("_", names));
+	}
+
+	public static Identifier recipeId(String recipeType, Identifier... ids) {
+		return recipeId(recipeType, Arrays.stream(ids).map(id -> id.getNamespace().equals("minecraft") ? id.getPath() : id.getNamespace() + "/" + id.getPath()).toArray(String[]::new));
+	}
+
+	public static Identifier recipeId(String recipeType, Item... items) {
+		return recipeId(recipeType, Arrays.stream(items).map(Registry.ITEM::getId).toArray(Identifier[]::new));
+	}
+
+	public static Identifier ingredientId(Ingredient ingredient) {
+		return ingredient.entries[0] instanceof Ingredient.StackEntry se ? Registry.ITEM.getId(se.stack.getItem()) : (ingredient.entries[0] instanceof Ingredient.TagEntry te ? te.tag.id() : new Identifier("ERROR"));
 	}
 }

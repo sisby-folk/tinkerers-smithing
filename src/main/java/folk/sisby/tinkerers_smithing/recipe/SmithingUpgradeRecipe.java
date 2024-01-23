@@ -3,6 +3,7 @@ package folk.sisby.tinkerers_smithing.recipe;
 import com.google.gson.JsonObject;
 import folk.sisby.tinkerers_smithing.TinkerersSmithing;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.Ingredient;
@@ -12,12 +13,18 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import org.jetbrains.annotations.Nullable;
 
-public class SmithingUpgradeRecipe extends SmithingRecipe implements ServerRecipe {
-	public final int additionCount;
+import static folk.sisby.tinkerers_smithing.TinkerersSmithingLoader.recipeId;
 
-	public SmithingUpgradeRecipe(Identifier id, Ingredient base, Ingredient addition, int additionCount, ItemStack result) {
-		super(id, base, addition, result);
+public class SmithingUpgradeRecipe extends SmithingRecipe implements ServerRecipe {
+	public final Item baseItem;
+	public final int additionCount;
+	public final Item resultItem;
+
+	public SmithingUpgradeRecipe(Item baseItem, Ingredient addition, Integer additionCount, Item resultItem) {
+		super(recipeId("smithing", resultItem, baseItem), Ingredient.ofItems(baseItem), addition, resultItem.getDefaultStack());
+		this.baseItem = baseItem;
 		this.additionCount = additionCount;
+		this.resultItem = resultItem;
 	}
 
 	@Override
@@ -30,20 +37,26 @@ public class SmithingUpgradeRecipe extends SmithingRecipe implements ServerRecip
 
 	public static class Serializer implements RecipeSerializer<SmithingUpgradeRecipe> {
 		public SmithingUpgradeRecipe read(Identifier id, JsonObject json) {
-			SmithingRecipe recipe = RecipeSerializer.SMITHING.read(id, json);
+			Item baseItem = JsonHelper.getItem(json, "base");
+			Ingredient addition = Ingredient.fromJson(JsonHelper.getObject(json, "addition"));
 			int additionCount = JsonHelper.getInt(json, "additionCount");
-			return new SmithingUpgradeRecipe(id, recipe.base, recipe.addition, additionCount, recipe.getOutput());
+			Item resultItem = JsonHelper.getItem(json, "result");
+			return new SmithingUpgradeRecipe(baseItem, addition, additionCount, resultItem);
 		}
 
 		public SmithingUpgradeRecipe read(Identifier id, PacketByteBuf buf) {
-			SmithingRecipe recipe = RecipeSerializer.SMITHING.read(id, buf);
+			Item baseItem = Item.byRawId(buf.readVarInt());
+			Ingredient addition = Ingredient.fromPacket(buf);
 			int additionCount = buf.readVarInt();
-			return new SmithingUpgradeRecipe(id, recipe.base, recipe.addition, additionCount, recipe.getOutput());
+			Item resultItem = Item.byRawId(buf.readVarInt());
+			return new SmithingUpgradeRecipe(baseItem, addition, additionCount, resultItem);
 		}
 
 		public void write(PacketByteBuf buf, SmithingUpgradeRecipe recipe) {
-			RecipeSerializer.SMITHING.write(buf, recipe);
+			buf.writeVarInt(Item.getRawId(recipe.baseItem));
+			recipe.addition.write(buf);
 			buf.writeVarInt(recipe.additionCount);
+			buf.writeVarInt(Item.getRawId(recipe.resultItem));
 		}
 	}
 

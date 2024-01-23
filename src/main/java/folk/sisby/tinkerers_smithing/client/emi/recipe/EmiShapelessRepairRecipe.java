@@ -12,10 +12,10 @@ import net.minecraft.item.ItemStack;
 
 import java.util.Random;
 
-public class EmiCraftingRepairRecipe extends EmiShapelessRecipe {
+public class EmiShapelessRepairRecipe extends EmiShapelessRecipe {
 	protected final int unique = EmiUtil.RANDOM.nextInt();
 
-	public EmiCraftingRepairRecipe(ShapelessRepairRecipe recipe) {
+	public EmiShapelessRepairRecipe(ShapelessRepairRecipe recipe) {
 		super(recipe);
 	}
 

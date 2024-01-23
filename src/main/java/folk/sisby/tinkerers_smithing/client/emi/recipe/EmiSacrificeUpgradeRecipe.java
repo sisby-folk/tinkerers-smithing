@@ -12,12 +12,12 @@ import net.minecraft.item.ItemStack;
 
 import java.util.Random;
 
-public class EmiSmithingSacrificeRecipe extends EmiSmithingRecipe implements EmiRecipe {
+public class EmiSacrificeUpgradeRecipe extends EmiSmithingRecipe implements EmiRecipe {
 	private final int additionUnits;
 	private final int resultUnits;
 	private final int uniq = EmiUtil.RANDOM.nextInt();
 
-	public EmiSmithingSacrificeRecipe(SacrificeUpgradeRecipe recipe) {
+	public EmiSacrificeUpgradeRecipe(SacrificeUpgradeRecipe recipe) {
 		super(recipe);
 		this.additionUnits = recipe.additionUnits;
 		this.resultUnits = recipe.resultUnits;

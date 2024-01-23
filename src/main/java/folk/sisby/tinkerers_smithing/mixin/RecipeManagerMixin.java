@@ -27,9 +27,9 @@ public class RecipeManagerMixin {
 	@ModifyVariable(method = "apply(Ljava/util/Map;Lnet/minecraft/resource/ResourceManager;Lnet/minecraft/util/profiler/Profiler;)V", at = @At(value = "INVOKE", target = "Ljava/util/Map;entrySet()Ljava/util/Set;", ordinal = 1), ordinal = 1)
 	private Map<RecipeType<?>, ImmutableMap.Builder<Identifier, Recipe<?>>> AddRuntimeRecipes(Map<RecipeType<?>, ImmutableMap.Builder<Identifier, Recipe<?>>> recipes) {
 		TinkerersSmithing.generateSmithingData(builder.build());
-		TinkerersSmithingLoader.INSTANCE.RECIPES.forEach((id, recipe) -> {
-			recipes.computeIfAbsent(recipe.getType(), recipeType -> ImmutableMap.builder()).put(id, recipe);
-			builder.put(id, recipe);
+		TinkerersSmithingLoader.INSTANCE.RECIPES.forEach(recipe -> {
+			recipes.computeIfAbsent(recipe.getType(), recipeType -> ImmutableMap.builder()).put(recipe.getId(), recipe);
+			builder.put(recipe.getId(), recipe);
 		});
 		TinkerersSmithing.LOGGER.info("[Tinkerer's Smithing] Hello from recipe manager!");
 		return recipes;

@@ -45,7 +45,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 	@ModifyExpressionValue(method = "updateResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/Item;canRepair(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemStack;)Z"))
 	private boolean overrideRepairMaterials(boolean original) {
 		for (CraftingRecipe recipe : this.player.getWorld().getRecipeManager().listAllOfType(RecipeType.CRAFTING)) {
-			if (recipe instanceof ShapelessRepairRecipe srr && srr.getBaseIngredient().test(this.input.getStack(0)) && srr.getUnit().test(this.input.getStack(1))) {
+			if (recipe instanceof ShapelessRepairRecipe srr && this.input.getStack(0).isOf(srr.baseItem) && srr.addition.test(this.input.getStack(1))) {
 				return true;
 			}
 		}
