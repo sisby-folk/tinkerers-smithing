@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 
 import static folk.sisby.tinkerers_smithing.TinkerersSmithingLoader.recipeId;
 
-public class SmithingUpgradeRecipe extends SmithingRecipe implements ServerRecipe {
+public class SmithingUpgradeRecipe extends SmithingRecipe implements ServerRecipe<SmithingRecipe> {
 	public final Item baseItem;
 	public final int additionCount;
 	public final Item resultItem;
@@ -66,7 +66,7 @@ public class SmithingUpgradeRecipe extends SmithingRecipe implements ServerRecip
 	}
 
 	@Override
-	public @Nullable RecipeSerializer<?> getFallbackSerializer() {
+	public @Nullable RecipeSerializer<SmithingRecipe> getFallbackSerializer() {
 		return RecipeSerializer.SMITHING;
 	}
 }

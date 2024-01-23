@@ -21,7 +21,7 @@ import java.util.List;
 import static folk.sisby.tinkerers_smithing.TinkerersSmithingLoader.ingredientId;
 import static folk.sisby.tinkerers_smithing.TinkerersSmithingLoader.recipeId;
 
-public class ShapelessRepairRecipe extends ShapelessRecipe implements ServerRecipe {
+public class ShapelessRepairRecipe extends ShapelessRecipe implements ServerRecipe<ShapelessRecipe> {
 	public final Item baseItem;
 	public final Ingredient addition;
 	public final int additionCount;
@@ -105,7 +105,7 @@ public class ShapelessRepairRecipe extends ShapelessRecipe implements ServerReci
 	}
 
 	@Override
-	public @Nullable RecipeSerializer<?> getFallbackSerializer() {
+	public @Nullable RecipeSerializer<ShapelessRecipe> getFallbackSerializer() {
 		return RecipeSerializer.SHAPELESS;
 	}
 }

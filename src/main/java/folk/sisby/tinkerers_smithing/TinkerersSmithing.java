@@ -28,6 +28,8 @@ public class TinkerersSmithing implements ModInitializer {
 	public static final String ID = "tinkerers_smithing";
 	public static final Logger LOGGER = LoggerFactory.getLogger(ID);
 
+	public static final Identifier S2C_PING = new Identifier(ID, "ping");
+
 	public static final TagKey<Item> DEWORK_INGREDIENTS = TagKey.of(Registry.ITEM_KEY, new Identifier(ID, "dework_ingredients"));
 	public static final RecipeSerializer<ShapelessRepairRecipe> SHAPELESS_REPAIR_SERIALIZER = Registry.register(Registry.RECIPE_SERIALIZER, new Identifier(ID, "repair"), new ShapelessRepairRecipe.Serializer());
 	public static final RecipeSerializer<SacrificeUpgradeRecipe> SACRIFICE_UPGRADE_SERIALIZER = Registry.register(Registry.RECIPE_SERIALIZER, new Identifier(ID, "sacrifice"), new SacrificeUpgradeRecipe.Serializer());

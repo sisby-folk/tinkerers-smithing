@@ -11,6 +11,7 @@
     "PlayerManagerMixin",
     "RecipeManagerMixin",
     "ResourceManagerHelperImplMixin",
+    "ServerPlayNetworkHandlerMixin",
     "SmithingScreenHandlerMixin",
     "SynchronizeRecipesS2CPacketMixin"
   ],

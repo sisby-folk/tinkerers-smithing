@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 
 import static folk.sisby.tinkerers_smithing.TinkerersSmithingLoader.recipeId;
 
-public class ShapelessUpgradeRecipe extends ShapelessRecipe implements ServerRecipe {
+public class ShapelessUpgradeRecipe extends ShapelessRecipe implements ServerRecipe<ShapelessRecipe> {
 	public final Item baseItem;
 	public final Ingredient addition;
 	public final int additionCount;
@@ -81,7 +81,7 @@ public class ShapelessUpgradeRecipe extends ShapelessRecipe implements ServerRec
 	}
 
 	@Override
-	public @Nullable RecipeSerializer<?> getFallbackSerializer() {
+	public @Nullable RecipeSerializer<ShapelessRecipe> getFallbackSerializer() {
 		return RecipeSerializer.SHAPELESS;
 	}
 }
