@@ -20,18 +20,28 @@ public class SmithingUpgradeRecipe extends SmithingRecipe implements ServerRecip
 	public final int additionCount;
 	public final Item resultItem;
 
-	public SmithingUpgradeRecipe(Item baseItem, Ingredient addition, Integer additionCount, Item resultItem) {
-		super(recipeId("smithing", resultItem, baseItem), Ingredient.ofItems(baseItem), addition, resultItem.getDefaultStack());
+	public SmithingUpgradeRecipe(Item baseItem, Ingredient addition, int additionCount, Item resultItem) {
+		super(recipeId("smithing", resultItem, baseItem), Ingredient.ofItems(baseItem), addition, getPreviewResult(resultItem, additionCount));
 		this.baseItem = baseItem;
 		this.additionCount = additionCount;
 		this.resultItem = resultItem;
+	}
+
+	private static ItemStack getPreviewResult(Item resultItem, int additionCount) {
+		ItemStack stack = resultItem.getDefaultStack().copy();
+		stack.setDamage(resultDamage(resultItem, additionCount, 1));
+		return stack;
+	}
+
+	private static int resultDamage(Item resultItem, int additionCount, int usedCount) {
+		return Math.min(resultItem.getMaxDamage() - 1, (int) Math.floor(resultItem.getMaxDamage() * ((additionCount - usedCount) / 4.0)));
 	}
 
 	@Override
 	public ItemStack craft(Inventory inventory) {
 		ItemStack output = super.craft(inventory);
 		int usedCount = Math.min(additionCount, inventory.getStack(1).getCount());
-		output.setDamage(Math.min(output.getMaxDamage() - 1, (int) Math.floor(output.getMaxDamage() * ((additionCount - usedCount) / 4.0))));
+		output.setDamage(resultDamage(output.getItem(), additionCount, usedCount));
 		return output;
 	}
 

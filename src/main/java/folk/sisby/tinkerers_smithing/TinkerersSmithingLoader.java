@@ -1,5 +1,7 @@
 package folk.sisby.tinkerers_smithing;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import folk.sisby.tinkerers_smithing.data.SmithingUnitCostManager;
 import folk.sisby.tinkerers_smithing.recipe.SacrificeUpgradeRecipe;
 import folk.sisby.tinkerers_smithing.recipe.ShapelessRepairRecipe;
@@ -195,8 +197,8 @@ public class TinkerersSmithingLoader {
 			return outMap;
 		}
 
-		public Map<Item, Pair<Integer, Map<Item, Integer>>> getSacrificePaths(Item item, Map<Item, Map<Ingredient, Integer>> unitCosts) { // This is gonna be ugly. This idea assumes a lot of 1:1ness in a system reworked to not do that.
-			Map<Item, Pair<Integer, Map<Item, Integer>>> outMap = new HashMap<>();
+		public Map<Item, Pair<Integer, Multimap<Integer, Item>>> getSacrificePaths(Item item, Map<Item, Map<Ingredient, Integer>> unitCosts) { // This is gonna be ugly. This idea assumes a lot of 1:1ness in a system reworked to not do that.
+			Map<Item, Pair<Integer, Multimap<Integer, Item>>> outMap = new HashMap<>();
 
 			List<Collection<Item>> types = new ArrayList<>();
 			SMITHING_TYPES.forEach((id, items) -> {
@@ -223,7 +225,7 @@ public class TinkerersSmithingLoader {
 								}
 
 								for (Item upgradeItem : upgradeMaterial.items.stream().filter(upgradeItem -> types.stream().anyMatch(type -> type.contains(upgradeItem))).toList()) {
-									Map<Item, Integer> sacrifices = new HashMap<>();
+									Multimap<Integer, Item> sacrifices = HashMultimap.create();
 									int upgradeViaCost = 0;
 									for (Item viaItem : map.get(upgradeMaterial.sacrificesVia).items.stream().filter(viaItem -> types.stream().anyMatch(type -> type.contains(viaItem))).toList()) {
 										upgradeViaCost = unitCosts.get(viaItem).values().stream().findFirst().orElse(0);
@@ -239,7 +241,7 @@ public class TinkerersSmithingLoader {
 												sacrificesViaCost = unitCosts.get(viaItem).values().stream().findFirst().orElse(0);
 											}
 											if (sacrificesViaCost > 0) {
-												sacrifices.put(sacrificeItem, sacrificesViaCost);
+												sacrifices.put(sacrificesViaCost, sacrificeItem);
 											}
 										}
 										if (!sacrifices.isEmpty()) {
@@ -277,11 +279,10 @@ public class TinkerersSmithingLoader {
 						RECIPES.add(new ShapelessUpgradeRecipe(base, addition, additionCount, result));
 					});
 				}
-				getSacrificePaths(base, unitCosts).forEach((result, sacrifice) -> {
-					sacrifice.getRight().forEach((addition, additionUnits) -> {
-                        RECIPES.add(new SacrificeUpgradeRecipe(base, addition, additionUnits, result, sacrifice.getLeft()));
-                    });
-				});
+				getSacrificePaths(base, unitCosts).forEach((result, sacrifice) -> sacrifice.getRight().keySet().forEach(additionUnits -> {
+				    Collection<Item> additions = sacrifice.getRight().get(additionUnits);
+				    RECIPES.add(new SacrificeUpgradeRecipe(base, Ingredient.ofItems(additions.toArray(Item[]::new)), additionUnits, result, sacrifice.getLeft()));
+				}));
 			}
 			LOGGER.info("[Tinkerer's Smithing] Registered {} Tool Materials with {} items: [{}]", TOOL_MATERIALS.size(), TOOL_MATERIALS.values().stream().map(m -> m.items.size()).reduce(Integer::sum).orElse(0), TOOL_MATERIALS.entrySet().stream().map(e -> e.getKey().toString() + "(" + e.getValue().items.size() + ")").collect(Collectors.joining(", ")));
 			LOGGER.info("[Tinkerer's Smithing] Registered {} Armor Materials with {} items: [{}].", ARMOR_MATERIALS.size(), ARMOR_MATERIALS.values().stream().map(m -> m.items.size()).reduce(Integer::sum).orElse(0), ARMOR_MATERIALS.entrySet().stream().map(e -> e.getKey().toString() + "(" + e.getValue().items.size() + ")").collect(Collectors.joining(", ")));
@@ -310,7 +311,7 @@ public class TinkerersSmithingLoader {
 	}
 
 	public static Identifier recipeId(String recipeType, String... names) {
-		return new Identifier(ID, recipeType + "/" + String.join("_", names));
+		return new Identifier(ID, recipeType + "/" + String.join("/", names));
 	}
 
 	public static Identifier recipeId(String recipeType, Identifier... ids) {
@@ -319,6 +320,10 @@ public class TinkerersSmithingLoader {
 
 	public static Identifier recipeId(String recipeType, Item... items) {
 		return recipeId(recipeType, Arrays.stream(items).map(Registry.ITEM::getId).toArray(Identifier[]::new));
+	}
+
+	public static Identifier appendId(Identifier id, String name) {
+		return new Identifier(id.toString() + "/" + name);
 	}
 
 	public static Identifier ingredientId(Ingredient ingredient) {

@@ -22,7 +22,7 @@ public class ShapelessUpgradeRecipe extends ShapelessRecipe implements ServerRec
 	public final int additionCount;
 	public final Item resultItem;
 
-	public ShapelessUpgradeRecipe(Item baseItem, Ingredient addition, Integer additionCount, Item resultItem) {
+	public ShapelessUpgradeRecipe(Item baseItem, Ingredient addition, int additionCount, Item resultItem) {
 		super(recipeId("shapeless", resultItem, baseItem), "", resultItem.getDefaultStack(), assembleIngredients(baseItem, addition, additionCount));
 		this.baseItem = baseItem;
 		this.addition = addition;

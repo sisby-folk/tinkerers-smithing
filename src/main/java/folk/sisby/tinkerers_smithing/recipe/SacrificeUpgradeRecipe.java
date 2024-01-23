@@ -13,30 +13,38 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import org.jetbrains.annotations.Nullable;
 
+import static folk.sisby.tinkerers_smithing.TinkerersSmithingLoader.appendId;
 import static folk.sisby.tinkerers_smithing.TinkerersSmithingLoader.recipeId;
 
 public class SacrificeUpgradeRecipe extends SmithingRecipe implements ServerRecipe<SmithingRecipe> {
 	public final Item baseItem;
-	private final Item additionItem;
 	public final int additionUnits;
 	public final Item resultItem;
 	public final int resultUnits;
 
-	public SacrificeUpgradeRecipe(Item baseItem, Item additionItem, Integer additionUnits, Item resultItem, int resultUnits) {
-		super(recipeId("sacrifice", resultItem, baseItem, additionItem), Ingredient.ofItems(baseItem), Ingredient.ofItems(additionItem), resultItem.getDefaultStack());
+	public SacrificeUpgradeRecipe(Item baseItem, Ingredient addition, int additionUnits, Item resultItem, int resultUnits) {
+		super(appendId(recipeId("sacrifice", resultItem, baseItem), String.valueOf(additionUnits)), Ingredient.ofItems(baseItem), addition, getPreviewResult(resultItem, additionUnits, resultUnits));
 		this.baseItem = baseItem;
-		this.additionItem = additionItem;
 		this.additionUnits = additionUnits;
 		this.resultItem = resultItem;
 		this.resultUnits = resultUnits;
+	}
+
+	private static ItemStack getPreviewResult(Item resultItem, int additionUnits, int resultUnits) {
+		ItemStack stack = resultItem.getDefaultStack().copy();
+		stack.setDamage(resultDamage(resultItem, additionUnits, resultUnits, 0, 1));
+		return stack;
+	}
+
+	private static int resultDamage(Item resultItem, int additionUnits, int resultUnits, int additionDamage, int additionMaxDamage) {
+		return (int) Math.ceil(resultItem.getMaxDamage() - ((additionMaxDamage - additionDamage) * ((double) additionUnits * resultItem.getMaxDamage()) / ((double)additionMaxDamage * resultUnits)));
 	}
 
 	@Override
 	public ItemStack craft(Inventory inventory) {
 		ItemStack output = super.craft(inventory);
 		ItemStack addition = inventory.getStack(1);
-		int damage = (int) Math.ceil(output.getMaxDamage() - ((addition.getMaxDamage() - addition.getDamage()) * ((double) additionUnits * output.getMaxDamage()) / ((double)addition.getMaxDamage() * resultUnits)));
-		output.setDamage(damage);
+		output.setDamage(resultDamage(output.getItem(), additionUnits, resultUnits, addition.getDamage(), addition.getMaxDamage()));
 		return output;
 	}
 
@@ -48,25 +56,25 @@ public class SacrificeUpgradeRecipe extends SmithingRecipe implements ServerReci
 	public static class Serializer implements RecipeSerializer<SacrificeUpgradeRecipe> {
 		public SacrificeUpgradeRecipe read(Identifier id, JsonObject json) {
 			Item baseItem = JsonHelper.getItem(json, "base");
-			Item additionItem = JsonHelper.getItem(json, "addition");
+			Ingredient addition = Ingredient.fromJson(JsonHelper.getObject(json, "addition"));
 			int additionUnits = JsonHelper.getInt(json, "additionUnits");
 			Item resultItem = JsonHelper.getItem(json, "result");
 			int resultUnits = JsonHelper.getInt(json, "resultUnits");
-			return new SacrificeUpgradeRecipe(baseItem, additionItem, additionUnits, resultItem, resultUnits);
+			return new SacrificeUpgradeRecipe(baseItem, addition, additionUnits, resultItem, resultUnits);
 		}
 
 		public SacrificeUpgradeRecipe read(Identifier id, PacketByteBuf buf) {
 			Item baseItem = Item.byRawId(buf.readVarInt());
-			Item additionItem = Item.byRawId(buf.readVarInt());
+			Ingredient addition = Ingredient.fromPacket(buf);
 			int additionUnits = buf.readVarInt();
 			Item resultItem = Item.byRawId(buf.readVarInt());
 			int resultUnits = buf.readVarInt();
-			return new SacrificeUpgradeRecipe(baseItem, additionItem, additionUnits, resultItem, resultUnits);
+			return new SacrificeUpgradeRecipe(baseItem, addition, additionUnits, resultItem, resultUnits);
 		}
 
 		public void write(PacketByteBuf buf, SacrificeUpgradeRecipe recipe) {
 			buf.writeVarInt(Item.getRawId(recipe.baseItem));
-			buf.writeVarInt(Item.getRawId(recipe.additionItem));
+			recipe.addition.write(buf);
 			buf.writeVarInt(recipe.additionUnits);
 			buf.writeVarInt(Item.getRawId(recipe.resultItem));
 			buf.writeVarInt(recipe.resultUnits);

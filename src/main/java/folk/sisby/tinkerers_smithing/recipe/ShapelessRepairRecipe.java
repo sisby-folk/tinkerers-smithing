@@ -5,6 +5,7 @@ import folk.sisby.tinkerers_smithing.TinkerersSmithing;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.RecipeSerializer;
@@ -14,8 +15,10 @@ import net.minecraft.util.JsonHelper;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
+import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static folk.sisby.tinkerers_smithing.TinkerersSmithingLoader.ingredientId;
@@ -27,24 +30,31 @@ public class ShapelessRepairRecipe extends ShapelessRecipe implements ServerReci
 	public final int additionCount;
 
 	public ShapelessRepairRecipe(Item baseItem, Ingredient addition, int additionCount) {
-		super(recipeId("repair", Registry.ITEM.getId(baseItem), ingredientId(addition)), "", baseItem.getDefaultStack(), assembleIngredients(baseItem, addition, additionCount));
+		super(recipeId("repair", Registry.ITEM.getId(baseItem), ingredientId(addition)), "", getPreviewResult(baseItem), assembleIngredients(baseItem, addition, additionCount));
 		this.baseItem = baseItem;
 		this.addition = addition;
 		this.additionCount = additionCount;
 	}
 
+	private static ItemStack getPreviewResult(Item baseItem) {
+		ItemStack stack = baseItem.getDefaultStack().copy();
+		stack.setDamage(1); // Helps signal to vanilla players that the recipe is durability related.
+		return stack;
+	}
+
 	private static DefaultedList<Ingredient> assembleIngredients(Item item, Ingredient addition, int additionCount) {
 		DefaultedList<Ingredient> ingredients = DefaultedList.of();
+		Ingredient additionWithAir = Ingredient.ofEntries(Arrays.stream(ArrayUtils.addAll(addition.entries, Ingredient.ofItems(Items.AIR).entries)));
 		ingredients.add(Ingredient.ofItems(item));
 		for (int i = 0; i < additionCount; i++) {
-			ingredients.add(addition);
+			ingredients.add(i > 0 ? additionWithAir : addition);
 		}
 		return ingredients;
 	}
 
 	private ItemStack findBase(CraftingInventory inventory) {
 		List<ItemStack> bases = inventory.stacks.stream().filter(s -> s.isOf(baseItem)).toList();
-		return bases.size() == 1 && !bases.get(0).hasEnchantments() ? bases.get(0) : null;
+		return bases.size() == 1 && !bases.get(0).hasEnchantments() && bases.get(0).isDamaged() ? bases.get(0) : null;
 	}
 
 	@Override

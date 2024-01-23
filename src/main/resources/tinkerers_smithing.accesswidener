@@ -7,3 +7,4 @@ accessible class net/minecraft/recipe/Ingredient$TagEntry
 accessible field net/minecraft/recipe/Ingredient$TagEntry tag Lnet/minecraft/tag/TagKey;
 accessible field net/minecraft/recipe/SmithingRecipe addition Lnet/minecraft/recipe/Ingredient;
 accessible field net/minecraft/inventory/CraftingInventory stacks Lnet/minecraft/util/collection/DefaultedList;
+accessible method net/minecraft/recipe/Ingredient ofEntries (Ljava/util/stream/Stream;)Lnet/minecraft/recipe/Ingredient;
