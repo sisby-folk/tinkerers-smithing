@@ -41,7 +41,7 @@ public class SmithingUpgradeRecipe extends SmithingTransformRecipe implements Se
 	@Override
 	public ItemStack craft(Inventory inventory, DynamicRegistryManager registryManager) {
 		ItemStack output = super.craft(inventory, registryManager);
-		int usedCount = Math.min(additionCount, inventory.getStack(1).getCount());
+		int usedCount = Math.min(additionCount, inventory.getStack(2).getCount());
 		output.setDamage(resultDamage(output.getItem(), additionCount, usedCount));
 		return output;
 	}
