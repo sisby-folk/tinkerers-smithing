@@ -24,21 +24,25 @@ repositories {
 
 dependencies {
 	minecraft libs.mc
-	mappings variantOf(libs.qm) { classifier "intermediary-v2" }
-	modImplementation libs.ql
-	modImplementation libs.qfapi
+	mappings variantOf(libs.yarn) { classifier "v2" }
+	modImplementation libs.fl
+	modImplementation libs.fapi
+	implementation libs.kaleidoConfig
 
 	modCompileOnly libs.emi
+
 	modLocalRuntime libs.emi
+	// include libs.kaleidoConfig
 }
+
 
 processResources {
 	final Map<String, String> map = [
-		"version"        : version.toString(),
-		"mc"             : libs.versions.mc.get(),
-		"ql"             : libs.versions.ql.get(),
-		"fapi"           : libs.versions.fapi.get(),
-		"qfapi"          : libs.versions.qfapi.get(),
+		"version"      : version.toString(),
+		"mc"           : libs.versions.mc.get(),
+		"fl"           : libs.versions.fl.get(),
+		"fapi"         : libs.versions.fapi.get(),
+		"kaleidoConfig": libs.versions.kaleidoConfig.get(),
 		"emi"            : libs.versions.emi.get()
 	]
 
@@ -61,17 +65,19 @@ jar {
 	}
 }
 
+loom {
+	accessWidenerPath = file("src/main/resources/tinkerers_smithing.accesswidener")
+}
+
 publishing {
 	publications {
 		mavenJava(MavenPublication) {
 			from components.java
 		}
 	}
-	repositories {
-	}
 }
 
-if (System.getenv("MODRINTH_TOKEN")) {
+if (System.getenv("MODRINTH_TOKEN") && file("CHANGELOG.md").exists() ) {
 	apply plugin: "com.modrinth.minotaur"
 	modrinth {
 		token = System.getenv("MODRINTH_TOKEN")
@@ -86,12 +92,12 @@ if (System.getenv("MODRINTH_TOKEN")) {
 		dependencies {
 			optional.project "emi"
 		}
-		changelog = "Changelog: https://github.com/sisby-folk/tinkerers-smithing/releases/tag/v" + baseVersion
+		changelog = rootProject.file("CHANGELOG.md").text + "\n\nChangelog: https://github.com/sisby-folk/portable-crafting/releases/tag/v$baseVersion"
 		syncBodyFrom = rootProject.file("README.md").text
 	}
 }
 
-if (System.getenv("GITHUB_TOKEN")) {
+if (System.getenv("GITHUB_TOKEN") && file("CHANGELOG.md").exists()) {
 	apply plugin: "com.github.breadmoirai.github-release"
 	githubRelease {
 		token System.getenv("GITHUB_TOKEN")
@@ -105,6 +111,7 @@ if (System.getenv("GITHUB_TOKEN")) {
 		releaseAssets remapJar.archiveFile
 		allowUploadToExisting true
 		generateReleaseNotes true
+		body rootProject.file("CHANGELOG.md").text
 	}
 	tasks.githubRelease.dependsOn remapJar
 }
