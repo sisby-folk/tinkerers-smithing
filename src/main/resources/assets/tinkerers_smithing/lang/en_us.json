@@ -1,5 +1,23 @@
 {
   "container.repair.work": "Work Cost: %d",
+  "item.tinkerers_smithing.broken": "Broken",
   "tag.tinkerers_smithing.dework_ingredients": "De-working Materials",
-  "item.tinkerers_smithing.broken": "Broken"
+  "tag.tinkerers_smithing.sacrifice.netherite_1": "1-Diamond Equipment",
+  "tag.tinkerers_smithing.sacrifice.netherite_2": "2-Diamond Equipment",
+  "tag.tinkerers_smithing.sacrifice.netherite_3": "3-Diamond Equipment",
+  "tag.tinkerers_smithing.sacrifice.netherite_4": "4-Diamond Equipment",
+  "tag.tinkerers_smithing.sacrifice.netherite_5": "5-Diamond Equipment",
+  "tag.tinkerers_smithing.sacrifice.netherite_6": "6-Diamond Equipment",
+  "tag.tinkerers_smithing.sacrifice.netherite_7": "7-Diamond Equipment",
+  "tag.tinkerers_smithing.sacrifice.netherite_8": "8-Diamond Equipment",
+  "tag.tinkerers_smithing.sacrifice.netherite_9": "9-Diamond Equipment",
+  "tag.tinkerers_smithing.sacrifice.netherite_1_plus": "1+ Diamond Equipment",
+  "tag.tinkerers_smithing.sacrifice.netherite_2_plus": "2+ Diamond Equipment",
+  "tag.tinkerers_smithing.sacrifice.netherite_3_plus": "3+ Diamond Equipment",
+  "tag.tinkerers_smithing.sacrifice.netherite_4_plus": "4+ Diamond Equipment",
+  "tag.tinkerers_smithing.sacrifice.netherite_5_plus": "5+ Diamond Equipment",
+  "tag.tinkerers_smithing.sacrifice.netherite_6_plus": "6+ Diamond Equipment",
+  "tag.tinkerers_smithing.sacrifice.netherite_7_plus": "7+ Diamond Equipment",
+  "tag.tinkerers_smithing.sacrifice.netherite_8_plus": "8+ Diamond Equipment",
+  "tag.tinkerers_smithing.sacrifice.netherite_9_plus": "9+ Diamond Equipment"
 }
