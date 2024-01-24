@@ -23,7 +23,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Map;
@@ -37,9 +36,9 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 		super(type, syncId, playerInventory, context);
 	}
 
-	@Redirect(method = "updateResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/AnvilScreenHandler;getNextCost(I)I"))
-	private int noLevelsNoWork(int i) {
-		return this.levelCost.get() == 0 ? i : AnvilScreenHandler.getNextCost(i);
+	@ModifyExpressionValue(method = "updateResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/AnvilScreenHandler;getNextCost(I)I"))
+	private int noLevelsNoWork(int original) {
+		return this.levelCost.get() == 0 ? (original - 1) / 2 : original;
 	}
 
 	@ModifyExpressionValue(method = "updateResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/Item;canRepair(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemStack;)Z"))
@@ -63,9 +62,9 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 		return original - 2;
 	}
 
-	@Redirect(method = "canTakeOutput", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/Property;get()I", ordinal = 1))
-	private int allowTakingFreeRepairs(Property instance) {
-		return instance.get() == 0 && this.repairItemUsage != 0 ? 1 : instance.get();
+	@ModifyExpressionValue(method = "canTakeOutput", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/Property;get()I", ordinal = 1))
+	private int allowTakingFreeRepairs(int original) {
+		return original == 0 && this.repairItemUsage != 0 ? 1 : original;
 	}
 
 	@ModifyVariable(method = "updateResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/Property;set(I)V", ordinal = 5, shift = At.Shift.AFTER), ordinal = 0)
