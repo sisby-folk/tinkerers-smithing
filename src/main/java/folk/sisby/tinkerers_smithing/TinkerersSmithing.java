@@ -31,6 +31,8 @@ public class TinkerersSmithing implements ModInitializer {
 	public static final Identifier S2C_PING = new Identifier(ID, "ping");
 
 	public static final TagKey<Item> DEWORK_INGREDIENTS = TagKey.of(Registry.ITEM_KEY, new Identifier(ID, "dework_ingredients"));
+	public static final TagKey<Item> BROKEN_BLACKLIST = TagKey.of(Registry.ITEM_KEY, new Identifier(ID, "broken_blacklist"));
+
 	public static final RecipeSerializer<ShapelessRepairRecipe> SHAPELESS_REPAIR_SERIALIZER = Registry.register(Registry.RECIPE_SERIALIZER, new Identifier(ID, "repair"), new ShapelessRepairRecipe.Serializer());
 	public static final RecipeSerializer<SacrificeUpgradeRecipe> SACRIFICE_UPGRADE_SERIALIZER = Registry.register(Registry.RECIPE_SERIALIZER, new Identifier(ID, "sacrifice"), new SacrificeUpgradeRecipe.Serializer());
 	public static final RecipeSerializer<SmithingUpgradeRecipe> SMITHING_UPGRADE_SERIALIZER = Registry.register(Registry.RECIPE_SERIALIZER, new Identifier(ID, "smithing"), new SmithingUpgradeRecipe.Serializer());
@@ -46,7 +48,7 @@ public class TinkerersSmithing implements ModInitializer {
 	}
 
 	public static boolean isKeeper(ItemStack stack) {
-		return stack.hasCustomName() || stack.hasEnchantments() || stack.getItem() instanceof ElytraItem;
+		return !stack.isIn(BROKEN_BLACKLIST) && (stack.hasCustomName() || stack.hasEnchantments() || stack.getItem() instanceof ElytraItem);
 	}
 
 	@Override
