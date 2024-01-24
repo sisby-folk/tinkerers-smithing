@@ -1,76 +1,74 @@
 package folk.sisby.tinkerers_smithing.recipe;
 
+import com.google.gson.JsonObject;
 import folk.sisby.tinkerers_smithing.TinkerersSmithing;
-import folk.sisby.tinkerers_smithing.TinkerersSmithingItem;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.LegacySmithingRecipe;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.Pair;
-import net.minecraft.world.World;
+import net.minecraft.util.JsonHelper;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.Map;
+import static folk.sisby.tinkerers_smithing.TinkerersSmithingLoader.recipeId;
 
-public class SmithingUpgradeRecipe extends LegacySmithingRecipe implements ServerRecipe {
-	public SmithingUpgradeRecipe(Identifier identifier) {
-		super(identifier, Ingredient.EMPTY, Ingredient.EMPTY, ItemStack.EMPTY);
+public class SmithingUpgradeRecipe extends LegacySmithingRecipe implements ServerRecipe<LegacySmithingRecipe> {
+	public final Item baseItem;
+	public final int additionCount;
+	public final Item resultItem;
+
+	public SmithingUpgradeRecipe(Item baseItem, Ingredient addition, int additionCount, Item resultItem) {
+		super(recipeId("smithing", resultItem, baseItem), Ingredient.ofItems(baseItem), addition, getPreviewResult(resultItem, additionCount));
+		this.baseItem = baseItem;
+		this.additionCount = additionCount;
+		this.resultItem = resultItem;
 	}
 
-	public Pair<Integer, Integer> getUsedRepairStacksAndCost(Item result, ItemStack ingredient) {
-		if (result instanceof TinkerersSmithingItem tsi) {
-			for (Map.Entry<Ingredient, Integer> entry : tsi.tinkerersSmithing$getUnitCosts().entrySet()) {
-				Ingredient upgradeIngredient = entry.getKey();
-				Integer cost = entry.getValue();
-				if (upgradeIngredient.test(ingredient) && ingredient.getCount() >= cost - 4) {
-					return new Pair<>(Math.min(ingredient.getCount(), cost), cost);
-				}
-			}
+	private static ItemStack getPreviewResult(Item resultItem, int additionCount) {
+		ItemStack stack = resultItem.getDefaultStack().copy();
+		stack.setDamage(resultDamage(resultItem, additionCount, 1));
+		return stack;
+	}
+
+	public static int resultDamage(Item resultItem, int additionCount, int usedCount) {
+		return Math.min(resultItem.getMaxDamage() - 1, (int) Math.floor(resultItem.getMaxDamage() * ((additionCount - usedCount) / 4.0)));
+	}
+
+	@Override
+	public ItemStack craft(Inventory inventory, DynamicRegistryManager registryManager) {
+		ItemStack output = super.craft(inventory, registryManager);
+		int usedCount = Math.min(additionCount, inventory.getStack(1).getCount());
+		output.setDamage(resultDamage(output.getItem(), additionCount, usedCount));
+		return output;
+	}
+
+	public static class Serializer implements RecipeSerializer<SmithingUpgradeRecipe> {
+		public SmithingUpgradeRecipe read(Identifier id, JsonObject json) {
+			Item baseItem = JsonHelper.getItem(json, "base");
+			Ingredient addition = Ingredient.fromJson(JsonHelper.getObject(json, "addition"));
+			int additionCount = JsonHelper.getInt(json, "additionCount");
+			Item resultItem = JsonHelper.getItem(json, "result");
+			return new SmithingUpgradeRecipe(baseItem, addition, additionCount, resultItem);
 		}
-		return null;
-	}
 
-	public ItemStack getValidOutput(Inventory inventory) {
-		ItemStack base = inventory.getStack(0);
-		ItemStack ingredient = inventory.getStack(1);
-
-		if (!base.isEmpty() && !ingredient.isEmpty() && base.getItem() instanceof TinkerersSmithingItem tsi) {
-			for (Item upgradeItem : tsi.tinkerersSmithing$getUpgradePaths()) {
-				Pair<Integer, Integer> usedAndCost = getUsedRepairStacksAndCost(upgradeItem, ingredient);
-				if (usedAndCost != null) {
-					ItemStack resultStack = upgradeItem.getDefaultStack();
-					resultStack.setNbt(base.getOrCreateNbt().copy());
-					resultStack.setDamage(Math.min(upgradeItem.getMaxDamage() - 1, (int) Math.floor(upgradeItem.getMaxDamage() * ((usedAndCost.getRight() - usedAndCost.getLeft()) / 4.0))));
-					return resultStack;
-				}
-			}
+		public SmithingUpgradeRecipe read(Identifier id, PacketByteBuf buf) {
+			Item baseItem = Item.byRawId(buf.readVarInt());
+			Ingredient addition = Ingredient.fromPacket(buf);
+			int additionCount = buf.readVarInt();
+			Item resultItem = Item.byRawId(buf.readVarInt());
+			return new SmithingUpgradeRecipe(baseItem, addition, additionCount, resultItem);
 		}
 
-		return null;
-	}
-
-	@Override
-	public boolean matches(Inventory craftingInventory, World world) {
-		return getValidOutput(craftingInventory) != null;
-	}
-
-	@Override
-	public ItemStack craft(Inventory craftingInventory, DynamicRegistryManager registryManager) {
-		ItemStack result = getValidOutput(craftingInventory);
-		return result != null ? result : ItemStack.EMPTY;
-	}
-
-	@Override
-	public boolean isIgnoredInRecipeBook() {
-		return true;
-	}
-
-	@Override
-	public boolean isEmpty() {
-		return true;
+		public void write(PacketByteBuf buf, SmithingUpgradeRecipe recipe) {
+			buf.writeVarInt(Item.getRawId(recipe.baseItem));
+			recipe.addition.write(buf);
+			buf.writeVarInt(recipe.additionCount);
+			buf.writeVarInt(Item.getRawId(recipe.resultItem));
+		}
 	}
 
 	@Override
@@ -79,7 +77,7 @@ public class SmithingUpgradeRecipe extends LegacySmithingRecipe implements Serve
 	}
 
 	@Override
-	public ItemStack getResult(DynamicRegistryManager registryManager) {
-		return ItemStack.EMPTY;
+	public @Nullable RecipeSerializer<LegacySmithingRecipe> getFallbackSerializer() {
+		return RecipeSerializer.SMITHING;
 	}
 }

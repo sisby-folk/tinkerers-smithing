@@ -27,13 +27,14 @@
     ]
   },
   "depends": {
-    "fabricloader": ">=0.14.9",
     "minecraft": ">=${mc}",
-    "fabric": ">=${fapi}"
+    "fabricloader": ">=${fl}",
+    "fabric-api": ">=${fapi}"
   },
   "suggests": {
     "emi": ">=${emi}"
   },
+  "accessWidener": "tinkerers_smithing.accesswidener",
   "mixins": [
     "tinkerers_smithing.mixins.json"
   ]

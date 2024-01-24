@@ -1,22 +1,16 @@
 package folk.sisby.tinkerers_smithing.client;
 
-import folk.sisby.tinkerers_smithing.TinkerersSmithingItemData;
+import folk.sisby.tinkerers_smithing.TinkerersSmithing;
 import net.fabricmc.api.ClientModInitializer;
-import net.minecraft.item.Item;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
-import java.util.Map;
-
-@SuppressWarnings("deprecation")
 public class TinkerersSmithingClient implements ClientModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger("tinkerers_smithing_client");
 
-	public static final Map<Item, TinkerersSmithingItemData> SERVER_SMITHING_ITEMS = new HashMap<>();
-
 	@Override
 	public void onInitializeClient() {
-		TinkerersSmithingClientNetworking.initializeReceivers();
+		ClientPlayNetworking.registerGlobalReceiver(TinkerersSmithing.S2C_PING, (client, handler, buf, sender) -> {});
 	}
 }
