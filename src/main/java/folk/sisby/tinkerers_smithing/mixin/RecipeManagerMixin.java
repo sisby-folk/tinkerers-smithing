@@ -28,13 +28,16 @@ public class RecipeManagerMixin {
 	private Map<RecipeType<?>, ImmutableMap.Builder<Identifier, Recipe<?>>> AddRuntimeRecipes(Map<RecipeType<?>, ImmutableMap.Builder<Identifier, Recipe<?>>> recipes) {
 		Map<Identifier, Recipe<?>> dataRecipes = builder.build();
 		TinkerersSmithing.generateSmithingData(dataRecipes);
-		TinkerersSmithingLoader.INSTANCE.RECIPES.forEach(recipe -> {
+		int manualRecipes = 0;
+		for (Recipe<?> recipe : TinkerersSmithingLoader.INSTANCE.RECIPES) {
 			if (!dataRecipes.containsKey(recipe.getId())) {
 				recipes.computeIfAbsent(recipe.getType(), recipeType -> ImmutableMap.builder()).put(recipe.getId(), recipe);
 				builder.put(recipe.getId(), recipe);
+			} else {
+				manualRecipes++;
 			}
-		});
-		TinkerersSmithing.LOGGER.info("[Tinkerer's Smithing] Added {} runtime recipes!", TinkerersSmithingLoader.INSTANCE.RECIPES.size());
+		}
+		TinkerersSmithing.LOGGER.info("[Tinkerer's Smithing] Added {} runtime recipes with {} data overrides!", TinkerersSmithingLoader.INSTANCE.RECIPES.size(), manualRecipes);
 		return recipes;
 	}
 }
