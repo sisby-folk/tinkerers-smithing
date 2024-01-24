@@ -37,7 +37,7 @@ public class EmiShapelessRepairRecipe extends EmiShapelessRecipe {
 		for (int i = 0; i < 9; i++) {
 			widgets.add(getInputWidget(i, i % 3 * 18, i / 3 * 18));
 		}
-		widgets.addSlot(resultPreview, 92, 14).large(true).recipeContext(this);
+		widgets.addSlot(resultPreview, 92, 14).output(true).recipeContext(this);
 	}
 
 	public SlotWidget getInputWidget(int slot, int x, int y) {

@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 @Mixin(ServerPlayNetworkHandler.class)
 public class ServerPlayNetworkHandlerMixin {
-	@ModifyArg(method = "sendPacket(Lnet/minecraft/network/Packet;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayNetworkHandler;sendPacket(Lnet/minecraft/network/Packet;Lnet/minecraft/network/PacketCallbacks;)V"))
+	@ModifyArg(method = "sendPacket(Lnet/minecraft/network/Packet;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayNetworkHandler;sendPacket(Lnet/minecraft/network/Packet;Lio/netty/util/concurrent/GenericFutureListener;)V"))
 	private Packet<?> skipServerRecipeSync(Packet<?> packet) {
 		if (packet instanceof SynchronizeRecipesS2CPacket srp && !ServerPlayNetworking.canSend((ServerPlayNetworkHandler) (Object) this, TinkerersSmithing.S2C_PING)) {
 			return ((ServerRecipePacket<?>) new SynchronizeRecipesS2CPacket(srp.getRecipes())).tinkerersSmithing$withFallback();

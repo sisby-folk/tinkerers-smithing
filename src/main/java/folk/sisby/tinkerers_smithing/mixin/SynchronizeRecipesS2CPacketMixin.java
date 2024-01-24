@@ -12,12 +12,13 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.function.BiConsumer;
 
 @Mixin(SynchronizeRecipesS2CPacket.class)
 public class SynchronizeRecipesS2CPacketMixin implements ServerRecipePacket<SynchronizeRecipesS2CPacket> {
 	@Unique private boolean tinkerersSmithing$fallback = false;
 
-	@ModifyArg(method = "write", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/PacketByteBuf;writeCollection(Ljava/util/Collection;Lnet/minecraft/network/PacketByteBuf$PacketWriter;)V"), index = 0)
+	@ModifyArg(method = "write", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/PacketByteBuf;writeCollection(Ljava/util/Collection;Ljava/util/function/BiConsumer;)V"), index = 0)
 	private Collection<Recipe<?>> writeSafeRecipes(Collection<Recipe<?>> original) {
 		if (tinkerersSmithing$fallback) {
 			Collection<Recipe<?>> safeRecipes = new ArrayList<>(original);
@@ -27,8 +28,8 @@ public class SynchronizeRecipesS2CPacketMixin implements ServerRecipePacket<Sync
 		return original;
 	}
 
-	@ModifyArg(method = "write", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/PacketByteBuf;writeCollection(Ljava/util/Collection;Lnet/minecraft/network/PacketByteBuf$PacketWriter;)V"), index = 1)
-	private PacketByteBuf.PacketWriter<Recipe<?>> write(PacketByteBuf.PacketWriter<Recipe<?>> original) {
+	@ModifyArg(method = "write", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/PacketByteBuf;writeCollection(Ljava/util/Collection;Ljava/util/function/BiConsumer;)V"), index = 1)
+	private BiConsumer<PacketByteBuf, Recipe<?>> write(BiConsumer<PacketByteBuf, Recipe<?>> original) {
 		if (tinkerersSmithing$fallback) {
 			return ServerRecipePacket::writeRecipeWithFallback;
 		}

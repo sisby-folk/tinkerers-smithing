@@ -9,10 +9,10 @@ import dev.emi.emi.api.recipe.EmiRecipeSorting;
 import dev.emi.emi.api.recipe.VanillaEmiRecipeCategories;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
-import dev.emi.emi.recipe.EmiAnvilRecipe;
 import folk.sisby.tinkerers_smithing.TinkerersSmithing;
 import folk.sisby.tinkerers_smithing.TinkerersSmithingLoader;
 import folk.sisby.tinkerers_smithing.client.emi.recipe.EmiAnvilDeworkRecipe;
+import folk.sisby.tinkerers_smithing.client.emi.recipe.EmiIdentifiedAnvilRecipe;
 import folk.sisby.tinkerers_smithing.client.emi.recipe.EmiSacrificeUpgradeRecipe;
 import folk.sisby.tinkerers_smithing.client.emi.recipe.EmiShapelessRepairRecipe;
 import folk.sisby.tinkerers_smithing.client.emi.recipe.EmiShapelessUpgradeRecipe;
@@ -22,21 +22,26 @@ import folk.sisby.tinkerers_smithing.recipe.ShapelessRepairRecipe;
 import folk.sisby.tinkerers_smithing.recipe.ShapelessUpgradeRecipe;
 import folk.sisby.tinkerers_smithing.recipe.SmithingUpgradeRecipe;
 import net.minecraft.enchantment.Enchantments;
+import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
+import net.minecraft.item.ToolItem;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.recipe.SmithingRecipe;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Pair;
 import net.minecraft.util.registry.Registry;
 import org.apache.commons.lang3.ArrayUtils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 public class TinkerersSmithingPlugin implements EmiPlugin {
 	private final Set<Identifier> replacedIds = new LinkedHashSet<>();
-	private final Set<Identifier> replacedIdPrefixes = new LinkedHashSet<>();
+	private final List<Pair<Item, Ingredient>> replacedAnvilRecipes = new ArrayList<>();
 	private final Set<EmiRecipe> addedRecipes = new LinkedHashSet<>();
 
 	@Override
@@ -44,7 +49,7 @@ public class TinkerersSmithingPlugin implements EmiPlugin {
 		VanillaEmiRecipeCategories.SMITHING.sorter = EmiRecipeSorting.identifier(); // Be a huge bitch bastard
 
 		replacedIds.clear();
-		replacedIdPrefixes.clear();
+		replacedAnvilRecipes.clear();
 		addedRecipes.clear();
 
         registry.getRecipeManager().listAllOfType(RecipeType.CRAFTING).stream().filter(ShapelessUpgradeRecipe.class::isInstance).map(r -> new EmiShapelessUpgradeRecipe((ShapelessUpgradeRecipe) r)).forEach(this::replaceRecipe);
@@ -73,7 +78,7 @@ public class TinkerersSmithingPlugin implements EmiPlugin {
 			)));
 		}
 
-		registry.removeRecipes(r -> replacedIdPrefixes.stream().anyMatch(id -> r.getId() != null && r.getId().toString().startsWith(id.toString())));
+		registry.removeRecipes(r -> replacedAnvilRecipes.stream().anyMatch(p -> r.getOutputs().stream().allMatch(es -> es.getItemStack().isOf(p.getLeft())) && r.getInputs().size() == 2 && r.getInputs().get(1).getEmiStacks().stream().allMatch(es -> p.getRight().test(es.getItemStack()))) && !addedRecipes.contains(r));
 		registry.removeRecipes(r -> replacedIds.contains(r.getId()) && !addedRecipes.contains(r));
 		addedRecipes.forEach(registry::addRecipe);
 
@@ -90,10 +95,21 @@ public class TinkerersSmithingPlugin implements EmiPlugin {
 	}
 
 	private void replaceAnvilRecipe(ShapelessRepairRecipe recipe) {
-		replacedIdPrefixes.add(new Identifier("emi", "/" + "anvil/repairing/material" + "/" + Registry.ITEM.getId(recipe.baseItem).getNamespace() + "/" + Registry.ITEM.getId(recipe.baseItem).getPath()));
-		addedRecipes.add(new EmiAnvilRecipe(EmiStack.of(recipe.baseItem), EmiIngredient.of(recipe.addition), new Identifier(recipe.getId().toString().replace(":repair/", ":anvil/"))));
+		Ingredient repairIngredient = getRepairIngredient(recipe.baseItem);
+		if (repairIngredient != null) replacedAnvilRecipes.add(new Pair<>(recipe.baseItem, repairIngredient));
+		addedRecipes.add(new EmiIdentifiedAnvilRecipe(EmiStack.of(recipe.baseItem), EmiIngredient.of(recipe.addition), new Identifier(recipe.getId().toString().replace(":repair/", ":anvil/"))));
 	}
 
 	record ItemPair(Item i1, Item i2) {
+	}
+
+	private Ingredient getRepairIngredient(Item item) {
+		if (item instanceof ArmorItem ai && ai.getMaterial() != null) {
+			return ai.getMaterial().getRepairIngredient();
+		}
+		if (item instanceof ToolItem ti && ti.getMaterial() != null) {
+			return ti.getMaterial().getRepairIngredient();
+		}
+		return null;
 	}
 }
