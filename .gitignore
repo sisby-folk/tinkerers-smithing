@@ -29,3 +29,6 @@ bin/
 # datagen
 datagen/out/
 /src/main/generated/.cache/
+
+# Changelog
+/CHANGELOG.md

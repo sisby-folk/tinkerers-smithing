@@ -1,79 +1,52 @@
 package folk.sisby.tinkerers_smithing.recipe;
 
+import com.google.gson.JsonObject;
 import folk.sisby.tinkerers_smithing.TinkerersSmithing;
-import folk.sisby.tinkerers_smithing.TinkerersSmithingItem;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.TransformSmithingRecipe;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.Pair;
-import net.minecraft.world.World;
+import net.minecraft.util.JsonHelper;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.Map;
+import static folk.sisby.tinkerers_smithing.TinkerersSmithingLoader.appendId;
+import static folk.sisby.tinkerers_smithing.TinkerersSmithingLoader.recipeId;
 
-public class SacrificeUpgradeRecipe extends TransformSmithingRecipe implements ServerRecipe {
-	public SacrificeUpgradeRecipe(Identifier identifier) {
-		super(identifier, Ingredient.EMPTY, Ingredient.EMPTY, Ingredient.EMPTY, ItemStack.EMPTY);
+public class SacrificeUpgradeRecipe extends TransformSmithingRecipe implements ServerRecipe<LegacySmithingRecipe> {
+	public final Item baseItem;
+	public final int additionUnits;
+	public final Item resultItem;
+	public final int resultUnits;
+
+	public SacrificeUpgradeRecipe(Item baseItem, Ingredient addition, int additionUnits, Item resultItem, int resultUnits) {
+		super(appendId(recipeId("sacrifice", resultItem, baseItem), String.valueOf(additionUnits)), Ingredient.ofItems(baseItem), addition, getPreviewResult(resultItem, additionUnits, resultUnits));
+		this.baseItem = baseItem;
+		this.additionUnits = additionUnits;
+		this.resultItem = resultItem;
+		this.resultUnits = resultUnits;
 	}
 
-	public ItemStack getValidOutput(Inventory inventory) {
-		ItemStack base = inventory.getStack(1);
-		ItemStack ingredient = inventory.getStack(2);
+	private static ItemStack getPreviewResult(Item resultItem, int additionUnits, int resultUnits) {
+		ItemStack stack = resultItem.getDefaultStack().copy();
+		stack.setDamage(resultDamage(resultItem, additionUnits, resultUnits, 0, 1));
+		return stack;
+	}
 
-		if (!base.isEmpty() && !ingredient.isEmpty() && base.isDamageable() && ingredient.isDamageable() && base.getItem() instanceof TinkerersSmithingItem tsi) {
-			for (Map.Entry<Item, Pair<Integer, Map<Item, Integer>>> sacrificePaths : tsi.tinkerersSmithing$getSacrificePaths().entrySet()) {
-				Item resultItem = sacrificePaths.getKey();
-				Integer resultViaUnits = sacrificePaths.getValue().getLeft();
-				Map<Item, Integer> sacrificeItems = sacrificePaths.getValue().getRight();
-
-				for (Map.Entry<Item, Integer> entry : sacrificeItems.entrySet()) {
-					Item sacrificeItem = entry.getKey();
-					Integer sacrificeUnits = entry.getValue();
-
-					if (ingredient.getItem() == sacrificeItem) {
-						ItemStack resultStack = resultItem.getDefaultStack();
-						if (base.getNbt() != null) {
-							resultStack.setNbt(base.getNbt().copy());
-						}
-						int damage = (int) Math.ceil(resultItem.getMaxDamage() - ((sacrificeItem.getMaxDamage() - ingredient.getDamage()) * ((double) sacrificeUnits * resultItem.getMaxDamage()) / ((double)sacrificeItem.getMaxDamage() * resultViaUnits)));
-						resultStack.setDamage(damage);
-						return resultStack;
-					}
-				}
-
-			}
-		}
-		return null;
+	public static int resultDamage(Item resultItem, int additionUnits, int resultUnits, int additionDamage, int additionMaxDamage) {
+		return (int) Math.ceil(resultItem.getMaxDamage() - ((additionMaxDamage - additionDamage) * ((double) additionUnits * resultItem.getMaxDamage()) / ((double)additionMaxDamage * resultUnits)));
 	}
 
 	@Override
-	public boolean matches(Inventory craftingInventory, World world) {
-		return getValidOutput(craftingInventory) != null;
-	}
-
-	@Override
-	public boolean matchesTemplateIngredient(ItemStack stack) {
-		return false;
-	}
-
-	@Override
-	public boolean matchesAdditionIngredient(ItemStack stack) {
-		return true;
-	}
-
-	@Override
-	public boolean matchesBaseIngredient(ItemStack stack) {
-		return true;
-	}
-
-	@Override
-	public ItemStack craft(Inventory craftingInventory, DynamicRegistryManager registryManager) {
-		ItemStack result = getValidOutput(craftingInventory);
-		return result != null ? result : ItemStack.EMPTY;
+	public ItemStack craft(Inventory inventory, DynamicRegistryManager registryManager) {
+		ItemStack output = super.craft(inventory, registryManager);
+		ItemStack addition = inventory.getStack(1);
+		output.setDamage(resultDamage(output.getItem(), additionUnits, resultUnits, addition.getDamage(), addition.getMaxDamage()));
+		return output;
 	}
 
 	@Override
@@ -81,9 +54,32 @@ public class SacrificeUpgradeRecipe extends TransformSmithingRecipe implements S
 		return true;
 	}
 
-	@Override
-	public boolean isEmpty() {
-		return true;
+	public static class Serializer implements RecipeSerializer<SacrificeUpgradeRecipe> {
+		public SacrificeUpgradeRecipe read(Identifier id, JsonObject json) {
+			Item baseItem = JsonHelper.getItem(json, "base");
+			Ingredient addition = Ingredient.fromJson(JsonHelper.getObject(json, "addition"));
+			int additionUnits = JsonHelper.getInt(json, "additionUnits");
+			Item resultItem = JsonHelper.getItem(json, "result");
+			int resultUnits = JsonHelper.getInt(json, "resultUnits");
+			return new SacrificeUpgradeRecipe(baseItem, addition, additionUnits, resultItem, resultUnits);
+		}
+
+		public SacrificeUpgradeRecipe read(Identifier id, PacketByteBuf buf) {
+			Item baseItem = Item.byRawId(buf.readVarInt());
+			Ingredient addition = Ingredient.fromPacket(buf);
+			int additionUnits = buf.readVarInt();
+			Item resultItem = Item.byRawId(buf.readVarInt());
+			int resultUnits = buf.readVarInt();
+			return new SacrificeUpgradeRecipe(baseItem, addition, additionUnits, resultItem, resultUnits);
+		}
+
+		public void write(PacketByteBuf buf, SacrificeUpgradeRecipe recipe) {
+			buf.writeVarInt(Item.getRawId(recipe.baseItem));
+			recipe.addition.write(buf);
+			buf.writeVarInt(recipe.additionUnits);
+			buf.writeVarInt(Item.getRawId(recipe.resultItem));
+			buf.writeVarInt(recipe.resultUnits);
+		}
 	}
 
 	@Override
@@ -92,7 +88,7 @@ public class SacrificeUpgradeRecipe extends TransformSmithingRecipe implements S
 	}
 
 	@Override
-	public ItemStack getResult(DynamicRegistryManager registryManager) {
-		return ItemStack.EMPTY;
+	public @Nullable RecipeSerializer<TransformSmithingRecipe> getFallbackSerializer() {
+		return RecipeSerializer.SMITHING;
 	}
 }

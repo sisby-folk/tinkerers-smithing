@@ -1,22 +1,25 @@
 {
-	"required": true,
-	"minVersion": "0.8",
-	"package": "folk.sisby.tinkerers_smithing.mixin",
-	"compatibilityLevel": "JAVA_17",
-	"mixins": [
-		"AnvilScreenHandlerMixin",
-		"EnchantmentHelperMixin",
-		"ItemMixin",
-		"ItemPredicateMixin",
-		"ItemStackMixin",
-		"SmithingScreenHandlerMixin",
-		"SynchronizeRecipesS2CPacketMixin"
-	],
-	"client": [
-		"client.AnvilScreenMixin",
-		"client.InGameHudMixin"
-	],
-	"injectors": {
-		"defaultRequire": 1
+  "required": true,
+  "minVersion": "0.8",
+  "package": "folk.sisby.tinkerers_smithing.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "AnvilScreenHandlerMixin",
+    "EnchantmentHelperMixin",
+    "ItemPredicateMixin",
+    "ItemStackMixin",
+    "PlayerManagerMixin",
+    "RecipeManagerMixin",
+    "ResourceManagerHelperImplMixin",
+    "ServerPlayNetworkHandlerMixin",
+    "SmithingScreenHandlerMixin",
+    "SynchronizeRecipesS2CPacketMixin"
+  ],
+  "client": [
+    "client.AnvilScreenMixin",
+    "client.InGameHudMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
 	}
 }

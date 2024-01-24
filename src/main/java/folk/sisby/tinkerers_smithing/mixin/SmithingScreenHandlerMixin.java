@@ -9,7 +9,6 @@ import net.minecraft.screen.ForgingScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.SmithingScreenHandler;
-import net.minecraft.util.Pair;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -29,11 +28,11 @@ public abstract class SmithingScreenHandlerMixin extends ForgingScreenHandler {
 
 	@Inject(method = "updateResult", at = @At(value = "TAIL"))
 	public void cacheIngredientsUsed(CallbackInfo ci) {
-		Pair<Integer, Integer> stacksAndCost = null;
+		int additionCount = -1;
 		if (this.currentRecipe instanceof SmithingUpgradeRecipe sur) {
-			stacksAndCost = sur.getUsedRepairStacksAndCost(this.getSlot(SmithingScreenHandler.RESULT_SLOT).getStack().getItem(), this.getSlot(SmithingScreenHandler.ADDITIONAL_SLOT).getStack());
+			additionCount = sur.additionCount;
 		}
-		ingredientsUsed = stacksAndCost == null ? 1 : stacksAndCost.getLeft();
+		ingredientsUsed = additionCount == -1 ? 1 : Math.min(additionCount, this.input.getStack(1).getCount());
 	}
 
 	@Inject(method = "onTakeOutput", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/SmithingScreenHandler;decrementStack(I)V", ordinal = 0))

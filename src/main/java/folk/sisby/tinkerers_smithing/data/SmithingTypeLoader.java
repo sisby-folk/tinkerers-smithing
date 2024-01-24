@@ -23,8 +23,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@SuppressWarnings("deprecation")
-public class SmithingTypeLoader extends MultiJsonDataLoader implements IdentifiableResourceReloadListener {
+public class SmithingTypeLoader extends MultiJsonDataLoader implements IdentifiableResourceReloadListener, RecipeDataDependency {
 	public static final SmithingTypeLoader INSTANCE = new SmithingTypeLoader(new Gson());
 	public static final Identifier ID = new Identifier(TinkerersSmithing.ID, "smithing_type_loader");
 	public static final TagGroupLoader<Item> ITEM_TAG_LOADER = new TagGroupLoader<>(Registries.ITEM::getOrEmpty, "tags/items");
@@ -50,31 +49,31 @@ public class SmithingTypeLoader extends MultiJsonDataLoader implements Identifia
 	protected void apply(Map<Identifier, Collection<Pair<JsonElement, String>>> prepared, ResourceManager manager, Profiler profiler) {
 		TinkerersSmithing.LOGGER.info("[Tinkerer's Smithing] Loading Types!");
 		TinkerersSmithingLoader.INSTANCE.SMITHING_TYPES.clear();
-		Map<Identifier, List<TagGroupLoader.EntryWithSource>> typeTags = new HashMap<>();
+		Map<Identifier, List<TagGroupLoader.TrackedEntry>> typeTags = new HashMap<>();
 		prepared.forEach((id, jsons) -> {
 			Identifier collisionAvoidingID = new Identifier(id.getNamespace(), AVOIDANCE_PREFIX + id.getPath());
 			jsons.forEach(jsonEntry -> {
-				List<TagGroupLoader.EntryWithSource> list = typeTags.computeIfAbsent(collisionAvoidingID, k -> new ArrayList<>());
+				List<TagGroupLoader.TrackedEntry> list = typeTags.computeIfAbsent(collisionAvoidingID, k -> new ArrayList<>());
 				TagFile tagFile = TagFile.CODEC.parse(new Dynamic<>(JsonOps.INSTANCE, jsonEntry.getLeft())).getOrThrow(false, TinkerersSmithing.LOGGER::error);
 				if (tagFile.replace()) {
 					list.clear();
 				}
-				tagFile.entries().forEach(entry -> list.add(new TagGroupLoader.EntryWithSource(entry, jsonEntry.getRight())));
+				tagFile.entries().forEach(entry -> list.add(new TagGroupLoader.TrackedEntry(entry, jsonEntry.getRight())));
 			});
 		});
 
-		Map<Identifier, List<TagGroupLoader.EntryWithSource>> itemTags = ITEM_TAG_LOADER.loadTags(manager);
-		Map<Identifier, List<TagGroupLoader.EntryWithSource>> allTags = new HashMap<>();
+		Map<Identifier, List<TagGroupLoader.TrackedEntry>> itemTags = ITEM_TAG_LOADER.loadTags(manager);
+		Map<Identifier, List<TagGroupLoader.TrackedEntry>> allTags = new HashMap<>();
 		allTags.putAll(itemTags);
 		allTags.putAll(typeTags);
-		Map<Identifier, Collection<Item>> tags = ITEM_TAG_LOADER.build(allTags);
+		Map<Identifier, Collection<Item>> tags = ITEM_TAG_LOADER.buildGroup(allTags);
 		tags.entrySet().removeIf(e -> !typeTags.containsKey(e.getKey()));
 		// Strip collision avoiding ID
 		tags = tags.entrySet().stream().collect(Collectors.toMap(e -> new Identifier(e.getKey().getNamespace(), StringUtils.removeStart(e.getKey().getPath(), AVOIDANCE_PREFIX)), Map.Entry::getValue));
 		// Manually jam in stuff by equipment slot, false positives should wash out by having no material.
 		for (Item item : Registries.ITEM) {
 			if (item instanceof ArmorItem ai) {
-				switch (ai.getArmorSlot()) {
+				switch (ai.getType()) {
 					case BOOTS -> addToTag(tags, "boots", item);
 					case LEGGINGS -> addToTag(tags, "leggings", item);
 					case CHESTPLATE -> addToTag(tags, "chestplate", item);
