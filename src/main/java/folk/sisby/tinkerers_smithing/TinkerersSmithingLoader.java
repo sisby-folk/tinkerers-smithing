@@ -14,7 +14,6 @@ import net.minecraft.item.ToolItem;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.Recipe;
-import net.minecraft.recipe.RecipeManager;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
@@ -167,7 +166,7 @@ public class TinkerersSmithingLoader {
 					for (Identifier recipeId : recipeIds) {
 						Recipe<?> recipe = recipes.get(recipeId);
 						if (recipe != null) {
-							if (recipe.getOutput(DynamicRegistryManager.fromRegistryOfRegistries(Registries.REGISTRY)).isOf(item)) {
+							if (recipe.getOutput(DynamicRegistryManager.of(Registries.REGISTRIES)).isOf(item)) {
 								for (Ingredient repairIngredient : repairIngredients) {
 									int unitCost = Math.toIntExact(recipe.getIngredients().stream()
 										.filter(ingredient -> repairIngredient.toJson().toString().equals(ingredient.toJson().toString()))

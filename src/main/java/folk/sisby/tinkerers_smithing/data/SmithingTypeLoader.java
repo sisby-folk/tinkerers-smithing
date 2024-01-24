@@ -73,7 +73,7 @@ public class SmithingTypeLoader extends MultiJsonDataLoader implements Identifia
 		// Manually jam in stuff by equipment slot, false positives should wash out by having no material.
 		for (Item item : Registries.ITEM) {
 			if (item instanceof ArmorItem ai) {
-				switch (ai.getArmorSlot()) {
+				switch (ai.getType()) {
 					case BOOTS -> addToTag(tags, "boots", item);
 					case LEGGINGS -> addToTag(tags, "leggings", item);
 					case CHESTPLATE -> addToTag(tags, "chestplate", item);

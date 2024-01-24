@@ -1,7 +1,7 @@
 package folk.sisby.tinkerers_smithing.recipe;
 
-import net.minecraft.network.Packet;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.SynchronizeRecipesS2CPacket;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeSerializer;
