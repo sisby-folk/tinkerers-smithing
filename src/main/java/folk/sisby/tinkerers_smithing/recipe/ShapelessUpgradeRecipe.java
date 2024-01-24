@@ -1,91 +1,87 @@
 package folk.sisby.tinkerers_smithing.recipe;
 
+import com.google.gson.JsonObject;
 import folk.sisby.tinkerers_smithing.TinkerersSmithing;
-import folk.sisby.tinkerers_smithing.TinkerersSmithingItem;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.recipe.SpecialCraftingRecipe;
+import net.minecraft.recipe.ShapelessRecipe;
 import net.minecraft.util.Identifier;
-import net.minecraft.world.World;
+import net.minecraft.util.JsonHelper;
+import net.minecraft.util.collection.DefaultedList;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import static folk.sisby.tinkerers_smithing.TinkerersSmithingLoader.recipeId;
 
-public class ShapelessUpgradeRecipe extends SpecialCraftingRecipe implements ServerRecipe {
-	public ShapelessUpgradeRecipe(Identifier identifier) {
-		super(identifier);
+public class ShapelessUpgradeRecipe extends ShapelessRecipe implements ServerRecipe<ShapelessRecipe> {
+	public final Item baseItem;
+	public final Ingredient addition;
+	public final int additionCount;
+	public final Item resultItem;
+
+	public ShapelessUpgradeRecipe(Item baseItem, Ingredient addition, int additionCount, Item resultItem) {
+		super(recipeId("shapeless", resultItem, baseItem), "", resultItem.getDefaultStack(), assembleIngredients(baseItem, addition, additionCount));
+		this.baseItem = baseItem;
+		this.addition = addition;
+		this.additionCount = additionCount;
+		this.resultItem = resultItem;
 	}
 
-	public List<ItemStack> getInventoryStacks(CraftingInventory craftingInventory) {
-		List<ItemStack> outList = new ArrayList<>();
-		for(int i = 0; i < craftingInventory.size(); ++i) {
-			ItemStack itemStack = craftingInventory.getStack(i);
-			if (!itemStack.isEmpty()) {
-				outList.add(itemStack);
-			}
+	private static DefaultedList<Ingredient> assembleIngredients(Item item, Ingredient addition, int additionCount) {
+		DefaultedList<Ingredient> ingredients = DefaultedList.of();
+		ingredients.add(Ingredient.ofItems(item));
+		for (int i = 0; i < additionCount; i++) {
+			ingredients.add(addition);
 		}
-		return outList;
-	}
-
-	public ItemStack getValidOutput(CraftingInventory craftingInventory) {
-		ItemStack equipmentStack = null;
-
-		List<ItemStack> gridItems = getInventoryStacks(craftingInventory);
-
-		for (ItemStack gridItem : gridItems) {
-			if (gridItem.getItem() instanceof TinkerersSmithingItem tsi && !tsi.tinkerersSmithing$getUnitCosts().isEmpty()) { // fix - won't work for upgrade-only items
-				if (equipmentStack == null) {
-					equipmentStack = gridItem;
-				} else {
-					return null; // can't have multiple
-				}
-			}
-		}
-
-		if (equipmentStack == null || equipmentStack.hasEnchantments()) return null;
-		gridItems.remove(equipmentStack);
-
-		if (equipmentStack.getItem() instanceof TinkerersSmithingItem tsi) {
-			for (Item upgradeItem : tsi.tinkerersSmithing$getUpgradePaths()) {
-				if (upgradeItem instanceof TinkerersSmithingItem utsi) {
-					for (Map.Entry<Ingredient, Integer> entry : utsi.tinkerersSmithing$getUnitCosts().entrySet()) {
-						Ingredient ingredient = entry.getKey();
-						Integer cost = entry.getValue();
-						if (gridItems.stream().allMatch(ingredient) && gridItems.size() == cost) {
-							ItemStack resultStack = upgradeItem.getDefaultStack();
-							resultStack.setNbt(equipmentStack.getOrCreateNbt().copy());
-							return resultStack;
-						}
-					}
-				}
-			}
-		}
-
-		return null;
+		return ingredients;
 	}
 
 	@Override
-	public boolean matches(CraftingInventory craftingInventory, World world) {
-		return getValidOutput(craftingInventory) != null;
+	public ItemStack craft(CraftingInventory inventory) {
+		ItemStack output = super.craft(inventory);
+		for (ItemStack stack : inventory.stacks) {
+			if (stack.isOf(baseItem)) {
+				output.setNbt(stack.getOrCreateNbt().copy());
+			}
+		}
+		return output;
 	}
 
-	@Override
-	public ItemStack craft(CraftingInventory craftingInventory) {
-		ItemStack result = getValidOutput(craftingInventory);
-		return result != null ? result : ItemStack.EMPTY;
-	}
+	public static class Serializer implements RecipeSerializer<ShapelessUpgradeRecipe> {
+		public ShapelessUpgradeRecipe read(Identifier id, JsonObject json) {
+			Item baseItem = JsonHelper.getItem(json, "base");
+			Ingredient addition = Ingredient.fromJson(JsonHelper.getObject(json, "addition"));
+			int additionCount = JsonHelper.getInt(json, "additionCount");
+			Item resultItem = JsonHelper.getItem(json, "result");
+			return new ShapelessUpgradeRecipe(baseItem, addition, additionCount, resultItem);
+		}
 
-	@Override
-	public boolean fits(int width, int height) {
-		return width * height >= 2;
+		public ShapelessUpgradeRecipe read(Identifier id, PacketByteBuf buf) {
+			Item baseItem = Item.byRawId(buf.readVarInt());
+			Ingredient addition = Ingredient.fromPacket(buf);
+			int additionCount = buf.readVarInt();
+			Item resultItem = Item.byRawId(buf.readVarInt());
+			return new ShapelessUpgradeRecipe(baseItem, addition, additionCount, resultItem);
+		}
+
+		public void write(PacketByteBuf buf, ShapelessUpgradeRecipe recipe) {
+			buf.writeVarInt(Item.getRawId(recipe.baseItem));
+			recipe.addition.write(buf);
+			buf.writeVarInt(recipe.additionCount);
+			buf.writeVarInt(Item.getRawId(recipe.resultItem));
+		}
 	}
 
 	@Override
 	public RecipeSerializer<?> getSerializer() {
 		return TinkerersSmithing.SHAPELESS_UPGRADE_SERIALIZER;
+	}
+
+	@Override
+	public @Nullable RecipeSerializer<ShapelessRecipe> getFallbackSerializer() {
+		return RecipeSerializer.SHAPELESS;
 	}
 }

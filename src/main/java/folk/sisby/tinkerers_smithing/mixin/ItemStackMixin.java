@@ -2,6 +2,7 @@ package folk.sisby.tinkerers_smithing.mixin;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+import com.llamalad7.mixinextras.injector.WrapWithCondition;
 import folk.sisby.tinkerers_smithing.TinkerersSmithing;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EquipmentSlot;
@@ -20,6 +21,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -29,11 +31,11 @@ import java.util.function.Consumer;
 
 @Mixin(ItemStack.class)
 public abstract class ItemStackMixin {
-	private boolean isBroken() {
+	@Unique private boolean isBroken() {
 		return TinkerersSmithing.isBroken((ItemStack) (Object) this);
 	}
 
-	private boolean isKeeper() {
+	@Unique private boolean isKeeper() {
 		return TinkerersSmithing.isKeeper((ItemStack) (Object) this);
 	}
 
@@ -90,11 +92,9 @@ public abstract class ItemStackMixin {
 		if (isKeeper() && isBroken()) ci.cancel();
 	}
 
-	@Redirect(method = "damage(ILnet/minecraft/entity/LivingEntity;Ljava/util/function/Consumer;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;decrement(I)V"))
-	private void dontBreakDecrementKeepers(ItemStack instance, int amount) {
-		if (!isKeeper()) {
-			instance.decrement(1);
-		}
+	@WrapWithCondition(method = "damage(ILnet/minecraft/entity/LivingEntity;Ljava/util/function/Consumer;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;decrement(I)V"))
+	private boolean dontBreakDecrementKeepers(ItemStack instance, int amount) {
+		return !isKeeper();
 	}
 
 	@ModifyArg(method = "damage(ILnet/minecraft/entity/LivingEntity;Ljava/util/function/Consumer;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;setDamage(I)V"))
