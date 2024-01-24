@@ -32,7 +32,7 @@ public abstract class SmithingScreenHandlerMixin extends ForgingScreenHandler {
 		if (this.currentRecipe instanceof SmithingUpgradeRecipe sur) {
 			additionCount = sur.additionCount;
 		}
-		ingredientsUsed = additionCount == -1 ? 1 : Math.min(additionCount, this.input.getStack(1).getCount());
+		ingredientsUsed = additionCount == -1 ? 1 : Math.min(additionCount, this.getSlot(SmithingScreenHandler.MATERIAL_ID).getStack().getCount());
 	}
 
 	@Inject(method = "onTakeOutput", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/SmithingScreenHandler;decrementStack(I)V", ordinal = 0))
