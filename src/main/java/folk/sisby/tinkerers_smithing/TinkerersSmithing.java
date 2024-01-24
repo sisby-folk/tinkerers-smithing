@@ -44,7 +44,7 @@ public class TinkerersSmithing implements ModInitializer {
 	}
 
 	public static boolean isBroken(ItemStack stack) {
-		return stack.isDamageable() && stack.getDamage() >= stack.getMaxDamage() - (stack.getItem() instanceof ElytraItem ? 1 : 0);
+		return !stack.isIn(BROKEN_BLACKLIST) && stack.isDamageable() && stack.getDamage() >= stack.getMaxDamage() - (stack.getItem() instanceof ElytraItem ? 1 : 0);
 	}
 
 	public static boolean isKeeper(ItemStack stack) {
