@@ -79,8 +79,8 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 
 	@Inject(method = "updateResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z", ordinal = 1), cancellable = true)
 	private void applyDeworkMaterial(CallbackInfo ci) {
-		ItemStack base = this.ingredientInventory.getStack(0);
-		ItemStack ingredient = this.ingredientInventory.getStack(1);
+		ItemStack base = this.input.getStack(0);
+		ItemStack ingredient = this.input.getStack(1);
 		if (ingredient.isIn(TinkerersSmithing.DEWORK_INGREDIENTS) && base.getRepairCost() > 0) {
 			ItemStack result = base.copy();
 			this.repairItemUsage = 0;
@@ -88,7 +88,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 				result.setRepairCost(((result.getRepairCost() + 1)/2)-1);
 				this.repairItemUsage++;
 			} while (result.getRepairCost() > 0 && this.repairItemUsage < ingredient.getCount());
-			this.result.setStack(0, result);
+			this.output.setStack(0, result);
 			this.levelCost.set(0);
 			this.sendContentUpdates();
 			ci.cancel();
@@ -112,19 +112,19 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 	}
 
 	@Unique private boolean doSwapEnchantments(Map<Enchantment, Integer> base, Map<Enchantment, Integer> ingredient) {
-		return !(this.ingredientInventory.getStack(1).isOf(Items.ENCHANTED_BOOK)) && getSRCost(base, ingredient) > getSRCost(ingredient, base);
+		return !(this.input.getStack(1).isOf(Items.ENCHANTED_BOOK)) && getSRCost(base, ingredient) > getSRCost(ingredient, base);
 	}
 
 	@ModifyVariable(method = "updateResult", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/enchantment/EnchantmentHelper;get(Lnet/minecraft/item/ItemStack;)Ljava/util/Map;", ordinal = 1), ordinal = 0)
 	private Map<Enchantment, Integer> orderlessCombineSwapBaseTable(Map<Enchantment, Integer> base) {
-		Map<Enchantment, Integer> ingredient = EnchantmentHelper.get(this.ingredientInventory.getStack(1));
+		Map<Enchantment, Integer> ingredient = EnchantmentHelper.get(this.input.getStack(1));
 		return doSwapEnchantments(base, ingredient) ? ingredient : base;
 	}
 
 	@SuppressWarnings("InvalidInjectorMethodSignature")
 	@ModifyVariable(method = "updateResult", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/enchantment/EnchantmentHelper;get(Lnet/minecraft/item/ItemStack;)Ljava/util/Map;", ordinal = 1), ordinal = 1)
 	private Map<Enchantment, Integer> orderlessCombineSwapIngredientTable(Map<Enchantment, Integer> ingredient) {
-		Map<Enchantment, Integer> base = EnchantmentHelper.get(this.ingredientInventory.getStack(0));
+		Map<Enchantment, Integer> base = EnchantmentHelper.get(this.input.getStack(0));
 		return doSwapEnchantments(base, ingredient) ? base : ingredient;
 	}
 }

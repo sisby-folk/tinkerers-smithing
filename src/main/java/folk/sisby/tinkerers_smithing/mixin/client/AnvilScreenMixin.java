@@ -1,6 +1,6 @@
 package folk.sisby.tinkerers_smithing.mixin.client;
 
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.AnvilScreen;
 import net.minecraft.client.gui.screen.ingame.ForgingScreen;
 import net.minecraft.entity.player.PlayerInventory;
@@ -20,15 +20,15 @@ public abstract class AnvilScreenMixin extends ForgingScreen<AnvilScreenHandler>
 	}
 
 	@Inject(method = "drawForeground", at = @At(value = "TAIL"))
-	private void drawRepairCost(GuiGraphics graphics, int mouseX, int mouseY, CallbackInfo ci) {
+	private void drawRepairCost(DrawContext context, int mouseX, int mouseY, CallbackInfo ci) {
 		ItemStack base = handler.getSlot(0).getStack();
 		ItemStack ingredient = handler.getSlot(1).getStack();
 		ItemStack result = handler.getSlot(2).getStack();
 		if (!base.isEmpty() && !result.isEmpty() && this.handler.getLevelCost() == 0) {
 			Text text = Text.translatable("container.repair.work", result.getRepairCost() - Math.max(base.getRepairCost(), ingredient.getRepairCost()));
 			int k = this.backgroundWidth - 8 - this.textRenderer.getWidth(text) - 2;
-			graphics.fill(k - 2, 67, this.backgroundWidth - 8, 79, 1325400064);
-			graphics.drawShadowedText(this.textRenderer, text.asOrderedText(), k, 69, 8453920);
+			context.fill(k - 2, 67, this.backgroundWidth - 8, 79, 1325400064);
+			context.drawText(this.textRenderer, text.asOrderedText(), k, 69, 8453920, true);
 		}
 	}
 }

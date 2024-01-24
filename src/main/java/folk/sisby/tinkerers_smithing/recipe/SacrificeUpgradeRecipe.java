@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.recipe.TransformSmithingRecipe;
+import net.minecraft.recipe.SmithingTransformRecipe;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
@@ -17,14 +17,14 @@ import org.jetbrains.annotations.Nullable;
 import static folk.sisby.tinkerers_smithing.TinkerersSmithingLoader.appendId;
 import static folk.sisby.tinkerers_smithing.TinkerersSmithingLoader.recipeId;
 
-public class SacrificeUpgradeRecipe extends TransformSmithingRecipe implements ServerRecipe<LegacySmithingRecipe> {
+public class SacrificeUpgradeRecipe extends SmithingTransformRecipe implements ServerRecipe<SmithingTransformRecipe> {
 	public final Item baseItem;
 	public final int additionUnits;
 	public final Item resultItem;
 	public final int resultUnits;
 
 	public SacrificeUpgradeRecipe(Item baseItem, Ingredient addition, int additionUnits, Item resultItem, int resultUnits) {
-		super(appendId(recipeId("sacrifice", resultItem, baseItem), String.valueOf(additionUnits)), Ingredient.ofItems(baseItem), addition, getPreviewResult(resultItem, additionUnits, resultUnits));
+		super(appendId(recipeId("sacrifice", resultItem, baseItem), String.valueOf(additionUnits)), Ingredient.empty(), Ingredient.ofItems(baseItem), addition, getPreviewResult(resultItem, additionUnits, resultUnits));
 		this.baseItem = baseItem;
 		this.additionUnits = additionUnits;
 		this.resultItem = resultItem;
@@ -88,7 +88,7 @@ public class SacrificeUpgradeRecipe extends TransformSmithingRecipe implements S
 	}
 
 	@Override
-	public @Nullable RecipeSerializer<TransformSmithingRecipe> getFallbackSerializer() {
-		return RecipeSerializer.SMITHING;
+	public @Nullable RecipeSerializer<SmithingTransformRecipe> getFallbackSerializer() {
+		return RecipeSerializer.SMITHING_TRANSFORM;
 	}
 }

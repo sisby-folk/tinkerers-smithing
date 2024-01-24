@@ -5,7 +5,7 @@ import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.SlotWidget;
 import dev.emi.emi.runtime.EmiDrawContext;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.DrawContext;
 
 import java.util.Random;
 import java.util.function.BiFunction;
@@ -38,7 +38,7 @@ public class IterativeSlotWidget extends SlotWidget {
 	}
 
 	@Override
-	public void drawOverlay(GuiGraphics draw, int mouseX, int mouseY, float delta) {
+	public void drawOverlay(DrawContext draw, int mouseX, int mouseY, float delta) {
 		EmiDrawContext context = EmiDrawContext.wrap(draw);
 		if (!getStack().isEmpty()) {
 			int off = 1;

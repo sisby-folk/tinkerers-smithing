@@ -10,6 +10,7 @@ import folk.sisby.tinkerers_smithing.client.emi.IterativeSlotWidget;
 import folk.sisby.tinkerers_smithing.recipe.SmithingUpgradeRecipe;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.recipe.Ingredient;
 
 public class EmiSmithingUpgradeRecipe extends EmiSmithingRecipe implements EmiRecipe {
 	public final Item baseItem;
@@ -17,7 +18,7 @@ public class EmiSmithingUpgradeRecipe extends EmiSmithingRecipe implements EmiRe
 	public final Item resultItem;
 
 	public EmiSmithingUpgradeRecipe(SmithingUpgradeRecipe recipe) {
-		super(recipe);
+		super(EmiIngredient.of(Ingredient.empty()), EmiStack.of(recipe.baseItem), EmiIngredient.of(recipe.addition), EmiStack.of(recipe.resultItem), recipe.getId());
 		this.baseItem = recipe.baseItem;
 		this.additionCount = recipe.additionCount;
 		this.resultItem = recipe.resultItem;

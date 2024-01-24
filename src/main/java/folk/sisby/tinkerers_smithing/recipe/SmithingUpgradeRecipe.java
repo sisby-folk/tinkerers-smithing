@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.recipe.TransformSmithingRecipe;
+import net.minecraft.recipe.SmithingTransformRecipe;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
@@ -16,13 +16,13 @@ import org.jetbrains.annotations.Nullable;
 
 import static folk.sisby.tinkerers_smithing.TinkerersSmithingLoader.recipeId;
 
-public class SmithingUpgradeRecipe extends TransformSmithingRecipe implements ServerRecipe<LegacySmithingRecipe> {
+public class SmithingUpgradeRecipe extends SmithingTransformRecipe implements ServerRecipe<SmithingTransformRecipe> {
 	public final Item baseItem;
 	public final int additionCount;
 	public final Item resultItem;
 
 	public SmithingUpgradeRecipe(Item baseItem, Ingredient addition, int additionCount, Item resultItem) {
-		super(recipeId("smithing", resultItem, baseItem), Ingredient.ofItems(baseItem), addition, getPreviewResult(resultItem, additionCount));
+		super(recipeId("smithing", resultItem, baseItem), Ingredient.empty(), Ingredient.ofItems(baseItem), addition, getPreviewResult(resultItem, additionCount));
 		this.baseItem = baseItem;
 		this.additionCount = additionCount;
 		this.resultItem = resultItem;
@@ -77,7 +77,7 @@ public class SmithingUpgradeRecipe extends TransformSmithingRecipe implements Se
 	}
 
 	@Override
-	public @Nullable RecipeSerializer<TransformSmithingRecipe> getFallbackSerializer() {
-		return RecipeSerializer.SMITHING;
+	public @Nullable RecipeSerializer<SmithingTransformRecipe> getFallbackSerializer() {
+		return RecipeSerializer.SMITHING_TRANSFORM;
 	}
 }

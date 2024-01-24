@@ -37,6 +37,6 @@ public abstract class SmithingScreenHandlerMixin extends ForgingScreenHandler {
 
 	@Inject(method = "onTakeOutput", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/SmithingScreenHandler;decrementStack(I)V", ordinal = 0))
 	public void specialDecrementIngredient(PlayerEntity player, ItemStack stack, CallbackInfo ci) {
-		this.getSlot(SmithingScreenHandler.ADDITIONAL_SLOT).getStack().decrement(ingredientsUsed - 1);
+		this.getSlot(SmithingScreenHandler.MATERIAL_ID).getStack().decrement(ingredientsUsed - 1);
 	}
 }

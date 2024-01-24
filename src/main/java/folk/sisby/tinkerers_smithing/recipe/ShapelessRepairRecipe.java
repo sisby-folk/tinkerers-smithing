@@ -55,14 +55,14 @@ public class ShapelessRepairRecipe extends ShapelessRecipe implements ServerReci
 	}
 
 	private ItemStack findBase(RecipeInputInventory inventory) {
-		List<ItemStack> bases = inventory.stacks.stream().filter(s -> s.isOf(baseItem)).toList();
+		List<ItemStack> bases = inventory.getInputStacks().stream().filter(s -> s.isOf(baseItem)).toList();
 		return bases.size() == 1 && !bases.get(0).hasEnchantments() && bases.get(0).isDamaged() ? bases.get(0) : null;
 	}
 
 	@Override
 	public boolean matches(RecipeInputInventory inventory, World world) {
 		ItemStack base = findBase(inventory);
-		long units = inventory.stacks.stream().filter(addition).count();
+		long units = inventory.getInputStacks().stream().filter(addition).count();
         if (base == null || units <= 0 || units > additionCount) return false;
 
         return base.getDamage() - ((int) Math.ceil((base.getMaxDamage() * (units - 1)) / (double) additionCount)) > 0;
@@ -71,7 +71,7 @@ public class ShapelessRepairRecipe extends ShapelessRecipe implements ServerReci
 	@Override
 	public ItemStack craft(RecipeInputInventory inventory, DynamicRegistryManager registryManager) {
 		ItemStack base = findBase(inventory);
-		long units = inventory.stacks.stream().filter(addition).count();
+		long units = inventory.getInputStacks().stream().filter(addition).count();
 		if (base == null || units <= 0 || units > additionCount) return ItemStack.EMPTY;
 
 		ItemStack output = super.craft(inventory, registryManager);

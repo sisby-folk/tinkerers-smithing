@@ -44,7 +44,7 @@ public class ShapelessUpgradeRecipe extends ShapelessRecipe implements ServerRec
 	@Override
 	public ItemStack craft(RecipeInputInventory inventory, DynamicRegistryManager registryManager) {
 		ItemStack output = super.craft(inventory, registryManager);
-		for (ItemStack stack : inventory.stacks) {
+		for (ItemStack stack : inventory.getInputStacks()) {
 			if (stack.isOf(baseItem)) {
 				output.setNbt(stack.getOrCreateNbt().copy());
 			}
