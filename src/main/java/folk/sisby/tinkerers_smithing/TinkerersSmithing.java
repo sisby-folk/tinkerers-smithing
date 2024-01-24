@@ -15,10 +15,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeSerializer;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.resource.ResourceType;
-import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,13 +32,13 @@ public class TinkerersSmithing implements ModInitializer {
 
 	public static final Identifier S2C_PING = new Identifier(ID, "ping");
 
-	public static final TagKey<Item> DEWORK_INGREDIENTS = TagKey.of(Registry.ITEM_KEY, new Identifier(ID, "dework_ingredients"));
-	public static final TagKey<Item> BROKEN_BLACKLIST = TagKey.of(Registry.ITEM_KEY, new Identifier(ID, "broken_blacklist"));
+	public static final TagKey<Item> DEWORK_INGREDIENTS = TagKey.of(RegistryKeys.ITEM, new Identifier(ID, "dework_ingredients"));
+	public static final TagKey<Item> BROKEN_BLACKLIST = TagKey.of(RegistryKeys.ITEM, new Identifier(ID, "broken_blacklist"));
 
-	public static final RecipeSerializer<ShapelessRepairRecipe> SHAPELESS_REPAIR_SERIALIZER = Registry.register(Registry.RECIPE_SERIALIZER, new Identifier(ID, "repair"), new ShapelessRepairRecipe.Serializer());
-	public static final RecipeSerializer<SacrificeUpgradeRecipe> SACRIFICE_UPGRADE_SERIALIZER = Registry.register(Registry.RECIPE_SERIALIZER, new Identifier(ID, "sacrifice"), new SacrificeUpgradeRecipe.Serializer());
-	public static final RecipeSerializer<SmithingUpgradeRecipe> SMITHING_UPGRADE_SERIALIZER = Registry.register(Registry.RECIPE_SERIALIZER, new Identifier(ID, "smithing"), new SmithingUpgradeRecipe.Serializer());
-	public static final RecipeSerializer<ShapelessUpgradeRecipe> SHAPELESS_UPGRADE_SERIALIZER = Registry.register(Registry.RECIPE_SERIALIZER, new Identifier(ID, "shapeless"), new ShapelessUpgradeRecipe.Serializer());
+	public static final RecipeSerializer<ShapelessRepairRecipe> SHAPELESS_REPAIR_SERIALIZER = Registry.register(Registries.RECIPE_SERIALIZER, new Identifier(ID, "repair"), new ShapelessRepairRecipe.Serializer());
+	public static final RecipeSerializer<SacrificeUpgradeRecipe> SACRIFICE_UPGRADE_SERIALIZER = Registry.register(Registries.RECIPE_SERIALIZER, new Identifier(ID, "sacrifice"), new SacrificeUpgradeRecipe.Serializer());
+	public static final RecipeSerializer<SmithingUpgradeRecipe> SMITHING_UPGRADE_SERIALIZER = Registry.register(Registries.RECIPE_SERIALIZER, new Identifier(ID, "smithing"), new SmithingUpgradeRecipe.Serializer());
+	public static final RecipeSerializer<ShapelessUpgradeRecipe> SHAPELESS_UPGRADE_SERIALIZER = Registry.register(Registries.RECIPE_SERIALIZER, new Identifier(ID, "shapeless"), new ShapelessUpgradeRecipe.Serializer());
 
 	public static void generateSmithingData(Map<Identifier, Recipe<?>> recipes) {
 		TinkerersSmithing.LOGGER.info("[Tinkerer's Smithing] Generating Smithing Data!");

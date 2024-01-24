@@ -9,6 +9,7 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.ShapelessRecipe;
+import net.minecraft.recipe.book.CraftingRecipeCategory;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.util.collection.DefaultedList;
@@ -23,7 +24,7 @@ public class ShapelessUpgradeRecipe extends ShapelessRecipe implements ServerRec
 	public final Item resultItem;
 
 	public ShapelessUpgradeRecipe(Item baseItem, Ingredient addition, int additionCount, Item resultItem) {
-		super(recipeId("shapeless", resultItem, baseItem), "", resultItem.getDefaultStack(), assembleIngredients(baseItem, addition, additionCount));
+		super(recipeId("shapeless", resultItem, baseItem), "", CraftingRecipeCategory.EQUIPMENT, resultItem.getDefaultStack(), assembleIngredients(baseItem, addition, additionCount));
 		this.baseItem = baseItem;
 		this.addition = addition;
 		this.additionCount = additionCount;

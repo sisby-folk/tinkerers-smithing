@@ -10,10 +10,11 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.ShapelessRecipe;
+import net.minecraft.recipe.book.CraftingRecipeCategory;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.Nullable;
@@ -30,7 +31,7 @@ public class ShapelessRepairRecipe extends ShapelessRecipe implements ServerReci
 	public final int additionCount;
 
 	public ShapelessRepairRecipe(Item baseItem, Ingredient addition, int additionCount) {
-		super(recipeId("repair", Registry.ITEM.getId(baseItem), ingredientId(addition)), "", getPreviewResult(baseItem), assembleIngredients(baseItem, addition, additionCount));
+		super(recipeId("repair", Registries.ITEM.getId(baseItem), ingredientId(addition)), "", CraftingRecipeCategory.EQUIPMENT, getPreviewResult(baseItem), assembleIngredients(baseItem, addition, additionCount));
 		this.baseItem = baseItem;
 		this.addition = addition;
 		this.additionCount = additionCount;

@@ -14,12 +14,9 @@ import net.minecraft.item.ToolItem;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.Recipe;
-import net.minecraft.recipe.RecipeManager;
 import net.minecraft.registry.Registries;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -322,7 +319,7 @@ public class TinkerersSmithingLoader {
 	}
 
 	public static Identifier recipeId(String recipeType, Item... items) {
-		return recipeId(recipeType, Arrays.stream(items).map(Registry.ITEM::getId).toArray(Identifier[]::new));
+		return recipeId(recipeType, Arrays.stream(items).map(Registries.ITEM::getId).toArray(Identifier[]::new));
 	}
 
 	public static Identifier appendId(Identifier id, String name) {
@@ -330,6 +327,6 @@ public class TinkerersSmithingLoader {
 	}
 
 	public static Identifier ingredientId(Ingredient ingredient) {
-		return ingredient.entries[0] instanceof Ingredient.StackEntry se ? Registry.ITEM.getId(se.stack.getItem()) : (ingredient.entries[0] instanceof Ingredient.TagEntry te ? te.tag.id() : new Identifier("ERROR"));
+		return ingredient.entries[0] instanceof Ingredient.StackEntry se ? Registries.ITEM.getId(se.stack.getItem()) : (ingredient.entries[0] instanceof Ingredient.TagEntry te ? te.tag.id() : new Identifier("ERROR"));
 	}
 }

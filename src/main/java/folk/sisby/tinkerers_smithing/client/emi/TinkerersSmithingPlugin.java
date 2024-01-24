@@ -26,8 +26,8 @@ import net.minecraft.item.Item;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.recipe.SmithingRecipe;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.Arrays;
@@ -77,7 +77,7 @@ public class TinkerersSmithingPlugin implements EmiPlugin {
 		registry.removeRecipes(r -> replacedIds.contains(r.getId()) && !addedRecipes.contains(r));
 		addedRecipes.forEach(registry::addRecipe);
 
-		for (Item item : Registry.ITEM) {
+		for (Item item : Registries.ITEM) {
 			if (Enchantments.VANISHING_CURSE.isAcceptableItem(item.getDefaultStack())) {
 				registry.addRecipe(new EmiAnvilDeworkRecipe(EmiStack.of(item), EmiIngredient.of(TinkerersSmithing.DEWORK_INGREDIENTS), TinkerersSmithingLoader.recipeId("dework", item)));
 			}
@@ -90,7 +90,7 @@ public class TinkerersSmithingPlugin implements EmiPlugin {
 	}
 
 	private void replaceAnvilRecipe(ShapelessRepairRecipe recipe) {
-		replacedIdPrefixes.add(new Identifier("emi", "/" + "anvil/repairing/material" + "/" + Registry.ITEM.getId(recipe.baseItem).getNamespace() + "/" + Registry.ITEM.getId(recipe.baseItem).getPath()));
+		replacedIdPrefixes.add(new Identifier("emi", "/" + "anvil/repairing/material" + "/" + Registries.ITEM.getId(recipe.baseItem).getNamespace() + "/" + Registries.ITEM.getId(recipe.baseItem).getPath()));
 		addedRecipes.add(new EmiAnvilRecipe(EmiStack.of(recipe.baseItem), EmiIngredient.of(recipe.addition), new Identifier(recipe.getId().toString().replace(":repair/", ":anvil/"))));
 	}
 
