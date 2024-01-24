@@ -73,6 +73,7 @@ public class ShapelessRepairRecipe extends ShapelessRecipe implements ServerReci
 		if (base == null || units <= 0 || units > additionCount) return ItemStack.EMPTY;
 
 		ItemStack output = super.craft(inventory);
+		output.setNbt(base.getOrCreateNbt().copy());
 		output.setDamage(Math.max(0, base.getDamage() - ((int) Math.ceil((base.getMaxDamage() * units) / (double) additionCount))));
 		return output;
 	}
