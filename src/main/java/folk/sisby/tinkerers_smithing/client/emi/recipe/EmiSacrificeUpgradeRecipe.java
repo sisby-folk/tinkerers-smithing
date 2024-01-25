@@ -12,7 +12,7 @@ public class EmiSacrificeUpgradeRecipe extends EmiSmithingRecipe implements EmiR
 	private final int resultUnits;
 
 	public EmiSacrificeUpgradeRecipe(SacrificeUpgradeRecipe recipe) {
-		super(EmiIngredient.of(Ingredient.empty()), EmiStack.of(recipe.baseItem), EmiIngredient.of(recipe.addition), EmiStack.of(recipe.resultItem), recipe.getId());
+		super(EmiIngredient.of(Ingredient.empty()), EmiStack.of(recipe.baseItem), EmiIngredient.of(recipe.addition), EmiStack.of(recipe.result), recipe.getId());
 		this.additionUnits = recipe.additionUnits;
 		this.resultUnits = recipe.resultUnits;
 	}

@@ -18,7 +18,7 @@ public class EmiSmithingUpgradeRecipe extends EmiSmithingRecipe implements EmiRe
 	public final Item resultItem;
 
 	public EmiSmithingUpgradeRecipe(SmithingUpgradeRecipe recipe) {
-		super(EmiIngredient.of(Ingredient.empty()), EmiStack.of(recipe.baseItem), EmiIngredient.of(recipe.addition), EmiStack.of(recipe.resultItem), recipe.getId());
+		super(EmiIngredient.of(Ingredient.empty()), EmiStack.of(recipe.baseItem), EmiIngredient.of(recipe.addition), EmiStack.of(recipe.result), recipe.getId());
 		this.baseItem = recipe.baseItem;
 		this.additionCount = recipe.additionCount;
 		this.resultItem = recipe.resultItem;
@@ -54,6 +54,6 @@ public class EmiSmithingUpgradeRecipe extends EmiSmithingRecipe implements EmiRe
 	}
 
 	private EmiIngredient getRepairStack(long i) {
-		return getInputs().get(1).copy().setAmount(getStackCount(i));
+		return addition.copy().setAmount(getStackCount(i));
 	}
 }
