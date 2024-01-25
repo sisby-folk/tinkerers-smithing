@@ -47,38 +47,6 @@
 				"id": "emi",
 				"versions": ">=${emi}",
 				"optional": true
-			},
-			{
-				"id": "farmersdelight",
-				"optional": true
-			},
-			{
-				"id": "campanion",
-				"optional": true
-			},
-			{
-				"id": "yttr",
-				"optional": true
-			},
-			{
-				"id": "create",
-				"optional": true
-			},
-			{
-				"id": "botania",
-				"optional": true
-			},
-			{
-				"id": "chalk",
-				"optional": true
-			},
-			{
-				"id": "consistency_plus",
-				"optional": true
-			},
-			{
-				"id": "halfdoors",
-				"optional": true
 			}
 		]
 	},
