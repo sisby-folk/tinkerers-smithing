@@ -93,7 +93,7 @@ if (System.getenv("MODRINTH_TOKEN") && file("CHANGELOG.md").exists() ) {
 			required.version libs.fapi.get().getName(), libs.versions.fapi.get()
 			optional.version libs.emi.get().getName().replace("-fabric", ""), libs.versions.emi.get() + "+fabric"
 		}
-		changelog = rootProject.file("CHANGELOG.md").text + "\n\nChangelog: https://github.com/sisby-folk/portable-crafting/releases/tag/v$baseVersion"
+		changelog = rootProject.file("CHANGELOG.md").text + "\n\nChangelog: https://github.com/sisby-folk/$project.name/releases/tag/v$baseVersion"
 		syncBodyFrom = rootProject.file("README.md").text
 	}
 }
