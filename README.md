@@ -80,7 +80,7 @@ For data structure examples, check out the [built-in datapack](https://github.co
 
 ### Older Versions
 
-For minecraft 1.15-1.17, version 1.0 is available as a [datapack](https://download-directory.github.io/?url=https://github.com/sisby-folk/tinkerers-smithing/tree/nbtc2/src/main/resources) for [NBT Crafting](https://modrinth.com/mod/nbt-crafting) - the [old readme](https://github.com/sisby-folk/tinkerers-smithing/blob/nbtc2-experiments/README.md) lists available features.
+For minecraft 1.15-1.17, 1.0 is available as a [datapack](https://download-directory.github.io/?url=https://github.com/sisby-folk/tinkerers-smithing/tree/nbtc2/src/main/resources) for [NBT Crafting](https://modrinth.com/mod/nbt-crafting) - see the [old readme](https://github.com/sisby-folk/tinkerers-smithing/blob/nbtc2-experiments/README.md) for features.
 
 ---
 
