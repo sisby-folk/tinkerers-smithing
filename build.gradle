@@ -27,7 +27,7 @@ dependencies {
 	mappings variantOf(libs.yarn) { classifier "v2" }
 	modImplementation libs.fl
 	modImplementation libs.fapi
-	implementation libs.kaleidoConfig
+	// implementation libs.kaleidoConfig
 
 	modCompileOnly libs.emi
 
@@ -90,7 +90,8 @@ if (System.getenv("MODRINTH_TOKEN") && file("CHANGELOG.md").exists() ) {
 		loaders = ['quilt', 'fabric', 'forge']
 		detectLoaders = false
 		dependencies {
-			optional.project "emi"
+			required.version libs.fapi.get().getName(), libs.versions.fapi.get()
+			optional.version libs.emi.get().getName(), libs.versions.emi.get()
 		}
 		changelog = rootProject.file("CHANGELOG.md").text + "\n\nChangelog: https://github.com/sisby-folk/portable-crafting/releases/tag/v$baseVersion"
 		syncBodyFrom = rootProject.file("README.md").text
