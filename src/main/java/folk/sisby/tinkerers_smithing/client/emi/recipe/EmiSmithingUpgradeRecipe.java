@@ -31,11 +31,11 @@ public class EmiSmithingUpgradeRecipe extends EmiSmithingRecipe implements EmiRe
 
 	@Override
 	public void addWidgets(WidgetHolder widgets) {
-		widgets.addTexture(EmiTexture.PLUS, 27, 3);
-		widgets.addTexture(EmiTexture.EMPTY_ARROW, 75, 1);
-		widgets.addSlot(EmiStack.of(baseItem), 0, 0);
-		widgets.add(new IterativeSlotWidget(this::getRepairStack, 49, 0));
-		widgets.add(new IterativeSlotWidget(this::getTool, 107, 0).recipeContext(this));
+		widgets.addTexture(EmiTexture.EMPTY_ARROW, 62, 1);
+		widgets.addSlot(template, 0, 0);
+		widgets.addSlot(input, 18, 0);
+		widgets.add(new IterativeSlotWidget(this::getRepairStack, 36, 0));
+		widgets.add(new IterativeSlotWidget(this::getTool, 94, 0).recipeContext(this));
 	}
 
 	private int getStackCount(long i) {
