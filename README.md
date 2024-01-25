@@ -9,12 +9,12 @@ Requires <a href="https://modrinth.com/mod/connector">Connector</a> and <a href=
 
 ---
 
-Tinkerer's Smithing is a data-driven equipment rebalance that:
- - Allows repairing every vanilla item with durability for no level cost (even fishing rods)
+Tinkerer's Smithing is a data-driven equipment crafting rebalance that:
+ - Allows repairing every vanilla item that has durability for no level cost (even fishing rods)
  - Allows upgrading all tools and armor between material tiers (even chainmail)
- - Encourages slowly improving your first set of tools and armor with materials and enchantments - all the way to the endgame.
- - Makes all the enchanted treasure you find lying around actually useful.
- - Balances all of its recipe types on the vanilla cost of equipment.
+ - Encourages gradually improving your first set of tools and armor with materials and enchantments
+ - Makes all the enchanted treasure you find lying around actually useful
+ - Balances all of its recipe types on the vanilla cost of equipment
 
 ---
 
@@ -27,7 +27,7 @@ Netherite is rebalanced to use diamonds for repair.<br/>
 
 **Anvil Combine**<br/>
 ![Anvil Combine](https://cdn.modrinth.com/data/RhVpNN5O/images/e399470dd0d196aa877e7ff824620a2fed7d347d.png)<br/>
-No level cost for repairing, and ordering doesn't matter.<br/>
+No level cost for repairing, and the order of inputs doesn't matter.<br/>
 
 **Keepers (Broken Equipment)**<br/>
 ![Broken Equipment](https://cdn.modrinth.com/data/RhVpNN5O/images/5a0f3230a213433f2bf8d53e4833aaea8d6bcac1.png)<br/>
@@ -64,11 +64,11 @@ For "gilded" tiers (like netherite) only.<br/>
 **Useful Treasure**<br/>
 ![Treasure Upgrading](https://cdn.modrinth.com/data/RhVpNN5O/images/aed8e9f96c645eb5dc2a608f624ca8742e4545fc.png)<br/>
 All vanilla materials are linked to eachother via the upgrade tree.<br/>
-It doesn't matter if a pair of Protection IV leggings are made of gold, chain, or leather - just upgrade them to the right material, then you can combine them onto your own equipment at an anvil.<br/>
+It doesn't matter if a pair of Protection IV leggings are made of gold, chain, or leather - just upgrade them to the right material, use them in an anvil combination.<br/>
 
 **Useful Scraps**<br/>
 ![Wooden Upgrades](https://cdn.modrinth.com/data/RhVpNN5O/images/638a8984edb015b886303688c0d539de0aab37e5.png)<br/>
-Like leather armor, forgotten wooden tools can be upgraded to gold enchanting bases or plain old stone, then iron, then diamond.
+Like leather armor, forgotten wooden tools can be upgraded to be useful again, as golden enchanting bases or otherwise.
 
 **Miscellaneous Repair**<br/>
 ![Miscellaneous Repair](https://cdn.modrinth.com/data/RhVpNN5O/images/cbaab6458d13eb934ab237855af8c6a99c063c71.png)<br/>
@@ -92,7 +92,7 @@ Check out the the [built-in datapack](https://github.com/sisby-folk/tinkerers-sm
 
 ### Older Versions
 
-For minecraft 1.15-1.17, you can download version 1.0 as a [datapack](https://download-directory.github.io/?url=https://github.com/sisby-folk/tinkerers-smithing/tree/nbtc2/src/main/resources) for [NBT Crafting](https://modrinth.com/mod/nbt-crafting) - the [old readme](https://github.com/sisby-folk/tinkerers-smithing/blob/nbtc2-experiments/README.md) lists available features.
+For minecraft 1.15-1.17, version 1.0 is available as a [datapack](https://download-directory.github.io/?url=https://github.com/sisby-folk/tinkerers-smithing/tree/nbtc2/src/main/resources) for [NBT Crafting](https://modrinth.com/mod/nbt-crafting) - the [old readme](https://github.com/sisby-folk/tinkerers-smithing/blob/nbtc2-experiments/README.md) lists available features.
 
 ---
 
