@@ -76,7 +76,7 @@ public class TinkerersSmithingLoader {
 			for (TinkerersSmithingMaterial material : getAllMaterials()) {
 				if (material.items.contains(item)) {
 					noneMatch = false;
-					outList.addAll(material.repairMaterials);
+					outList.addAll(material.repairMaterials.stream().filter(i -> !i.isEmpty()).toList());
 				}
 			}
 
