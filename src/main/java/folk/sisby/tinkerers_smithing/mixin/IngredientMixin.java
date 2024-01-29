@@ -6,10 +6,9 @@ import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.Ingredient;
+import net.minecraft.tag.ItemTags;
 import net.minecraft.util.registry.Registry;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -20,11 +19,10 @@ import java.util.Arrays;
 
 @Mixin(Ingredient.class)
 public class IngredientMixin {
-	@Shadow @Final public Ingredient.Entry[] entries;
-
 	@Unique private boolean isFootgun() {
-		if (Arrays.stream(entries).anyMatch(e -> e instanceof Ingredient.TagEntry) && Registry.ITEM.streamTagsAndEntries().toList().isEmpty()) {
-			TinkerersSmithing.LOGGER.error("[Tinkerer's Smithing] Cowardly refusing to access an unloaded tag ingredient: {}", this, new IllegalStateException("A tag ingredient was accessed before tags are loaded - This usually breaks recipes! Please report this to the mod in the trace below."));
+		Ingredient self = (Ingredient) (Object) this;
+		if (Arrays.stream(self.entries).anyMatch(e -> e instanceof Ingredient.TagEntry) && (Registry.ITEM.getEntryList(ItemTags.PLANKS).isEmpty() || Registry.ITEM.getEntryList(ItemTags.PLANKS).get().size() == 0)) {
+			TinkerersSmithing.LOGGER.error("[Tinkerer's Smithing] Cowardly refusing to access an unloaded tag ingredient: {}", self.toJson().toString(), new IllegalStateException("A tag ingredient was accessed before tags are loaded - This can break recipes! Report this to the mod in the trace below."));
 			return true;
 		}
 		return false;
