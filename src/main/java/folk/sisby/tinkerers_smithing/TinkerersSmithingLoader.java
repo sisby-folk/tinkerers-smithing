@@ -327,7 +327,11 @@ public class TinkerersSmithingLoader {
 		return new Identifier(id.toString() + "/" + name);
 	}
 
-	public static Identifier ingredientId(Ingredient ingredient) {
-		return ingredient.entries[0] instanceof Ingredient.StackEntry se ? Registries.ITEM.getId(se.stack.getItem()) : (ingredient.entries[0] instanceof Ingredient.TagEntry te ? te.tag.id() : new Identifier("ERROR"));
+	public static Identifier repairRecipeId(Item baseItem, Ingredient ingredient) {
+		if (ingredient.entries.length == 0) {
+			TinkerersSmithing.LOGGER.error("Ingredients for Tinkerer's Smithing recipes can't be empty! When repairing item {}", Registries.ITEM.getId(baseItem), new IllegalArgumentException("Ingredient entries are empty!"));
+		}
+		Identifier ingredientId = ingredient.entries.length != 0 && ingredient.entries[0] instanceof Ingredient.StackEntry se ? Registries.ITEM.getId(se.stack.getItem()) : (ingredient.entries.length != 0 && ingredient.entries[0] instanceof Ingredient.TagEntry te ? te.tag.id() : new Identifier("ERROR"));
+		return recipeId("repair", Registries.ITEM.getId(baseItem), ingredientId);
 	}
 }
