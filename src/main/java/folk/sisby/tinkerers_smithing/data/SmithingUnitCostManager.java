@@ -38,7 +38,9 @@ public class SmithingUnitCostManager extends JsonDataLoader implements Identifia
 			json.getAsJsonObject().get(KEY_VALUES).getAsJsonArray().forEach(jsonValue -> {
 				Ingredient ingredient = Ingredient.fromJson(jsonValue.getAsJsonObject());
 				int cost = jsonValue.getAsJsonObject().get(KEY_VALUE_COST).getAsInt();
-				costs.put(ingredient, cost);
+				if (!ingredient.isEmpty()) {
+					costs.put(ingredient, cost);
+				}
 			});
 			TinkerersSmithingLoader.INSTANCE.COST_OVERRIDES.put(item, new UnitCostOverride(replace, costs));
 		}, () -> TinkerersSmithing.LOGGER.warn("[Tinkerer's Smithing] Failed to override cost for invalid item {}", id)));

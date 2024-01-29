@@ -23,8 +23,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 import java.util.List;
 
-import static folk.sisby.tinkerers_smithing.TinkerersSmithingLoader.ingredientId;
-import static folk.sisby.tinkerers_smithing.TinkerersSmithingLoader.recipeId;
+import static folk.sisby.tinkerers_smithing.TinkerersSmithingLoader.repairRecipeId;
 
 public class ShapelessRepairRecipe extends ShapelessRecipe implements ServerRecipe<ShapelessRecipe> {
 	public final Item baseItem;
@@ -32,7 +31,7 @@ public class ShapelessRepairRecipe extends ShapelessRecipe implements ServerReci
 	public final int additionCount;
 
 	public ShapelessRepairRecipe(Item baseItem, Ingredient addition, int additionCount) {
-		super(recipeId("repair", Registries.ITEM.getId(baseItem), ingredientId(addition)), "", CraftingRecipeCategory.EQUIPMENT, getPreviewResult(baseItem), assembleIngredients(baseItem, addition, additionCount));
+		super(repairRecipeId(baseItem, addition), "", CraftingRecipeCategory.EQUIPMENT, getPreviewResult(baseItem), assembleIngredients(baseItem, addition, additionCount));
 		this.baseItem = baseItem;
 		this.addition = addition;
 		this.additionCount = additionCount;
@@ -107,6 +106,7 @@ public class ShapelessRepairRecipe extends ShapelessRecipe implements ServerReci
 
 		public void write(PacketByteBuf buf, ShapelessRepairRecipe recipe) {
 			buf.writeVarInt(Item.getRawId(recipe.baseItem));
+			if (recipe.addition.getMatchingStacks().length == 0) TinkerersSmithing.LOGGER.error("No matching stacks while serializing repair recipe {}!", recipe.getId());
 			recipe.addition.write(buf);
 			buf.writeVarInt(recipe.additionCount);
 		}
