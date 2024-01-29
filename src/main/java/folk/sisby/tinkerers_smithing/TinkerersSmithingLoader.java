@@ -328,9 +328,9 @@ public class TinkerersSmithingLoader {
 
 	public static Identifier repairRecipeId(Item baseItem, Ingredient ingredient) {
 		if (ingredient.entries.length == 0) {
-			TinkerersSmithing.LOGGER.error("Ingredients for Tinkerer's Smithing recipes can't be empty! When repairing item {}", Registry.ITEM.getId(baseItem), new IllegalArgumentException("Ingredient entries are empty!"));
+			throw new IllegalArgumentException("Ingredients for Tinkerer's Smithing recipes can't be empty! When repairing item %s".formatted(Registry.ITEM.getId(baseItem)));
 		}
-		Identifier ingredientId = ingredient.entries.length != 0 && ingredient.entries[0] instanceof Ingredient.StackEntry se ? Registry.ITEM.getId(se.stack.getItem()) : (ingredient.entries.length != 0 && ingredient.entries[0] instanceof Ingredient.TagEntry te ? te.tag.id() : new Identifier("ERROR"));
+		Identifier ingredientId = ingredient.entries[0] instanceof Ingredient.StackEntry se ? Registry.ITEM.getId(se.stack.getItem()) : ingredient.entries[0] instanceof Ingredient.TagEntry te ? te.tag.id() : new Identifier("ERROR");
 		return recipeId("repair", Registry.ITEM.getId(baseItem), ingredientId);
 	}
 }
