@@ -6,6 +6,7 @@
   "mixins": [
     "AnvilScreenHandlerMixin",
     "EnchantmentHelperMixin",
+    "IngredientMixin",
     "ItemPredicateMixin",
     "ItemStackMixin",
     "PlayerManagerMixin",
