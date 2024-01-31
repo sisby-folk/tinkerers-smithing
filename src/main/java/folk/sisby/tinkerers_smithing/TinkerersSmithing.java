@@ -9,7 +9,7 @@ import folk.sisby.tinkerers_smithing.recipe.ShapelessRepairRecipe;
 import folk.sisby.tinkerers_smithing.recipe.ShapelessUpgradeRecipe;
 import folk.sisby.tinkerers_smithing.recipe.SmithingUpgradeRecipe;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.minecraft.item.ElytraItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -19,11 +19,11 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
-import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.Map;
 
 public class TinkerersSmithing implements ModInitializer {
@@ -34,6 +34,9 @@ public class TinkerersSmithing implements ModInitializer {
 
 	public static final TagKey<Item> DEWORK_INGREDIENTS = TagKey.of(RegistryKeys.ITEM, new Identifier(ID, "dework_ingredients"));
 	public static final TagKey<Item> BROKEN_BLACKLIST = TagKey.of(RegistryKeys.ITEM, new Identifier(ID, "broken_blacklist"));
+
+	// Must load before recipes do, so we can't use the usual fabric route.
+	public static final List<IdentifiableResourceReloadListener> RECIPE_DEPENDENCY_RELOADERS = List.of(SmithingToolMaterialLoader.INSTANCE, SmithingArmorMaterialLoader.INSTANCE, SmithingUnitCostManager.INSTANCE, SmithingTypeLoader.INSTANCE);
 
 	public static final RecipeSerializer<ShapelessRepairRecipe> SHAPELESS_REPAIR_SERIALIZER = Registry.register(Registries.RECIPE_SERIALIZER, new Identifier(ID, "repair"), new ShapelessRepairRecipe.Serializer());
 	public static final RecipeSerializer<SacrificeUpgradeRecipe> SACRIFICE_UPGRADE_SERIALIZER = Registry.register(Registries.RECIPE_SERIALIZER, new Identifier(ID, "sacrifice"), new SacrificeUpgradeRecipe.Serializer());
@@ -55,11 +58,6 @@ public class TinkerersSmithing implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(SmithingToolMaterialLoader.INSTANCE);
-		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(SmithingArmorMaterialLoader.INSTANCE);
-		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(SmithingUnitCostManager.INSTANCE);
-		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(SmithingTypeLoader.INSTANCE);
-
 		LOGGER.info("[Tinkerer's Smithing] Initialized.");
 	}
 }
