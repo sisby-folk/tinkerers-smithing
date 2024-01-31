@@ -5,7 +5,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import folk.sisby.tinkerers_smithing.TinkerersSmithing;
 import folk.sisby.tinkerers_smithing.TinkerersSmithingLoader;
-import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
 import net.minecraft.resource.ResourceManager;
@@ -16,12 +15,16 @@ import net.minecraft.util.Pair;
 import net.minecraft.util.profiler.Profiler;
 import net.minecraft.util.registry.Registry;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
-public class SmithingTypeLoader extends MultiJsonDataLoader implements IdentifiableResourceReloadListener, RecipeDataDependency {
+public class SmithingTypeLoader extends MultiJsonDataLoader {
 	public static final SmithingTypeLoader INSTANCE = new SmithingTypeLoader(new Gson());
 	public static final Identifier ID = new Identifier(TinkerersSmithing.ID, "smithing_type_loader");
 	public static final TagGroupLoader<Item> ITEM_TAG_LOADER = new TagGroupLoader<>(Registry.ITEM::getOrEmpty, "tags/items");
@@ -32,8 +35,8 @@ public class SmithingTypeLoader extends MultiJsonDataLoader implements Identifia
 	}
 
 	@Override
-	public @NotNull Identifier getFabricId() {
-		return ID;
+	public String getName() {
+		return ID.toString();
 	}
 
 	public static void addToTag(Map<Identifier, Collection<Item>> tags, String path, Item item) {
