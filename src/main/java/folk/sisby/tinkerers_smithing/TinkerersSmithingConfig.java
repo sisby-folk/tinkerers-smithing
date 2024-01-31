@@ -28,11 +28,9 @@ public class TinkerersSmithingConfig extends WrappedConfig {
 	public final boolean matchesOrEquivalent(Ingredient fromRepair, Ingredient fromCrafting) {
 		String transformedJsonString = fromRepair.toJson().toString();
 		if (transformedJsonString.equals(fromCrafting.toJson().toString())) return true;
-		TinkerersSmithing.LOGGER.info("OLD JSON: {}", transformedJsonString);
 		for (Map.Entry<String, String> substitution : ingredientSubstitutions.entrySet()) {
 			transformedJsonString = transformedJsonString.replace("{\"item\":\"%s\"}".formatted(substitution.getKey()), "{\"tag\":\"%s\"}".formatted(substitution.getValue()));
 		}
-		TinkerersSmithing.LOGGER.info("NEW JSON: {}", transformedJsonString);
 		return transformedJsonString.equals(fromCrafting.toJson().toString());
 	}
 }
