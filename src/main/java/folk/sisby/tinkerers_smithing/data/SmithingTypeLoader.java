@@ -23,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class SmithingTypeLoader extends MultiJsonDataLoader implements IdentifiableResourceReloadListener, RecipeDataDependency {
+public class SmithingTypeLoader extends MultiJsonDataLoader implements IdentifiableResourceReloadListener {
 	public static final SmithingTypeLoader INSTANCE = new SmithingTypeLoader(new Gson());
 	public static final Identifier ID = new Identifier(TinkerersSmithing.ID, "smithing_type_loader");
 	public static final TagGroupLoader<Item> ITEM_TAG_LOADER = new TagGroupLoader<>(Registry.ITEM::getOrEmpty, "tags/items");

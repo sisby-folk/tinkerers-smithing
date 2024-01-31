@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SmithingUnitCostManager extends JsonDataLoader implements IdentifiableResourceReloadListener, RecipeDataDependency {
+public class SmithingUnitCostManager extends JsonDataLoader implements IdentifiableResourceReloadListener {
 	public static final SmithingUnitCostManager INSTANCE = new SmithingUnitCostManager(new Gson());
 	public static final Identifier ID = new Identifier(TinkerersSmithing.ID, "smithing_unit_cost_loader");
 
