@@ -4,19 +4,17 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import folk.sisby.tinkerers_smithing.TinkerersSmithing;
 import folk.sisby.tinkerers_smithing.TinkerersSmithingLoader;
-import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.resource.JsonDataLoader;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.profiler.Profiler;
 import net.minecraft.util.registry.Registry;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class SmithingUnitCostManager extends JsonDataLoader implements IdentifiableResourceReloadListener {
+public class SmithingUnitCostManager extends JsonDataLoader {
 	public static final SmithingUnitCostManager INSTANCE = new SmithingUnitCostManager(new Gson());
 	public static final Identifier ID = new Identifier(TinkerersSmithing.ID, "smithing_unit_cost_loader");
 
@@ -48,8 +46,8 @@ public class SmithingUnitCostManager extends JsonDataLoader implements Identifia
 	}
 
 	@Override
-	public @NotNull Identifier getFabricId() {
-		return ID;
+	public String getName() {
+		return ID.toString();
 	}
 
 	public record UnitCostOverride(boolean replace, Map<Ingredient, Integer> costs) {
