@@ -9,6 +9,7 @@ import folk.sisby.tinkerers_smithing.recipe.ShapelessRepairRecipe;
 import folk.sisby.tinkerers_smithing.recipe.ShapelessUpgradeRecipe;
 import folk.sisby.tinkerers_smithing.recipe.SmithingUpgradeRecipe;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.item.ElytraItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -27,6 +28,8 @@ import java.util.Map;
 public class TinkerersSmithing implements ModInitializer {
 	public static final String ID = "tinkerers_smithing";
 	public static final Logger LOGGER = LoggerFactory.getLogger(ID);
+
+	public static final TinkerersSmithingConfig CONFIG = TinkerersSmithingConfig.createToml(FabricLoader.getInstance().getConfigDir(), "", ID, TinkerersSmithingConfig.class);
 
 	public static final Identifier S2C_PING = new Identifier(ID, "ping");
 

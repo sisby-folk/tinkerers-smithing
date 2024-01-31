@@ -27,12 +27,12 @@ dependencies {
 	mappings variantOf(libs.yarn) { classifier "v2" }
 	modImplementation libs.fl
 	modImplementation libs.fapi
-	// implementation libs.kaleidoConfig
+	implementation libs.kaleidoConfig
 
 	modCompileOnly libs.emi
 
 	modLocalRuntime libs.emi
-	// include libs.kaleidoConfig
+	include libs.kaleidoConfig
 }
 
 

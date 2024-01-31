@@ -48,6 +48,9 @@
 				"versions": ">=${emi}",
 				"optional": true
 			}
+		],
+		"jars": [
+			"META-INF/jars/kaleido-config-${kaleidoConfig}.jar"
 		]
 	},
 	"access_widener": ["tinkerers_smithing.accesswidener"],
