@@ -9,12 +9,12 @@ import folk.sisby.tinkerers_smithing.recipe.ShapelessRepairRecipe;
 import folk.sisby.tinkerers_smithing.recipe.ShapelessUpgradeRecipe;
 import folk.sisby.tinkerers_smithing.recipe.SmithingUpgradeRecipe;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.minecraft.item.ElytraItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeSerializer;
+import net.minecraft.resource.ResourceReloader;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKeys;
@@ -36,7 +36,7 @@ public class TinkerersSmithing implements ModInitializer {
 	public static final TagKey<Item> BROKEN_BLACKLIST = TagKey.of(RegistryKeys.ITEM, new Identifier(ID, "broken_blacklist"));
 
 	// Must load before recipes do, so we can't use the usual fabric route.
-	public static final List<IdentifiableResourceReloadListener> RECIPE_DEPENDENCY_RELOADERS = List.of(SmithingToolMaterialLoader.INSTANCE, SmithingArmorMaterialLoader.INSTANCE, SmithingUnitCostManager.INSTANCE, SmithingTypeLoader.INSTANCE);
+	public static final List<ResourceReloader> RECIPE_DEPENDENCY_RELOADERS = List.of(SmithingToolMaterialLoader.INSTANCE, SmithingArmorMaterialLoader.INSTANCE, SmithingUnitCostManager.INSTANCE, SmithingTypeLoader.INSTANCE);
 
 	public static final RecipeSerializer<ShapelessRepairRecipe> SHAPELESS_REPAIR_SERIALIZER = Registry.register(Registries.RECIPE_SERIALIZER, new Identifier(ID, "repair"), new ShapelessRepairRecipe.Serializer());
 	public static final RecipeSerializer<SacrificeUpgradeRecipe> SACRIFICE_UPGRADE_SERIALIZER = Registry.register(Registries.RECIPE_SERIALIZER, new Identifier(ID, "sacrifice"), new SacrificeUpgradeRecipe.Serializer());
