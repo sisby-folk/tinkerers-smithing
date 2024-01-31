@@ -2,7 +2,6 @@ package folk.sisby.tinkerers_smithing;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import com.google.gson.JsonElement;
 import folk.sisby.tinkerers_smithing.data.SmithingUnitCostManager;
 import folk.sisby.tinkerers_smithing.recipe.SacrificeUpgradeRecipe;
 import folk.sisby.tinkerers_smithing.recipe.ShapelessRepairRecipe;
@@ -168,11 +167,8 @@ public class TinkerersSmithingLoader {
 						if (recipe != null) {
 							if (recipe.getOutput().isOf(item)) {
 								for (Ingredient repairIngredient : repairIngredients) {
-									String repairIngredientString = repairIngredient.toJson().toString();
 									int unitCost = Math.toIntExact(recipe.getIngredients().stream()
-										.map(Ingredient::toJson)
-										.map(JsonElement::toString)
-										.filter(s -> repairIngredientString.equals(s) || (TinkerersSmithing.CONFIG.ingredientSubstitutions.containsKey(s) && repairIngredientString.equals(TinkerersSmithing.CONFIG.ingredientSubstitutions.get(s))))
+										.filter(craftingIngredient -> TinkerersSmithing.CONFIG.matchesOrEquivalent(repairIngredient, craftingIngredient))
 										.count());
 									if (unitCost > 0) {
 										outMap.put(repairIngredient, unitCost);
