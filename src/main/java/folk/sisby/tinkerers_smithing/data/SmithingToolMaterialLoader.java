@@ -4,17 +4,15 @@ import com.google.gson.Gson;
 import folk.sisby.tinkerers_smithing.TinkerersSmithing;
 import folk.sisby.tinkerers_smithing.TinkerersSmithingLoader;
 import folk.sisby.tinkerers_smithing.TinkerersSmithingMaterial;
-import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.minecraft.item.Item;
 import net.minecraft.item.ToolItem;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.util.Identifier;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
-public class SmithingToolMaterialLoader extends SmithingMaterialLoader implements IdentifiableResourceReloadListener, RecipeDataDependency {
+public class SmithingToolMaterialLoader extends SmithingMaterialLoader {
 	public static final SmithingToolMaterialLoader INSTANCE = new SmithingToolMaterialLoader(new Gson());
 	public static final Identifier ID = new Identifier(TinkerersSmithing.ID, "smithing_tool_material_loader");
 
@@ -47,7 +45,7 @@ public class SmithingToolMaterialLoader extends SmithingMaterialLoader implement
 	}
 
 	@Override
-	public @NotNull Identifier getFabricId() {
-		return ID;
+	public String getName() {
+		return ID.toString();
 	}
 }

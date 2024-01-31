@@ -11,8 +11,8 @@
     "ItemStackMixin",
     "PlayerManagerMixin",
     "RecipeManagerMixin",
-    "ResourceManagerHelperImplMixin",
     "ServerPlayNetworkHandlerMixin",
+    "SimpleResourceReloadMixin",
     "SmithingScreenHandlerMixin",
     "SynchronizeRecipesS2CPacketMixin"
   ],
