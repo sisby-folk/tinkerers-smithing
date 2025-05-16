@@ -17,11 +17,14 @@ import java.util.Arrays;
 public class IngredientMixin {
 	@Unique
 	private boolean isFootgun() {
+		boolean pronounceUnloadedError = TinkerersSmithing.CONFIG.pronounceUnloadedError;
 		Ingredient self = (Ingredient) (Object) this;
-		if (Arrays.stream(self.entries).anyMatch(e -> e instanceof Ingredient.TagEntry) && (Registries.ITEM.getEntryList(ItemTags.PLANKS).isEmpty() || Registries.ITEM.getEntryList(ItemTags.PLANKS).get().size() == 0)) {
-			TinkerersSmithing.LOGGER.error("[Tinkerer's Smithing] Cowardly refusing to access an unloaded tag ingredient: {}", self.toJson().toString(), new IllegalStateException("A tag ingredient was accessed before tags are loaded - This can break recipes! Report this to the mod in the trace below."));
-			return true;
-		}
+			if (Arrays.stream(self.entries).anyMatch(e -> e instanceof Ingredient.TagEntry) && (Registries.ITEM.getEntryList(ItemTags.PLANKS).isEmpty() || Registries.ITEM.getEntryList(ItemTags.PLANKS).get().size() == 0)) {
+				if (pronounceUnloadedError) {
+				TinkerersSmithing.LOGGER.error("[Tinkerer's Smithing] Cowardly refusing to access an unloaded tag ingredient: {}", self.toJson().toString(), new IllegalStateException("A tag ingredient was accessed before tags are loaded - This can break recipes! Report this to the mod in the trace below."));
+					}
+				return true;
+			}
 		return false;
 	}
 

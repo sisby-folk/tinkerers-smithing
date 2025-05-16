@@ -33,4 +33,6 @@ public class TinkerersSmithingConfig extends WrappedConfig {
 		}
 		return transformedJsonString.equals(fromCrafting.toJson().toString());
 	}
+	@Comment("Print error messages? (default: false)")
+	public boolean pronounceUnloadedError = false;
 }
